@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 
 
 
@@ -21,9 +21,23 @@ export class City extends BaseEntity {
 
     @Field()
     @Column("float")
-    lattitiude!: number; 
+    lattitiude!: number;
 
     @Field()
     @Column("float")
     longitude!: number;
+
+    // @Field(() => [InterestPoint])
+    // @OneToMany(
+    //     () => InteresPoint,
+    //     (interesPoint) => interestPoint.city,
+    // )
+    // interestPoints!: InterestPoint[]
+
+    // @Field(() => [User])
+    // @OneToMany(
+    //     () => User,
+    //     (user) => user.city,
+    // )
+    // users!: user[];
 }
