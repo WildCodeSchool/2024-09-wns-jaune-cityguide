@@ -41,9 +41,8 @@ export class InterestPointResolver {
     @Query(() => InterestPoint)
     async getInterestPointsByCategory(@Arg("category_id") id: string) {
         const interestPoints = await InterestPoint.find({ 
-            where: { /* id_category: { id } */
-        } 
-    });
+            where: { /* id_category: { id } */ } 
+        });
         return interestPoints;
     }
 
