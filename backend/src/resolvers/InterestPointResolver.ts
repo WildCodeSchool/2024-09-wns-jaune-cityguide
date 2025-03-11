@@ -32,7 +32,18 @@ export class InterestPointInput {
 export class InterestPointResolver {
 	@Query(() => [InterestPoint])
 	async getInterestPoints() {
-		const interestPoints = await InterestPoint.find();
+		const interestPoints = await InterestPoint.find({
+            relations: [/* "category", "city" */]
+        });
 		return interestPoints;
 	}
+
+    @Query(() => InterestPoint)
+    async getInterestPointsByCategory(@Arg("category_id") id: string) {
+        const interestPoints = await InterestPoint.find({ 
+            where: { /* id_category: { id } */
+        } 
+    });
+        return interestPoints;
+    }
 }
