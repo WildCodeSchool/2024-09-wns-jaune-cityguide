@@ -1,4 +1,4 @@
-import { Arg, Field, InputType, Query, Resolver } from "type-graphql";
+import { Arg, Field, InputType, Query, Resolver, Mutation } from "type-graphql";
 import { InterestPoint } from "../entities/InterestPoint";
 
 @InputType()
@@ -62,4 +62,14 @@ export class InterestPointResolver {
         });
         return interestpoint;
     }
+
+    @Mutation(() => InterestPoint)
+	async createInterestPoint(@Arg("data") data: InterestPointInput) {
+		let interestpoint = new InterestPoint()
+		interestpoint = Object.assign(interestpoint, data);
+		// const categories = await Category.findBy({id: In(data.category)});
+		// interestpoint.categories = categories;
+		await interestpoint.save()
+		return interestpoint;
+	}
 }
