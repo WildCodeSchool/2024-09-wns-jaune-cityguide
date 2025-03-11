@@ -77,4 +77,14 @@ export class InterestPointResolver {
 	async deleteInterestPointById( @Arg("interest_point_id") id: string) {
 		return (await InterestPoint.delete({id})).affected
     }
+
+    @Mutation(() => InterestPoint)
+	async replaceInterestPointById( @Arg("interest_point_id") id: string, @Arg("data") data: InterestPointInput ) {
+		let interestpoint = await InterestPoint.findOneByOrFail({id})
+		interestpoint = Object.assign(interestpoint, data);
+		// const categories = await Category.findBy({id: In(data.categories)});
+		// interestpoint.categories = categories;
+		await interestpoint.save()
+		return interestpoint;
+	}
 }
