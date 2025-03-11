@@ -27,17 +27,17 @@ export class City extends BaseEntity {
     @Column("float")
     longitude!: number;
 
-    // @Field(() => [InterestPoint])
-    // @OneToMany(
-    //     () => InteresPoint,
-    //     (interesPoint) => interestPoint.city,
-    // )
-    // interestPoints!: InterestPoint[]
+    @Field(() => [InterestPoint])
+    @OneToMany(
+        () => InteresPoint,
+        (interesPoint) => interestPoint.city,
+    )
+    interestPoints!: InterestPoint[]
 
-    // @Field(() => [User])
-    // @OneToMany(
-    //     () => User,
-    //     (user) => user.city,
-    // )
-    // users!: user[];
+    @Field(() => [User])
+    @OneToMany(
+        () => User,
+        (user) => user.city,
+    )
+    users!: user[];
 }

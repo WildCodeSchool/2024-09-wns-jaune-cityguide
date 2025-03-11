@@ -29,37 +29,37 @@ export class CityResolver {
         return cities;
     }
 
-    // @Query(() => City)
-    // async getOneCity() {
-    //     const city = await City.findOneOrFail( {where: {id}, relations: ["interestPoints"]})
-    //     if (!city) {
-    //         throw new Error("City not found")
-    //     }
-    //     return city;
-    // }
+    @Query(() => City)
+    async getOneCity() {
+        const city = await City.findOneOrFail( {where: {id}, relations: ["interestPoints"]})
+        if (!city) {
+            throw new Error("City not found")
+        }
+        return city;
+    }
 
-    // @Mutation(() => City)
-    // async createCity(@Arg("data") data: CityInput) {
-    //     let city = new City()
-    //     city = Object.assign(city, data);
-    //     const interestPoint = await InterestPoint.findBy({id: In(data.interestPoints)})
-    //     city.interestPoints = interestPoints
-    //     await city.save()
-    //     return city;
-    // }
+    @Mutation(() => City)
+    async createCity(@Arg("data") data: CityInput) {
+        let city = new City()
+        city = Object.assign(city, data);
+        const interestPoint = await InterestPoint.findBy({id: In(data.interestPoints)})
+        city.interestPoints = interestPoints
+        await city.save()
+        return city;
+    }
 
-    // @Mutation(() => City)
-    // async updateCityById( @Arg("cityId") id: string, @Arg("data") data: CityInput) {
-    //     let city = await City.findOneByOrFail({id})
-    //     city = Object.assign(city, data);
-    //     const interestPoints = await InterestPoint.findBy({id: In(data.interestPoints)})
-    //     city.interestPoints = interestPoints
-    //     await city.save()
-    //     return city;
-    // }
+    @Mutation(() => City)
+    async updateCityById( @Arg("cityId") id: string, @Arg("data") data: CityInput) {
+        let city = await City.findOneByOrFail({id})
+        city = Object.assign(city, data);
+        const interestPoints = await InterestPoint.findBy({id: In(data.interestPoints)})
+        city.interestPoints = interestPoints
+        await city.save()
+        return city;
+    }
 
-    // @Mutation(() => Boolean)
-    // async deleteCityById( @Arg("cityId") id: string) {
-    //     return (await City.delete({id})).affected
-    // }
+    @Mutation(() => Boolean)
+    async deleteCityById( @Arg("cityId") id: string) {
+        return (await City.delete({id})).affected
+    }
 }
