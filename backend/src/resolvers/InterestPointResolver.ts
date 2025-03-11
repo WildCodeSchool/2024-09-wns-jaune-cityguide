@@ -72,4 +72,9 @@ export class InterestPointResolver {
 		await interestpoint.save()
 		return interestpoint;
 	}
+
+    @Mutation(() => Boolean)
+	async deleteInterestPointById( @Arg("interest_point_id") id: string) {
+		return (await InterestPoint.delete({id})).affected
+    }
 }
