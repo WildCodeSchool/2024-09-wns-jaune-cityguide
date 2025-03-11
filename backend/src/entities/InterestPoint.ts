@@ -32,7 +32,7 @@ export class InterestPoint extends BaseEntity {
 	@Column()
 	link_url!: string;
 
-	// TODO: add FKs: id_city and category_ic
+	// TODO: add FKs: id_city and category_id
 
 	// @Field(() => Category)
 	// @ManyToOne(
