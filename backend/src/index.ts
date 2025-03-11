@@ -5,6 +5,7 @@ import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import jwt from 'jsonwebtoken';
 import { CityResolver } from './resolvers/CityResolver';
+import { CategoryResolver } from './resolvers/CategoryResolver';
 
 
 config();
@@ -20,7 +21,7 @@ const start = async () => {
     await dataSource.initialize();
 
     const schema = await buildSchema({
-        resolvers: [CityResolver],
+        resolvers: [CityResolver, CategoryResolver],
         //authChecker: authChecker,
     });
 

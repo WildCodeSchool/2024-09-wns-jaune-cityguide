@@ -1,6 +1,7 @@
 import { config } from "dotenv";
 import { DataSource } from "typeorm";
 import { City } from "../entities/City";
+import { Category } from "../entities/Category";
 
 
 config();
@@ -16,5 +17,5 @@ export const dataSource = new DataSource({
     password: DB_PASSWORD,
     database: DB_SCHEMA,
     synchronize: true,
-    entities: [City],
+    entities: [City, Category],
 });
