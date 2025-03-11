@@ -46,4 +46,13 @@ export class InterestPointResolver {
     });
         return interestPoints;
     }
+
+    @Query(() => InterestPoint)
+    async getInterestPointsByCity(@Arg("city_id") id: string) {
+    const interestPoints = await InterestPoint.find({ 
+        where: { /* id_city: { id } */
+     } 
+    });
+        return interestPoints;
+    }
 }
