@@ -1,4 +1,4 @@
-import { Arg, Field, InputType, Query, Resolver, Mutation } from "type-graphql";
+import { Arg, Field, InputType, Query, Resolver, Mutation, ID } from "type-graphql";
 import { InterestPoint } from "../entities/InterestPoint";
 import type { Category } from "../entities/Category";
 import type {City} from "../entities/City";
@@ -23,10 +23,10 @@ export class InterestPointInput {
 	@Field()
 	link_url!: string;
 	
-	@Field()
+	@Field(() => ID)
 	city!: City;
 	
-	@Field()
+	@Field(() => ID)
 	category!: Category;
 }
 
