@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { Category } from "./Category";
 import { City } from "./City";
+import { Picture } from "./Picture";
 
 @Entity()
 @ObjectType()
@@ -53,4 +54,11 @@ export class InterestPoint extends BaseEntity {
 		(city) => city.interestPoints,
 	)
 	city?: City;
+
+	@Field(() => Picture)
+	@ManyToOne(
+		() => Picture,
+		(picture) => picture.interestPoint,
+	)
+	pictures!: Picture[];
 }
