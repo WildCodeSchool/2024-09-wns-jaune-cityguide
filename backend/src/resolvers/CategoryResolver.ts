@@ -26,7 +26,7 @@ export class CategoryResolver {
 
   @Query(() => Category)
   async getCategoryById(@Arg("categoryId") id: string) {
-    const category = Category.findOneOrFail({ where: { id } });
+    const category = await Category.findOneOrFail({ where: { id } });
     return category;
   }
 
