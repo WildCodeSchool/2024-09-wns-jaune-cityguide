@@ -44,7 +44,7 @@ export class InterestPoint extends BaseEntity {
 	// @Field(() => City)
 	// @ManyToOne(
 	// 	() => City,
-	// 	(city) => category.interestPoints,
+	// 	(city) => city.interestPoints,
 	// )
 	// id_city!: City;
 }
