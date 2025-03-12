@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { CityResolver } from "./resolvers/CityResolver";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { InterestPointResolver } from "./resolvers/InterestPointResolver";
+import { UserResolver } from "./resolvers/UserResolver";
 
 config();
 
@@ -20,7 +21,7 @@ const start = async () => {
 	await dataSource.initialize();
 
 	const schema = await buildSchema({
-		resolvers: [CityResolver, CategoryResolver, InterestPointResolver],
+		resolvers: [CityResolver, CategoryResolver, InterestPointResolver, UserResolver],
 		//authChecker: authChecker,
 	});
 
@@ -28,7 +29,7 @@ const start = async () => {
 
 	await startStandaloneServer(apiServer, {
 		listen: { port },
-		/* context: async ({ req, res }) => {
+		context: async ({ req, res }) => {
             if (!process.env.TOKEN_SECRET_KEY) return { res };
             const token = req.headers.cookie?.split("token=")[1];
 
@@ -40,7 +41,7 @@ const start = async () => {
                 res,
                 user: tokenContent,
             };
-        }, */
+        },
 	});
 
 	console.log("Backend started on port#" + port);
