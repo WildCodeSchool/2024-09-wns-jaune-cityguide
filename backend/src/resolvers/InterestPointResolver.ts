@@ -1,5 +1,7 @@
 import { Arg, Field, InputType, Query, Resolver, Mutation } from "type-graphql";
 import { InterestPoint } from "../entities/InterestPoint";
+import type { Category } from "../entities/Category";
+import type {City} from "../entities/City";
 
 @InputType()
 export class InterestPointInput {
@@ -21,70 +23,66 @@ export class InterestPointInput {
 	@Field()
 	link_url!: string;
 
-	// @Field()
-	// id_city!: number;
+	@Field()
+	city!: City;
 
-	// @Field()
-	// id_category!: number;
+	@Field()
+	category!: Category;
 }
 
 @Resolver(InterestPoint)
 export class InterestPointResolver {
 	@Query(() => [InterestPoint])
 	async getInterestPoints() {
-		const interestpoints = await InterestPoint.find({
-            relations: [/* "category", "city" */]
+		const interestPoints = await InterestPoint.find({
+            relations: ["category", "city"]
         });
-		return interestpoints;
+		return interestPoints;
 	}
 
     @Query(() => InterestPoint)
-    async getInterestPointsByCategory(@Arg("category_id") id: string) {
-        const interestpoints = await InterestPoint.find({ 
-            where: { /* id_category: { id } */ } 
+    async getInterestPointsByCategory(@Arg("categoryId") id: string) {
+        const interestPoints = await InterestPoint.find({ 
+            where: { category: { id } } 
         });
-        return interestpoints;
+        return interestPoints;
     }
 
     @Query(() => InterestPoint)
-    async getInterestPointsByCity(@Arg("city_id") id: string) {
-        const interestpoints = await InterestPoint.find({ 
-            where: { /* id_city: { id } */} 
+    async getInterestPointsByCity(@Arg("cityId") id: string) {
+        const interestPoints = await InterestPoint.find({ 
+            where: { city: { id } } 
         });
-        return interestpoints;
+        return interestPoints;
     }
 
     @Query(() => InterestPoint)
-    async getInterestPointById(@Arg("interest_point_id") id: string) {
-        const interestpoint = await InterestPoint.findOneOrFail({
+    async getInterestPointById(@Arg("interestPointId") id: string) {
+        const interestPoint = await InterestPoint.findOneOrFail({
             where: { id },
-			relations: [/* "category", "city" */]
+			relations: ["category", "city"]
         });
-        return interestpoint;
+        return interestPoint;
     }
 
     @Mutation(() => InterestPoint)
 	async createInterestPoint(@Arg("data") data: InterestPointInput) {
-		let interestpoint = new InterestPoint()
-		interestpoint = Object.assign(interestpoint, data);
-		// const categories = await Category.findBy({id: In(data.category)});
-		// interestpoint.categories = categories;
-		await interestpoint.save()
-		return interestpoint;
+		let interestPoint = new InterestPoint()
+		interestPoint = Object.assign(interestPoint, data);
+		await interestPoint.save()
+		return interestPoint;
 	}
 
     @Mutation(() => Boolean)
-	async deleteInterestPointById( @Arg("interest_point_id") id: string) {
+	async deleteInterestPointById( @Arg("interestPointId") id: string) {
 		return (await InterestPoint.delete({id})).affected
     }
 
     @Mutation(() => InterestPoint)
-	async replaceInterestPointById( @Arg("interest_point_id") id: string, @Arg("data") data: InterestPointInput ) {
-		let interestpoint = await InterestPoint.findOneByOrFail({id})
-		interestpoint = Object.assign(interestpoint, data);
-		// const categories = await Category.findBy({id: In(data.categories)});
-		// interestpoint.categories = categories;
-		await interestpoint.save()
-		return interestpoint;
+	async replaceInterestPointById( @Arg("interestPointId") id: string, @Arg("data") data: InterestPointInput ) {
+		let interestPoint = await InterestPoint.findOneByOrFail({id})
+		interestPoint = Object.assign(interestPoint, data);
+		await interestPoint.save()
+		return interestPoint;
 	}
 }
