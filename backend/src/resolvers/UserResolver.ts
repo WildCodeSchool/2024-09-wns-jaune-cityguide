@@ -1,0 +1,159 @@
+import { Arg, Authorized, Ctx, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
+import { User, UserRole } from "../entities/User";
+import { Response } from "express";
+import * as argon from "argon2";
+import * as jwt from "jsonwebtoken";
+
+
+@InputType()
+export class NewUserInput {
+  @Field()
+  firstname!: string;
+
+  @Field()
+  lastname!: string;
+
+  @Field()
+  email!: string;
+
+  @Field()
+  password!: string;
+}
+
+
+@InputType()
+export class UserInput {
+  @Field()
+  email!: string;
+
+  @Field()
+  password!: string;
+}
+
+
+
+@Resolver(User)
+export class UserResolver {
+  @Query(() => [User])
+  /* @Authorized(UserRole.SUPER_ADMIN) */
+  async getUsers() {
+    const users = await User.find();
+    return users;
+  }
+
+  @Query(() => User)
+  /* @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN) */
+  async getUserById(@Arg("userId") id: string) {
+    const user = await User.findOneByOrFail({ id });
+    if (!user) {
+      throw new Error("User note found");
+    }
+    return user;
+  }
+
+  @Mutation(() => User)
+  async registerUser(
+    @Arg("data") data: NewUserInput,
+    @Ctx() { res }: { res: Response }) {
+
+    if (!process.env.TOKEN_SECRET_KEY) {
+      throw new Error("Missing env variable");
+    }
+
+    const hashedPassword = await argon.hash(data.password);
+    const user = User.save({
+      email: data.email,
+      firstname: data.firstname,
+      lastname: data.lastname,
+      password: hashedPassword,
+      role: UserRole.USER,
+    });
+
+    const tokenContent = {
+      email: (await user).email,
+      firstname: (await user).firstname,
+      lastname: (await user).lastname,
+      role: (await user).role,
+    };
+
+    const token = jwt.sign(
+      tokenContent,
+      process.env.TOKEN_SECRET_KEY,
+      { expiresIn: "7h" },
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict"
+    });
+
+    const profile = {
+      email: (await user).email,
+      firstname: (await user).firstname,
+    };
+    return JSON.stringify(profile);
+  }
+
+  @Mutation(() => String)
+  async loginUser(
+    @Arg("data") data: UserInput,
+    @Ctx() { res }: { res: Response }) {
+      if (!process.env.TOKEN_SECRET_KEY) {
+        throw new Error("Missing env variable");
+      }
+
+      const user = await User.findOneByOrFail({ email: data.email });
+      if (!user) {
+        throw new Error("User not found");
+      };
+
+      const validPassword = await argon.verify(user.password, data.password);
+      if (!validPassword) {
+        throw new Error("Invalid password");
+      };
+
+      const tokenContent = {
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        role: user.role,
+      };
+
+      const token = jwt.sign(tokenContent, process.env.TOKEN_SECRET_KEY, { expiresIn: "7h" });
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict"
+      });
+
+      const profile = {
+        email: user.email,
+        firtsname: user.firstname,
+      };
+
+      return JSON.stringify(profile);
+    }
+
+
+  @Mutation(() => User)
+  /* @Authorized(UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN, UserRole.SUPER_USER, UserRole.USER) */
+  async updateUser(
+    @Arg("userId") id: string,
+    @Arg("data") data: UserInput) {
+      let user = await User.findOneByOrFail({ id });
+      user = Object.assign(user, data);
+      user.save();
+      return user;
+    }
+
+
+  @Mutation(() => User)
+  /* @Authorized(UserRole.SUPER_ADMIN, UserRole.SUPER_USER, UserRole.USER) */
+  async deleteUser(
+    @Arg("userId") id: string) {
+      const user = await User.findOneByOrFail({ id });
+      await user.remove();
+      return user;
+    }
+}
