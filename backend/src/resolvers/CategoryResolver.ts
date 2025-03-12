@@ -9,7 +9,7 @@ class CategoryInput {
   @Field()
   name!: string;
 
-  @Field()
+  @Field({ nullable: true })
   description?: string;
 
   @Field()
