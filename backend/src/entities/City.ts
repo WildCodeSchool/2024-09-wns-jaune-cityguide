@@ -36,7 +36,7 @@ export class City extends BaseEntity {
 		() => InterestPoint,
 		(interestPoint) => interestPoint.city,
 	)
-	interestPoints!: InterestPoint[];
+	interestPoints?: InterestPoint[];
 
 	// @Field(() => [User])
 	// @OneToMany(
