@@ -30,7 +30,7 @@ export class CityResolver {
     }
 
     @Query(() => City)
-    async getOneCity() {
+    async getCityById(@Arg("adId") id: string) {
         const city = await City.findOneOrFail( {where: {id}, relations: ["interestPoints"]})
         if (!city) {
             throw new Error("City not found")
