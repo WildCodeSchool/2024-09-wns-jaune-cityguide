@@ -1,5 +1,13 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+	BaseEntity,
+	Column,
+	Entity,
+	PrimaryGeneratedColumn,
+	ManyToOne,
+} from "typeorm";
+import { Category } from "./Category";
+import { City } from "./City";
 
 @Entity()
 @ObjectType()
@@ -32,19 +40,17 @@ export class InterestPoint extends BaseEntity {
 	@Column()
 	link_url!: string;
 
-	// TODO: add FKs: id_city and category_id
+	@Field(() => Category)
+	@ManyToOne(
+		() => Category,
+		(category) => category.interestPoints,
+	)
+	category!: Category;
 
-	// @Field(() => Category)
-	// @ManyToOne(
-	// 	() => Category,
-	// 	(category) => category.interestPoints,
-	// )
-	// id_category!: Category;
-
-	// @Field(() => City)
-	// @ManyToOne(
-	// 	() => City,
-	// 	(city) => city.interestPoints,
-	// )
-	// id_city!: City;
+	@Field(() => City)
+	@ManyToOne(
+		() => City,
+		(city) => city.interestPoints,
+	)
+	city!: City;
 }
