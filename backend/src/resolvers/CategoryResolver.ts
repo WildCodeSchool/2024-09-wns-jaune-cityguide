@@ -43,8 +43,12 @@ export class CategoryResolver {
     @Arg("categoryId") id: string,
     @Arg("data") data: CategoryInput
   ) {
-    let category = await Category.findOneByOrFail({ id });
-    category = Object.assign(category, data);
+    const category = await Category.findOneByOrFail({ id });
+    Object.assign(category, {
+      name: data.name,
+      description: data.description,
+      color: data.color,
+    });
     await category.save();
     return category;
   }
