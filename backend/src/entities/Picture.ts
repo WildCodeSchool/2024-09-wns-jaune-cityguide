@@ -24,8 +24,8 @@ export class Picture extends BaseEntity {
 	description!: string;
 
 	@Field()
-	@Column("float")
-	url!: number;
+	@Column()
+	url!: string;
 
 	@Field(() => InterestPoint)
 	@OneToMany(
