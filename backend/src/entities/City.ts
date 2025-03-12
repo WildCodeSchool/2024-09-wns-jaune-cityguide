@@ -25,7 +25,7 @@ export class City extends BaseEntity {
 
 	@Field()
 	@Column("float")
-	lattitiude!: number;
+	lattitude!: number;
 
 	@Field()
 	@Column("float")
@@ -36,7 +36,7 @@ export class City extends BaseEntity {
 		() => InterestPoint,
 		(interestPoint) => interestPoint.city,
 	)
-	interestPoints!: InterestPoint[];
+	interestPoints?: InterestPoint[];
 
 	// @Field(() => [User])
 	// @OneToMany(

@@ -52,5 +52,5 @@ export class InterestPoint extends BaseEntity {
 		() => City,
 		(city) => city.interestPoints,
 	)
-	city!: City;
+	city?: City;
 }
