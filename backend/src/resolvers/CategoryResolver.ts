@@ -1,5 +1,6 @@
 import { Arg, Field, InputType, Query, Resolver, Mutation } from "type-graphql";
 import { Category } from "../entities/Category";
+import type { InterestPoint } from "../entities/InterestPoint";
 
 @InputType()
 class CategoryInput {
@@ -14,6 +15,9 @@ class CategoryInput {
 
   @Field()
   color!: string;
+
+  @Field()
+  interestPoints!: InterestPoint[];
 }
 
 @Resolver(Category)
