@@ -25,23 +25,28 @@ const start = async () => {
 		//authChecker: authChecker,
 	});
 
-	const apiServer = new ApolloServer({ schema });
+	const apiServer = new ApolloServer({ schema, introspection: true });
 
 	await startStandaloneServer(apiServer, {
 		listen: { port },
 		context: async ({ req, res }) => {
-            if (!process.env.TOKEN_SECRET_KEY) return { res };
-            const token = req.headers.cookie?.split("token=")[1];
+			try {
+				if (!process.env.TOKEN_SECRET_KEY) return { res };
+				const token = req.headers.cookie?.split("token=")[1];
 
-            if (!token) return { res };
+				if (!token) return { res };
 
-            const tokenContent = jwt.verify(token, process.env.TOKEN_SECRET_KEY);
+				const tokenContent = jwt.verify(token, process.env.TOKEN_SECRET_KEY);
 
-            return {
-                res,
-                user: tokenContent,
-            };
-        },
+				return {
+					res,
+					user: tokenContent,
+				};
+			} catch (error) {
+				console.error("Erreur dans le contexte Apollo :", error);
+				return { res }; // Retourner un contexte minimal pour éviter le blocage
+			}
+		},
 	});
 
 	console.log("Backend started on port#" + port);
