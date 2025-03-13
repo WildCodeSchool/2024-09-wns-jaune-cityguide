@@ -5,6 +5,7 @@ import {
 	Entity,
 	PrimaryGeneratedColumn,
 	ManyToOne,
+	OneToMany,
 } from "typeorm";
 import { Category } from "./Category";
 import { City } from "./City";
@@ -55,8 +56,8 @@ export class InterestPoint extends BaseEntity {
 	)
 	city?: City;
 
-	@Field(() => Picture)
-	@ManyToOne(
+	@Field(() => [Picture])
+	@OneToMany(
 		() => Picture,
 		(picture) => picture.interestPoint,
 	)
