@@ -1,10 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home'
-import Inscription from './pages/Inscription'
-
-
-
+import Inscription from "./pages/Inscription/Inscription";
 import './App.css'
 
 function App() {
@@ -12,7 +9,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<Inscription />} />
+        <Route path="/register" element={<Inscription />} />
       </Routes>
     </Router>
   );
