@@ -27,11 +27,6 @@ const start = async () => {
 			CategoryResolver,
 			InterestPointResolver,
 			UserResolver,
-		],
-		resolvers: [
-			CityResolver,
-			CategoryResolver,
-			InterestPointResolver,
 			PictureResolver,
 		],
 		//authChecker: authChecker,
