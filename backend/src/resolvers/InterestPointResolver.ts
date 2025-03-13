@@ -1,7 +1,7 @@
 import { Arg, Field, InputType, Query, Resolver, Mutation, ID } from "type-graphql";
 import { InterestPoint } from "../entities/InterestPoint";
-import type { Category } from "../entities/Category";
-import type {City} from "../entities/City";
+import { City } from "../entities/City";
+import { Category } from "../entities/Category";
 
 @InputType()
 export class InterestPointInput {
@@ -24,10 +24,13 @@ export class InterestPointInput {
 	link_url!: string;
 	
 	@Field(() => ID)
-	city!: City;
+	city!: string;
 	
 	@Field(() => ID)
-	category!: Category;
+	category!: string;
+
+	@Field(() => [ID], { nullable: true })
+	pictures?: string[];
 }
 
 @Resolver(InterestPoint)
@@ -35,7 +38,7 @@ export class InterestPointResolver {
 	@Query(() => [InterestPoint])
 	async getInterestPoints() {
 		const interestPoints = await InterestPoint.find({
-			relations: ["category", "city"]
+			relations: ["category", "city", "pictures"]
 		});
 		return interestPoints;
 	}
@@ -43,7 +46,8 @@ export class InterestPointResolver {
 	@Query(() => InterestPoint)
 	async getInterestPointsByCategory(@Arg("categoryId") id: string) {
 		const interestPoints = await InterestPoint.find({ 
-			where: { category: { id } } 
+			where: { category: { id } } ,
+			relations: ["category", "city", "pictures"]
 		});
 		return interestPoints;
 	}
@@ -60,15 +64,22 @@ export class InterestPointResolver {
 	async getInterestPointById(@Arg("interestPointId") id: string) {
 		const interestPoint = await InterestPoint.findOneOrFail({
 			where: { id },
-			relations: ["category", "city"]
+			relations: ["category", "city", "pictures"]
 		});
 		return interestPoint;
 	}
 	
 	@Mutation(() => InterestPoint)
 	async createInterestPoint(@Arg("data") data: InterestPointInput) {
-		let interestPoint = new InterestPoint()
+		
+		const city = await City.findOneOrFail({ where: { id: data.city}});
+		const category = await Category.findOneOrFail({ where: { id: data.category}});
+
+		let interestPoint = new InterestPoint();
 		interestPoint = Object.assign(interestPoint, data);
+		interestPoint.city = city;
+		interestPoint.category = category;
+		
 		await interestPoint.save()
 		return interestPoint;
 	}
