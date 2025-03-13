@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { CityResolver } from "./resolvers/CityResolver";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { InterestPointResolver } from "./resolvers/InterestPointResolver";
+import { PictureResolver } from "./resolvers/PictureResolver";
 
 config();
 
@@ -20,7 +21,12 @@ const start = async () => {
 	await dataSource.initialize();
 
 	const schema = await buildSchema({
-		resolvers: [CityResolver, CategoryResolver, InterestPointResolver],
+		resolvers: [
+			CityResolver,
+			CategoryResolver,
+			InterestPointResolver,
+			PictureResolver,
+		],
 		//authChecker: authChecker,
 	});
 
