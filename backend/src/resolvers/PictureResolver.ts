@@ -43,6 +43,19 @@ export class PictureResolver {
     return picture;
   }
 
+  @Query(() => [Picture])
+  async getPicturesByInterestPoint(@Arg("interestPointId") id: string) {
+    const pictures = await Picture.find({ 
+      where: { interestPoint: { id } }, 
+      relations: [
+        "interestPoint", 
+        "interestPoint.city"
+      ] 
+    });
+    return pictures;
+  }
+
+  @Mutation(() => Picture)
   async createPicture(@Arg("data") data: PictureInput) {
     const interestPoint = await InterestPoint.findOneOrFail({ where: { id: data.interestPoint } });
 
