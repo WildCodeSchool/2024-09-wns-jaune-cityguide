@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { CityResolver } from "./resolvers/CityResolver";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { InterestPointResolver } from "./resolvers/InterestPointResolver";
+import { UserResolver } from "./resolvers/UserResolver";
 import { PictureResolver } from "./resolvers/PictureResolver";
 
 config();
@@ -25,28 +26,39 @@ const start = async () => {
 			CityResolver,
 			CategoryResolver,
 			InterestPointResolver,
+			UserResolver,
+		],
+		resolvers: [
+			CityResolver,
+			CategoryResolver,
+			InterestPointResolver,
 			PictureResolver,
 		],
 		//authChecker: authChecker,
 	});
 
-	const apiServer = new ApolloServer({ schema });
+	const apiServer = new ApolloServer({ schema, introspection: true });
 
 	await startStandaloneServer(apiServer, {
 		listen: { port },
-		/* context: async ({ req, res }) => {
-            if (!process.env.TOKEN_SECRET_KEY) return { res };
-            const token = req.headers.cookie?.split("token=")[1];
+		context: async ({ req, res }) => {
+			try {
+				if (!process.env.TOKEN_SECRET_KEY) return { res };
+				const token = req.headers.cookie?.split("token=")[1];
 
-            if (!token) return { res };
+				if (!token) return { res };
 
-            const tokenContent = jwt.verify(token, process.env.TOKEN_SECRET_KEY);
+				const tokenContent = jwt.verify(token, process.env.TOKEN_SECRET_KEY);
 
-            return {
-                res,
-                user: tokenContent,
-            };
-        }, */
+				return {
+					res,
+					user: tokenContent,
+				};
+			} catch (error) {
+				console.error("Erreur dans le contexte Apollo :", error);
+				return { res }; // Retourner un contexte minimal pour éviter le blocage
+			}
+		},
 	});
 
 	console.log("Backend started on port#" + port);
