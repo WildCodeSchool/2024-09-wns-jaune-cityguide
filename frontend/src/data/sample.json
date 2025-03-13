@@ -1,0 +1,214 @@
+{
+	"interestPoints": [
+		{
+			"id": "1",
+			"name": "Tour Eiffel",
+			"description": "Symbole de la France, construite par Gustave Eiffel en 1889.",
+			"address": "Champ de Mars, 5 Av. Anatole France, 75007 Paris",
+			"latitude": 48.8584,
+			"longitude": 2.2945,
+			"link_url": "https://www.toureiffel.paris/",
+			"category": {
+				"id": "1",
+				"name": "Monument",
+				"color": "#D32F2F"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Tour Eiffel",
+					"url": "https://example.com/tour-eiffel.jpg"
+				}
+			]
+		},
+		{
+			"id": "2",
+			"name": "Musée du Louvre",
+			"description": "Le plus grand musée du monde, abritant la Joconde.",
+			"address": "Rue de Rivoli, 75001 Paris",
+			"latitude": 48.8606,
+			"longitude": 2.3376,
+			"link_url": "https://www.louvre.fr/",
+			"category": {
+				"id": "2",
+				"name": "Musée",
+				"color": "#1976D2"
+			},
+			"pictures": [
+				{
+					"id": "2",
+					"name": "Musée du Louvre",
+					"url": "https://example.com/louvre.jpg"
+				}
+			]
+		},
+		{
+			"id": "3",
+			"name": "Cathédrale Notre-Dame",
+			"description": "Cathédrale gothique emblématique.",
+			"address": "6 Parvis Notre-Dame, 75004 Paris",
+			"latitude": 48.853,
+			"longitude": 2.3499,
+			"link_url": "https://www.notredamedeparis.fr/",
+			"category": {
+				"id": "1",
+				"name": "Monument",
+				"color": "#D32F2F"
+			},
+			"pictures": [
+				{
+					"id": "3",
+					"name": "Notre-Dame",
+					"url": "https://example.com/notre-dame.jpg"
+				}
+			]
+		},
+		{
+			"id": "4",
+			"name": "Sacré-Cœur",
+			"description": "Basilique sur la butte Montmartre avec une vue panoramique.",
+			"address": "35 Rue du Chevalier de la Barre, 75018 Paris",
+			"latitude": 48.8867,
+			"longitude": 2.3431,
+			"link_url": "https://www.sacre-coeur-montmartre.com/",
+			"category": {
+				"id": "1",
+				"name": "Monument",
+				"color": "#D32F2F"
+			},
+			"pictures": [
+				{
+					"id": "4",
+					"name": "Sacré-Cœur",
+					"url": "https://example.com/sacre-coeur.jpg"
+				}
+			]
+		},
+		{
+			"id": "5",
+			"name": "Jardin du Luxembourg",
+			"description": "Parc emblématique avec un palais et des espaces verts.",
+			"address": "75006 Paris",
+			"latitude": 48.8462,
+			"longitude": 2.3372,
+			"link_url": "https://www.senat.fr/visite/jardin.html",
+			"category": {
+				"id": "3",
+				"name": "Parc",
+				"color": "#388E3C"
+			},
+			"pictures": [
+				{
+					"id": "5",
+					"name": "Jardin du Luxembourg",
+					"url": "https://example.com/jardin-luxembourg.jpg"
+				}
+			]
+		},
+		{
+			"id": "6",
+			"name": "Bois de Boulogne",
+			"description": "Grand espace vert avec des lacs et des sentiers.",
+			"address": "75016 Paris",
+			"latitude": 48.8638,
+			"longitude": 2.2594,
+			"link_url": "https://www.paris.fr/bois-de-boulogne",
+			"category": {
+				"id": "3",
+				"name": "Parc",
+				"color": "#388E3C"
+			},
+			"pictures": [
+				{
+					"id": "6",
+					"name": "Bois de Boulogne",
+					"url": "https://example.com/bois-boulogne.jpg"
+				}
+			]
+		},
+		{
+			"id": "7",
+			"name": "Opéra Garnier",
+			"description": "Théâtre historique et chef-d'œuvre architectural.",
+			"address": "Place de l'Opéra, 75009 Paris",
+			"latitude": 48.872,
+			"longitude": 2.3316,
+			"link_url": "https://www.operadeparis.fr/",
+			"category": {
+				"id": "4",
+				"name": "Culture",
+				"color": "#FFC107"
+			},
+			"pictures": [
+				{
+					"id": "7",
+					"name": "Opéra Garnier",
+					"url": "https://example.com/opera-garnier.jpg"
+				}
+			]
+		},
+		{
+			"id": "8",
+			"name": "Centre Pompidou",
+			"description": "Musée d'art moderne et contemporain.",
+			"address": "Place Georges-Pompidou, 75004 Paris",
+			"latitude": 48.86,
+			"longitude": 2.3522,
+			"link_url": "https://www.centrepompidou.fr/",
+			"category": {
+				"id": "2",
+				"name": "Musée",
+				"color": "#1976D2"
+			},
+			"pictures": [
+				{
+					"id": "8",
+					"name": "Centre Pompidou",
+					"url": "https://example.com/centre-pompidou.jpg"
+				}
+			]
+		},
+		{
+			"id": "9",
+			"name": "Arc de Triomphe",
+			"description": "Monument emblématique sur les Champs-Élysées.",
+			"address": "Place Charles de Gaulle, 75008 Paris",
+			"latitude": 48.8738,
+			"longitude": 2.295,
+			"link_url": "https://www.paris-arc-de-triomphe.fr/",
+			"category": {
+				"id": "1",
+				"name": "Monument",
+				"color": "#D32F2F"
+			},
+			"pictures": [
+				{
+					"id": "9",
+					"name": "Arc de Triomphe",
+					"url": "https://example.com/arc-triomphe.jpg"
+				}
+			]
+		},
+		{
+			"id": "10",
+			"name": "Cimetière du Père-Lachaise",
+			"description": "Cimetière célèbre où reposent de nombreuses personnalités.",
+			"address": "16 Rue du Repos, 75020 Paris",
+			"latitude": 48.8614,
+			"longitude": 2.3933,
+			"link_url": "https://www.pere-lachaise.com/",
+			"category": {
+				"id": "5",
+				"name": "Lieu historique",
+				"color": "#6D4C41"
+			},
+			"pictures": [
+				{
+					"id": "10",
+					"name": "Père-Lachaise",
+					"url": "https://example.com/pere-lachaise.jpg"
+				}
+			]
+		}
+	]
+}
