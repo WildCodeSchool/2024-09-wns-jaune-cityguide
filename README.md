@@ -54,6 +54,8 @@ Se rendre sur https://github.com/WildCodeSchool/2024-09-wns-jaune-cityguide et c
 Se relire, puis cliquer sur le bouton:
 **Create pull request**
 
+Attention, ne pas oublier d'ajouter des **Reviewers** afin de leur notifier la pull request
+
 Ensuite il faudra attendre la validation du code d'au moins deux personnes exterieures à la features avant de merger.
 
 8. Acceptation de la pull request
