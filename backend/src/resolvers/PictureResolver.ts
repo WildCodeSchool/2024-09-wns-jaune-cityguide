@@ -19,6 +19,18 @@ export class PictureInput {
 
 @Resolver(Picture)
 export class PictureResolver {
+
+  @Query(() => [Picture])
+  async getPictures() {
+    const pictures = await Picture.find({ 
+      relations: [
+        "interestPoint", 
+        "interestPoint.city"
+      ] 
+    });
+    return pictures
+  }
+
   @Query(() => Picture)
   async getPictureById(@Arg("pictureId") id: string) {
     const picture = await Picture.findOneOrFail({ 
