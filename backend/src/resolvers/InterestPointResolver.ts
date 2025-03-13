@@ -38,7 +38,7 @@ export class InterestPointResolver {
 	@Query(() => [InterestPoint])
 	async getInterestPoints() {
 		const interestPoints = await InterestPoint.find({
-			relations: ["category", "city"]
+			relations: ["category", "city", "pictures"]
 		});
 		return interestPoints;
 	}
@@ -46,7 +46,8 @@ export class InterestPointResolver {
 	@Query(() => InterestPoint)
 	async getInterestPointsByCategory(@Arg("categoryId") id: string) {
 		const interestPoints = await InterestPoint.find({ 
-			where: { category: { id } } 
+			where: { category: { id } } ,
+			relations: ["category", "city", "pictures"]
 		});
 		return interestPoints;
 	}
@@ -63,7 +64,7 @@ export class InterestPointResolver {
 	async getInterestPointById(@Arg("interestPointId") id: string) {
 		const interestPoint = await InterestPoint.findOneOrFail({
 			where: { id },
-			relations: ["category", "city"]
+			relations: ["category", "city", "pictures"]
 		});
 		return interestPoint;
 	}
