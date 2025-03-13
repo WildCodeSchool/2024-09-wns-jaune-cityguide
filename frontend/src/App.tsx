@@ -1,20 +1,13 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import "./App.css";
+import Header from "./organisms/Header";
 
-import Home from './pages/Home'
-import Inscription from './pages/Inscription'
-
-
-
-import './App.css'
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<Inscription />} />
-      </Routes>
-    </Router>
+    <>
+    <Header/>
+    </>
+
   );
 }
 
