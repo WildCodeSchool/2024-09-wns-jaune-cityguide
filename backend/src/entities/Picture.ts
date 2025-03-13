@@ -4,7 +4,7 @@ import {
 	Column,
 	Entity,
 	PrimaryGeneratedColumn,
-	OneToMany,
+	ManyToOne,
 } from "typeorm";
 import { InterestPoint } from "./InterestPoint";
 
@@ -28,7 +28,7 @@ export class Picture extends BaseEntity {
 	url!: string;
 
 	@Field(() => InterestPoint)
-	@OneToMany(
+	@ManyToOne(
 		() => InterestPoint,
 		(interestPoint) => interestPoint.pictures,
 	)
