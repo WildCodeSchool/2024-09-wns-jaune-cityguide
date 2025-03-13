@@ -6,7 +6,7 @@ export default function HomePage() {
     <div>
       <h1>Page d'accueil</h1>
       <nav>
-        <Link to="/about">Aller à la page À propos</Link>
+        <Link to="/inscription">Aller à la page Inscription</Link>
       </nav>
     </div>
   );
