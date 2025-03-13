@@ -49,7 +49,10 @@ git push origin nom-de-la-branche
 
 7. Faire valider sa pull request
 
-Se rendre sur https://github.com/WildCodeSchool/2024-09-wns-jaune-cityguide et cliquer sur le bouton pull request
+Se rendre sur https://github.com/WildCodeSchool/2024-09-wns-jaune-cityguide et cliquer sur le bouton :
+**Compare & pull request**
+Se relire, puis cliquer sur le bouton:
+**Create pull request**
 
 Ensuite il faudra attendre la validation du code d'au moins deux personnes exterieures à la features avant de merger.
 
