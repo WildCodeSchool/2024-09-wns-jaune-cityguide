@@ -1,5 +1,7 @@
 import { Arg, Field, InputType, Query, Resolver, Mutation, ID } from "type-graphql";
 import { InterestPoint } from "../entities/InterestPoint";
+import { City } from "../entities/City";
+import { Category } from "../entities/Category";
 
 @InputType()
 export class InterestPointInput {
@@ -68,8 +70,15 @@ export class InterestPointResolver {
 	
 	@Mutation(() => InterestPoint)
 	async createInterestPoint(@Arg("data") data: InterestPointInput) {
+		
+		const city = await City.findOneOrFail({ where: { id: data.city}});
+		const category = await Category.findOneOrFail({ where: { id: data.category}});
+
 		let interestPoint = new InterestPoint();
 		interestPoint = Object.assign(interestPoint, data);
+		interestPoint.city = city;
+		interestPoint.category = category;
+		
 		await interestPoint.save()
 		return interestPoint;
 	}
