@@ -81,4 +81,9 @@ export class PictureResolver {
     await picture.save();
     return picture;
   }
+
+  @Mutation(() => Boolean)
+  async deletePictureById(@Arg("pictureId") id: string) {
+    return (await Picture.delete({ id })).affected;
+  }
 }
