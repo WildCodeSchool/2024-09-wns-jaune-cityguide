@@ -30,4 +30,19 @@ export class PictureResolver {
     await picture.save();
     return picture;
   }
+  
+  @Mutation(() => Picture)
+  async updatePictureById(@Arg("pictureId") id: string, @Arg("data") data: PictureInput) {
+    let picture = await Picture.findOneByOrFail({ id });
+    
+    picture = Object.assign(picture, data);
+    
+    const interestPoint = await InterestPoint.findOneOrFail({ where: { id: data.interestPoint } });
+    
+    Object.assign(picture, data);
+    picture.interestPoint = interestPoint;
+    
+    await picture.save();
+    return picture;
+  }
 }
