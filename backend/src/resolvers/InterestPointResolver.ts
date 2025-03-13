@@ -2,6 +2,8 @@ import { Arg, Field, InputType, Query, Resolver, Mutation, ID } from "type-graph
 import { InterestPoint } from "../entities/InterestPoint";
 import type { Category } from "../entities/Category";
 import type {City} from "../entities/City";
+import type { Picture } from "../entities/Picture";
+import { In } from "typeorm";
 
 @InputType()
 export class InterestPointInput {
@@ -24,10 +26,13 @@ export class InterestPointInput {
 	link_url!: string;
 	
 	@Field(() => ID)
-	city!: City;
+	city!: string;
 	
 	@Field(() => ID)
-	category!: Category;
+	category!: string;
+
+	@Field(() => [ID], { nullable: true })
+	pictures?: string[];
 }
 
 @Resolver(InterestPoint)
@@ -67,8 +72,13 @@ export class InterestPointResolver {
 	
 	@Mutation(() => InterestPoint)
 	async createInterestPoint(@Arg("data") data: InterestPointInput) {
-		let interestPoint = new InterestPoint()
+		let interestPoint = new InterestPoint();
 		interestPoint = Object.assign(interestPoint, data);
+		// const category = await Category.findOneByOrFail({id: In([data.category])});
+		// const city = await City.findOneByOrFail({id: In([data.city])});
+		// interestPoint.category = category;
+		// interestPoint.city = city;
+		// console.log("CC", interestPoint);
 		await interestPoint.save()
 		return interestPoint;
 	}
