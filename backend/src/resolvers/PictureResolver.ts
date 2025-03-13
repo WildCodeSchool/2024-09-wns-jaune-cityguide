@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType, Mutation, Resolver, ID, Arg } from "type-graphql";
+import { Field, InputType, ObjectType, Mutation, Resolver, ID, Arg, Query } from "type-graphql";
 import { Picture } from "../entities/Picture";
 import { InterestPoint } from "../entities/InterestPoint";
 
@@ -19,7 +19,18 @@ export class PictureInput {
 
 @Resolver(Picture)
 export class PictureResolver {
-  @Mutation(() => Picture)
+  @Query(() => Picture)
+  async getPictureById(@Arg("pictureId") id: string) {
+    const picture = await Picture.findOneOrFail({ 
+      where: { id }, 
+      relations: [
+        "interestPoint", 
+        "interestPoint.city"
+      ] 
+    });
+    return picture;
+  }
+
   async createPicture(@Arg("data") data: PictureInput) {
     const interestPoint = await InterestPoint.findOneOrFail({ where: { id: data.interestPoint } });
 
