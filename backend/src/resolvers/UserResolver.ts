@@ -30,6 +30,18 @@ export class UserInput {
   password!: string;
 }
 
+@InputType()
+export class UpdateUserInput {
+  @Field({ nullable: true })
+  firstname?: string;
+
+  @Field({ nullable: true })
+  lastname?: string;
+
+  @Field({ nullable: true })
+  email?: string;
+}
+
 
 
 @Resolver(User)
@@ -44,7 +56,7 @@ export class UserResolver {
   @Query(() => User)
   /* @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN) */
   async getUserById(@Arg("userId") id: string) {
-    const user = await User.findOneByOrFail({ id });
+    const user = await User.findOneBy({ id });
     if (!user) {
       throw new Error("User note found");
     }
@@ -61,19 +73,19 @@ export class UserResolver {
     }
 
     const hashedPassword = await argon.hash(data.password);
-    const user = User.save({
+    const user = await User.save({
       email: data.email,
       firstname: data.firstname,
       lastname: data.lastname,
-      password: hashedPassword,
+      hashedPassword: hashedPassword,
       role: UserRole.USER,
     });
 
     const tokenContent = {
-      email: (await user).email,
-      firstname: (await user).firstname,
-      lastname: (await user).lastname,
-      role: (await user).role,
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      role: user.role,
     };
 
     const token = jwt.sign(
@@ -89,8 +101,8 @@ export class UserResolver {
     });
 
     const profile = {
-      email: (await user).email,
-      firstname: (await user).firstname,
+      mail: user.email,
+      name: user.firstname,
     };
     return JSON.stringify(profile);
   }
@@ -99,61 +111,69 @@ export class UserResolver {
   async loginUser(
     @Arg("data") data: UserInput,
     @Ctx() { res }: { res: Response }) {
-      if (!process.env.TOKEN_SECRET_KEY) {
-        throw new Error("Missing env variable");
-      }
-
-      const user = await User.findOneByOrFail({ email: data.email });
-      if (!user) {
-        throw new Error("User not found");
-      };
-
-      const validPassword = await argon.verify(user.password, data.password);
-      if (!validPassword) {
-        throw new Error("Invalid password");
-      };
-
-      const tokenContent = {
-        email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        role: user.role,
-      };
-
-      const token = jwt.sign(tokenContent, process.env.TOKEN_SECRET_KEY, { expiresIn: "7h" });
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict"
-      });
-
-      const profile = {
-        email: user.email,
-        firtsname: user.firstname,
-      };
-
-      return JSON.stringify(profile);
+      
+    if (!process.env.TOKEN_SECRET_KEY) {
+      throw new Error("Missing env variable");
     }
+
+    const user = await User.findOneBy({ email: data.email });
+    if (!user) {
+      throw new Error("User not found");
+    };
+
+    const validPassword = await argon.verify(user.hashedPassword, data.password);
+    if (!validPassword) {
+      throw new Error("Invalid password");
+    };
+
+    const tokenContent = {
+      userId: user.id,
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      role: user.role,
+    };
+
+    const token = jwt.sign(tokenContent, process.env.TOKEN_SECRET_KEY, { expiresIn: "7h" });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict"
+    });
+    
+    const profile = {
+      mail: user.email,
+      name: user.firstname,
+    };
+    return JSON.stringify(profile);
+  }
 
 
   @Mutation(() => User)
   /* @Authorized(UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN, UserRole.SUPER_USER, UserRole.USER) */
   async updateUser(
     @Arg("userId") id: string,
-    @Arg("data") data: UserInput) {
-      let user = await User.findOneByOrFail({ id });
-      user = Object.assign(user, data);
-      user.save();
-      return user;
-    }
+    @Arg("data") data: UpdateUserInput) {
+    let user = await User.findOneByOrFail({ id });
+    user = Object.assign(user, data);
+    user.save();
+    return user;
+  }
 
 
   @Mutation(() => User)
   /* @Authorized(UserRole.SUPER_ADMIN, UserRole.SUPER_USER, UserRole.USER) */
   async deleteUser(
     @Arg("userId") id: string) {
-      const user = await User.findOneByOrFail({ id });
-      await user.remove();
-      return user;
-    }
+    const user = await User.findOneByOrFail({ id });
+
+    // Stocker une copie de l'utilisateur avant suppression
+    const deletedUser = { ...user };
+
+    await user.remove();
+
+    // Retourner la copie de l'utilisateur supprimé
+    return deletedUser;
+  }
 }
