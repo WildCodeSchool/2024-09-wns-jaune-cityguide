@@ -4,6 +4,7 @@ import { City } from "../entities/City";
 import { Category } from "../entities/Category";
 import { InterestPoint } from "../entities/InterestPoint";
 import { User } from "../entities/User";
+import { Picture } from "../entities/Picture";
 
 config();
 
@@ -17,5 +18,5 @@ export const dataSource = new DataSource({
 	password: DB_PASSWORD,
 	database: DB_SCHEMA,
 	synchronize: true,
-	entities: [City, Category, InterestPoint, User],
+	entities: [City, Category, InterestPoint, User, Picture],
 });

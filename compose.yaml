@@ -20,6 +20,17 @@ services:
     environment:
       VITE_GATEWAY_PORT: ${GATEWAY_PORT}
 
+  test_database:
+    container_name: cityguide_test_database
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: ${DB_TEST_PASSWORD}
+      POSTGRES_DB: ${DB_TEST_SCHEMA}
+      POSTGRES_USER: ${DB_TEST_USER}
+      POSTGRES_HOST: ${DB_TEST_HOST}
+    ports:
+      - "5434:5432"
+
   database:
     container_name: cityguide_database
     image: postgres

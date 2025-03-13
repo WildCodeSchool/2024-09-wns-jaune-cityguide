@@ -2,8 +2,27 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import HomePage from "./pages/Home/HomePage.tsx";
+import Inscription from './pages/Inscription/index.tsx';
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/",
+        element: <Inscription />,
+      },
+    ],
+  },
+]);
 
 const client = new ApolloClient({
   uri: `http://localhost:${import.meta.env.VITE_GATEWAY_PORT}/api`,
@@ -13,7 +32,7 @@ const client = new ApolloClient({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ApolloProvider client={client}>
-      <App />
+    <RouterProvider router={router} />
     </ApolloProvider>
   </StrictMode>,
 )

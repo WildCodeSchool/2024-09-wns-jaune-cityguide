@@ -5,9 +5,6 @@ import type { InterestPoint } from "../entities/InterestPoint";
 @InputType()
 class CategoryInput {
   @Field()
-  id!: string;
-
-  @Field()
   name!: string;
 
   @Field({ nullable: true })
@@ -17,7 +14,7 @@ class CategoryInput {
   color!: string;
 
   @Field(() => [ID])
-  interestPoints!: InterestPoint[];
+  interestPoints?: InterestPoint[];
 }
 
 @Resolver(Category)

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import './Home.css'
 
-function Home() {
+export default function HomePage() {
   return (
     <div>
       <h1>Page d'accueil</h1>
@@ -11,5 +11,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;

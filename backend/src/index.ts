@@ -8,6 +8,7 @@ import { CityResolver } from "./resolvers/CityResolver";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { InterestPointResolver } from "./resolvers/InterestPointResolver";
 import { UserResolver } from "./resolvers/UserResolver";
+import { PictureResolver } from "./resolvers/PictureResolver";
 
 config();
 
@@ -21,7 +22,13 @@ const start = async () => {
 	await dataSource.initialize();
 
 	const schema = await buildSchema({
-		resolvers: [CityResolver, CategoryResolver, InterestPointResolver, UserResolver],
+		resolvers: [
+			CityResolver,
+			CategoryResolver,
+			InterestPointResolver,
+			UserResolver,
+			PictureResolver,
+		],
 		//authChecker: authChecker,
 	});
 
