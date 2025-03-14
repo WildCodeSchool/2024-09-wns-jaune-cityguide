@@ -15,7 +15,7 @@ const customIcon = new L.Icon({
 	popupAnchor: [1, -34],
 });
 
-export default function MapComponent() {
+export default function MapComponent({ onSelectPoint }: { onSelectPoint: (point: InterestPoint) => void }) {
 	const [interestPoints, setInterestPoints] = useState<InterestPoint[]>([]);
 
 	useEffect(() => {
@@ -41,6 +41,9 @@ export default function MapComponent() {
 						key={point.id}
 						position={[point.latitude, point.longitude]}
 						icon={customIcon as L.Icon}
+						eventHandlers={{
+							click: () => onSelectPoint(point),
+						  }}
 					>
 						<Popup>
 							<div className="text-center">

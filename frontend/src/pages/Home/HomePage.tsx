@@ -5,16 +5,29 @@ import { useState } from "react";
 
 export default function HomePage() {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedPoint, setSelectedPoint] = useState(null);
+
   const toggleDetails = () => {
     setIsOpen(!isOpen);
   };
-	return (
-		<div>
-			<MapComponent />
-      <div>
-          <button onClick={toggleDetails}>Détails du point d'intérêt</button>
-          {isOpen && <InterestPointDetails onClose={toggleDetails} />}
-        </div>
-		</div>
-	);
+  const handleSelectPoint = (point) => {
+    setSelectedPoint(point);
+    setIsOpen(true);
+  };
+
+  return (
+    <div className="flex flex-col flex-1">
+      <MapComponent onSelectPoint={handleSelectPoint} />
+      <div className="w-full mx-auto">
+        {isOpen && (
+          <div className="top-full left-0 w-full shadow-lg h-[75vh] overflow-y-auto">
+            <InterestPointDetails
+              point={selectedPoint}
+              onClose={toggleDetails}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
