@@ -17,8 +17,8 @@ export default function InterestPointDetails({ onClose, point }) {
   };
 
   return (
-    <div className=" bg-[#706EEB] flex flex-col md:items-center lg:flex-row lg:justify-center p-2 lg:p-0 m-2 lg:m-0 rounded-3xl lg:rounded-none  md:w-auto">
-      <div className="bg-[#FFFFFF] lg:bg-transparent flex flex-col md:flex-row items-center lg:justify-center gap-6 lg:gap-50 pt-5 pb-10 px-10 lg:p-10 rounded-3xl w-90 lg:w-full lg:max-w-5xl">
+    <div className=" bg-[#706EEB] flex flex-col md:items-center md:justify-center lg:flex-row lg:justify-center p-2 lg:p-0 lg:m-0">
+      <div className="bg-[#FFFFFF] lg:bg-transparent flex flex-col md:flex-row items-center lg:justify-center gap-6 lg:gap-50 pt-5 pb-10 px-10 lg:p-10 rounded-3xl w-90 lg:w-full lg:max-w-5xl m-auto">
         <div className="pb-6 lg:pb-0 border-b-2 border-[#706EEB] flex flex-col lg:border-0 lg:w-100">
           <button
             className="static text-black transform pr-0 rounded-full flex justify-end lg:hidden"

@@ -20,7 +20,7 @@ export default function HomePage() {
       <MapComponent onSelectPoint={handleSelectPoint} />
       <div className="w-full mx-auto">
         {isOpen && (
-          <div className="top-full left-0 w-full shadow-lg h-[75vh] overflow-y-auto">
+          <div className="top-full left-0 w-full h-[75vh] overflow-y-auto">
             <InterestPointDetails
               point={selectedPoint}
               onClose={toggleDetails}
