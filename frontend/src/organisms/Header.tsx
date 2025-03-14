@@ -10,7 +10,9 @@ export default function Navbar() {
         <div className="relative flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
+            <a href="/">
             <img className="h-14 w-auto" src={logo} alt="City Guide" />
+            </a>
           </div>
 
           {/* 🔹 Searchbar bien positionnée (centrée en desktop et présente en mobile) */}
