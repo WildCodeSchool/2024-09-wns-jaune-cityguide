@@ -9,6 +9,7 @@ import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { InterestPointResolver } from "./resolvers/InterestPointResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 import { PictureResolver } from "./resolvers/PictureResolver";
+import { seedDatabase } from "./data/seeder";
 
 config();
 
@@ -19,7 +20,13 @@ if (isNaN(port) || port < 0 || port > 65535) {
 }
 
 const start = async () => {
-	await dataSource.initialize();
+	await dataSource
+		.initialize()
+		.then(() => console.log("Database connected"))
+		.catch((err) => console.error("Error connecting to the database", err));
+	await seedDatabase()
+		.then(() => console.log("Database seeded"))
+		.catch((err) => console.error("Error seeding the database", err));
 
 	const schema = await buildSchema({
 		resolvers: [
