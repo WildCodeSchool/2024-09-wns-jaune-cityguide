@@ -5,7 +5,7 @@ import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import HomePage from "./pages/Home/HomePage.tsx";
-import Inscription from './pages/Inscription/index.tsx';
+import Inscription from './pages/Inscription/Inscription.tsx';
 
 const router = createBrowserRouter([
   {
