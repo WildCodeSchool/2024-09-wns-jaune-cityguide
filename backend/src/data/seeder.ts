@@ -112,7 +112,7 @@ export async function seedDatabase() {
 					category: category,
 				},
 			]);
-			console.log("Interest point inserted:", savedInterestPoint);
+			// console.log("Interest point inserted:", savedInterestPoint);
 			if (!savedInterestPoint) {
 				throw new Error(
 					`Failed to insert interest point: ${interestPoint.name}`,
