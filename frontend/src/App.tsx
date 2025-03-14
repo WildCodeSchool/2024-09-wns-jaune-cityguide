@@ -1,18 +1,18 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-import Home from './pages/Home'
-import Inscription from "./pages/Inscription/Inscription";
-import './App.css'
+import { Outlet } from "react-router-dom";
+import "./App.css";
+import Footer from "./organisms/Footer";
+import Header from "./organisms/Header";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Inscription />} />
-      </Routes>
-    </Router>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
   );
 }
 
-export default App
+export default App;

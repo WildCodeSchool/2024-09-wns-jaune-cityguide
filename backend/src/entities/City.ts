@@ -7,6 +7,7 @@ import {
 	OneToMany,
 } from "typeorm";
 import { InterestPoint } from "./InterestPoint";
+import { User } from "./User";
 
 @Entity()
 @ObjectType()
@@ -38,10 +39,10 @@ export class City extends BaseEntity {
 	)
 	interestPoints?: InterestPoint[];
 
-	// @Field(() => [User])
-	// @OneToMany(
-	// 	() => User,
-	// 	(user) => user.city,
-	// )
-	// users!: user[];
+	 @Field(() => [User])
+	 @OneToMany(
+	 	() => User,
+	 	(user) => user.city,
+	 )
+	 users!: User[];
 }

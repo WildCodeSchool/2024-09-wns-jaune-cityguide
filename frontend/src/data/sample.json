@@ -1,0 +1,269 @@
+{
+	"interestPoints": [
+		{
+			"id": "1",
+			"name": "Tour Eiffel",
+			"description": "Symbole incontesté de la France, la Tour Eiffel a été construite par l'ingénieur Gustave Eiffel pour l'Exposition Universelle de 1889. Haut de 330 mètres, cet imposant monument en fer forgé offre une vue imprenable sur la ville de Paris depuis ses différents étages.",
+			"address": "Champ de Mars, 5 Av. Anatole France, 75007 Paris",
+			"latitude": 48.8584,
+			"longitude": 2.2945,
+			"link_url": "https://www.toureiffel.paris/",
+			"category": {
+				"id": "1",
+				"name": "Monument",
+				"color": "#D32F2F"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Tour Eiffel",
+					"url": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg"
+				},
+				{
+					"id": "2",
+					"name": "Tour Eiffel",
+					"url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtiQ_Pcwlc6qydBsUKAmQwTUsiq1TIZkMOXezMfCXBxmqlDwM&s"
+				}
+			]
+		},
+		{
+			"id": "2",
+			"name": "Musée du Louvre",
+			"description": "Le Musée du Louvre est le plus grand musée d'art du monde, avec des collections couvrant plus de 9 000 ans d'histoire. Il abrite des chefs-d'œuvre comme la Joconde et la Vénus de Milo, attirant des millions de visiteurs chaque année.",
+			"address": "Rue de Rivoli, 75001 Paris",
+			"latitude": 48.8606,
+			"longitude": 2.3376,
+			"link_url": "https://www.louvre.fr/",
+			"category": {
+				"id": "2",
+				"name": "Musée",
+				"color": "#1976D2"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Musée du Louvre",
+					"url": "https://presse.louvre.fr/wp-content/uploads/2022/05/1651502318_cour-napolon-et-pyramide-2009-muse-du-louvre-stphane-olivier-pyramide-du-louvre-arch-impei-muse-du-louvre.jpg"
+				},
+				{
+					"id": "2",
+					"name": "Musée du Louvre",
+					"url": "https://www.francetourisme.fr/images/musees_expos/visite_privee_louvre.jpg"
+				}
+			]
+		},
+		{
+			"id": "3",
+			"name": "Cathédrale Notre-Dame",
+			"description": "La Cathédrale Notre-Dame est un chef-d'œuvre de l'architecture gothique, célèbre pour ses vitraux, ses sculptures et son impressionnante façade. Elle a été construite entre le XIIe et le XIVe siècle et est un lieu clé du patrimoine historique de Paris.",
+			"address": "6 Parvis Notre-Dame, 75004 Paris",
+			"latitude": 48.853,
+			"longitude": 2.3499,
+			"link_url": "https://www.notredamedeparis.fr/",
+			"category": {
+				"id": "1",
+				"name": "Monument",
+				"color": "#D32F2F"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Notre-Dame",
+					"url": "https://revivre-notre-dame.fr/wp-content/uploads/2021/11/DR-notre-dame-5310767_1920-1024x683.jpg"
+				},
+				{
+					"id": "2",
+					"name": "Notre-Dame",
+					"url": "https://media.lactualite.com/2024/11/4dfbcc14ccd50a4508f01a98124b65303dbdc16eda1c285e3b7d94609cf2727d-1200x800.jpg"
+				}
+			]
+		},
+		{
+			"id": "4",
+			"name": "Sacré-Cœur",
+			"description": "Bâtie au sommet de la Butte Montmartre, la Basilique du Sacré-Cœur offre une vue panoramique spectaculaire sur Paris. Ce site religieux est un lieu de pèlerinage et un symbole de la foi chrétienne en France.",
+			"address": "35 Rue du Chevalier de la Barre, 75018 Paris",
+			"latitude": 48.8867,
+			"longitude": 2.3431,
+			"link_url": "https://www.sacre-coeur-montmartre.com/",
+			"category": {
+				"id": "1",
+				"name": "Monument",
+				"color": "#D32F2F"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Sacré-Cœur",
+					"url": "https://i.notretemps.com/2000x1125/smart/2022/12/02/sacre-coeur-paris-1.jpeg"
+				},
+				{
+					"id": "2",
+					"name": "Sacré-Cœur",
+					"url": "https://pariscrea.com/wp-content/uploads/2022/09/sacre-coeur-parvis-vue-paris.jpg"
+				}
+			]
+		},
+		{
+			"id": "5",
+			"name": "Jardin du Luxembourg",
+			"description": "Ce parc majestueux abrite un palais, des jardins à la française, des statues, ainsi qu'un grand bassin central. C'est un lieu idéal pour une promenade ou un moment de détente en plein cœur de Paris.",
+			"address": "75006 Paris",
+			"latitude": 48.8462,
+			"longitude": 2.3372,
+			"link_url": "https://www.senat.fr/visite/jardin.html",
+			"category": {
+				"id": "3",
+				"name": "Parc",
+				"color": "#388E3C"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Jardin du Luxembourg",
+					"url": "https://media.ouest-france.fr/v1/pictures/MjAyMjA0MmJhYWM2MmI2MWFhNTI4MmRhNWJmNGU3YjdhYzU1ODY?width=1260&height=708&focuspoint=50%2C25&cropresize=1&client_id=bpeditorial&sign=8a3d8406c4697924f741f820ae3bdb7f230dddf890a7bd98f2c22fafb1d7e5e7"
+				},
+				{
+					"id": "2",
+					"name": "Jardin du Luxembourg",
+					"url": "https://www.hoteltrianonrivegauche.com/wp-content/uploads/2020/05/Jardin-du-Luxembourg-2-1024x683.jpg"
+				}
+			]
+		},
+		{
+			"id": "6",
+			"name": "Bois de Boulogne",
+			"description": "Grand espace vert situé à l'ouest de Paris, le Bois de Boulogne offre des lacs, des sentiers de promenade et des espaces de loisirs. C'est un lieu idéal pour une échappée nature à proximité du centre-ville.",
+			"address": "75016 Paris",
+			"latitude": 48.8638,
+			"longitude": 2.2594,
+			"link_url": "https://www.paris.fr/bois-de-boulogne",
+			"category": {
+				"id": "3",
+				"name": "Parc",
+				"color": "#388E3C"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Bois de Boulogne",
+					"url": "https://www.tripsavvy.com/thmb/YII8CK2wpMIDeE_1raBO8Yj7GyQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/DSC_0550-e5a25a09f42f42ce8b0207e4cc122c10.jpg"
+				},
+				{
+					"id": "2",
+					"name": "Bois de Boulogne",
+					"url": "https://www.apur.org/sites/default/files/styles/body_with_sidebar/public/images/publication/a-la-une/bois_boulogne_vincennes_935_550.jpg?itok=_0L2xnwz"
+				}
+			]
+		},
+		{
+			"id": "7",
+			"name": "Opéra Garnier",
+			"description": "Théâtre historique et chef-d'œuvre architectural.",
+			"address": "Place de l'Opéra, 75009 Paris",
+			"latitude": 48.872,
+			"longitude": 2.3316,
+			"link_url": "https://www.operadeparis.fr/",
+			"category": {
+				"id": "4",
+				"name": "Culture",
+				"color": "#FFC107"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Opéra Garnier",
+					"url": "http://royal-opera.fr/wp-content/uploads/2018/09/opera-garnier.jpg"
+				},
+				{
+					"id": "2",
+					"name": "Opéra Garnier",
+					"url": "https://res.cloudinary.com/opera-national-de-paris/image/upload/c_crop,h_3333,w_5000,x_0,y_0/w_870/f_auto/f_auto/v1/user_photos/najocddrarivc3uljafm?_a=E"
+				},
+				{
+					"id": "3",
+					"name": "Opéra Garnier",
+					"url": "https://www.orchestredechambredeparis.com/wp-content/uploads/2021/01/opera-garnier-paris-.jpg"
+				}
+			]
+		},
+		{
+			"id": "8",
+			"name": "Centre Pompidou",
+			"description": "Musée d'art moderne et contemporain.",
+			"address": "Place Georges-Pompidou, 75004 Paris",
+			"latitude": 48.86,
+			"longitude": 2.3522,
+			"link_url": "https://www.centrepompidou.fr/",
+			"category": {
+				"id": "2",
+				"name": "Musée",
+				"color": "#1976D2"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Centre Pompidou",
+					"url": "https://www.centrepompidou.fr/fileadmin/_processed_/2/4/csm_collection-notrebatiment-photofacaderuerambuteau2021_1920x750_af5ca8a213.jpg"
+				},
+				{
+					"id": "2",
+					"name": "Centre Pompidou",
+					"url": "https://www.lisaa.com/sites/default/files/centre-pompidou-design-mode-emploi-evenement-2-.jpg"
+				}
+			]
+		},
+		{
+			"id": "9",
+			"name": "Arc de Triomphe",
+			"description": "Monument emblématique sur les Champs-Élysées.",
+			"address": "Place Charles de Gaulle, 75008 Paris",
+			"latitude": 48.8738,
+			"longitude": 2.295,
+			"link_url": "https://www.paris-arc-de-triomphe.fr/",
+			"category": {
+				"id": "1",
+				"name": "Monument",
+				"color": "#D32F2F"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Arc de Triomphe",
+					"url": "https://static.wixstatic.com/media/de5a6d_2d8773bcaf0f479e8f1eb4ad3f65f905~mv2.webp/v1/fill/w_1500,h_1000,al_c/de5a6d_2d8773bcaf0f479e8f1eb4ad3f65f905~mv2.webp"
+				},
+				{
+					"id": "2",
+					"name": "Arc de Triomphe",
+					"url": "https://img-4.linternaute.com/G4-641pfHrigA7AqeyhxG9heerw=/1240x/smart/1ffb771060e64dbdb49eacc66f7001b4/ccmcms-linternaute/10441443.jpeg"
+				}
+			]
+		},
+		{
+			"id": "10",
+			"name": "Cimetière du Père-Lachaise",
+			"description": "Cimetière célèbre où reposent de nombreuses personnalités.",
+			"address": "16 Rue du Repos, 75020 Paris",
+			"latitude": 48.8614,
+			"longitude": 2.3933,
+			"link_url": "https://www.pere-lachaise.com/",
+			"category": {
+				"id": "5",
+				"name": "Lieu historique",
+				"color": "#6D4C41"
+			},
+			"pictures": [
+				{
+					"id": "1",
+					"name": "Père-Lachaise",
+					"url": "https://media.lesechos.com/api/v1/images/view/642d1485d876ac58e30a8073/1280x720/pere-lachaise-paris.jpg"
+				},
+				{
+					"id": "2",
+					"name": "Père-Lachaise",
+					"url": "https://storage.googleapis.com/eyp-wordpress/1/2024/04/9668507336-996d88ceac-k.jpg"
+				}
+			]
+		}
+	]
+}
