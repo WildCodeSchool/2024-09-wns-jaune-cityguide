@@ -53,6 +53,7 @@ export class InterestPoint extends BaseEntity {
 	@ManyToOne(
 		() => City,
 		(city) => city.interestPoints,
+		{ onDelete: "CASCADE", onUpdate: "CASCADE" },
 	)
 	city!: City;
 
@@ -60,6 +61,7 @@ export class InterestPoint extends BaseEntity {
 	@OneToMany(
 		() => Picture,
 		(picture) => picture.interestPoint,
+		{ onDelete: "CASCADE", onUpdate: "CASCADE" },
 	)
 	pictures!: Picture[];
 }
