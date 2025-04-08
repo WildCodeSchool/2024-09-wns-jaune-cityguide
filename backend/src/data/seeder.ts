@@ -9,19 +9,19 @@ import { Picture } from "../entities/Picture";
 export async function seedDatabase() {
 	console.log("🔎 Checking database content...");
 
-	const pictureRepository = dataSource.getRepository(Picture);
 	const categoryRepository = dataSource.getRepository(Category);
 	const cityRepository = dataSource.getRepository(City);
 	const interestPointRepository = dataSource.getRepository(InterestPoint);
+	const pictureRepository = dataSource.getRepository(Picture);
 
-	const picturesCount = await pictureRepository.count();
-	if (picturesCount > 0) {
-		console.log("Table 'Picture' already seeded. Deleting data...");
-		pictureRepository.delete({});
-		console.log("Table cleared.");
-		return;
-	}
-	console.log("Table 'Picture' is empty.");
+	// const picturesCount = await pictureRepository.count();
+	// if (picturesCount > 0) {
+	// 	console.log("Table 'Picture' already seeded. Deleting data...");
+	// 	pictureRepository.delete({});
+	// 	console.log("Table cleared.");
+	// 	return;
+	// }
+	// console.log("Table 'Picture' is empty.");
 
 	const interestPointsCount = await interestPointRepository.count();
 	if (interestPointsCount > 0) {
@@ -62,7 +62,7 @@ export async function seedDatabase() {
 		if (!savedCategory) {
 			throw new Error(`Failed to insert category: ${category.name}`);
 		}
-		// console.log("Category inserted:", savedCategory);
+		console.log("Category inserted:", savedCategory);
 	}
 	console.log("✅ Categories inserted successfully!");
 
@@ -75,7 +75,7 @@ export async function seedDatabase() {
 		if (!savedCity) {
 			throw new Error(`Failed to insert city: ${city.name}`);
 		}
-		// console.log("City inserted:", savedCity);
+		console.log("City inserted:", savedCity);
 	}
 	console.log("✅ Cities inserted successfully!");
 
@@ -112,7 +112,7 @@ export async function seedDatabase() {
 					category: category,
 				},
 			]);
-			// console.log("Interest point inserted:", savedInterestPoint);
+			console.log("Interest point inserted:", savedInterestPoint);
 			if (!savedInterestPoint) {
 				throw new Error(
 					`Failed to insert interest point: ${interestPoint.name}`,
