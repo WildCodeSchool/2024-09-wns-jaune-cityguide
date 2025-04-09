@@ -3,8 +3,10 @@ import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import L from "leaflet";
 
+import { useCitiesStore } from "../store/citiesStore";
+import { useInterestPointsStore } from "../store/interestPointsStore";
+
 import type { InterestPoint } from "../@types/types";
-import sampleData from "../data/sample.json";
 
 // About custom icons: https://leafletjs.com/examples/custom-icons/
 const customIcon = new L.Icon({
@@ -19,19 +21,29 @@ export default function MapComponent({
 	onSelectPoint,
 }: { onSelectPoint: (point: InterestPoint) => void }) {
 	const [interestPoints, setInterestPoints] = useState<InterestPoint[]>([]);
+	const { selectedCity } = useCitiesStore();
+	const { interestPointsByCity } = useInterestPointsStore();
+
+	const [mapCenter, setMapCenter] = useState<[number, number]>([
+		48.8566,
+		2.3522, // Paris coordinates by default
+	]);
 
 	useEffect(() => {
-		const fetchData = async () => {
-			const interestPoints: InterestPoint[] = sampleData.interestPoints;
-			setInterestPoints(interestPoints);
-		};
-		fetchData();
-	}, []);
+		if (selectedCity && interestPointsByCity) {
+			setInterestPoints(interestPointsByCity);
+			setMapCenter([
+				Number(selectedCity.latitude),
+				Number(selectedCity.longitude),
+			]);
+		}
+	}, [selectedCity, interestPointsByCity]);
 
+	// TODO: flyto the selected city when it changes
 	return (
 		<div className="w-full h-[700px] z-0">
 			<MapContainer
-				center={[48.8566, 2.3522]}
+				center={mapCenter}
 				zoom={13}
 				className="w-full h-full"
 				id="map"
