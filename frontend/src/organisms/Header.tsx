@@ -10,7 +10,9 @@ export default function Navbar() {
         <div className="relative flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
+            <a href="/">
             <img className="h-14 w-auto" src={logo} alt="City Guide" />
+            </a>
           </div>
 
           {/* 🔹 Searchbar bien positionnée (centrée en desktop et présente en mobile) */}
@@ -48,7 +50,7 @@ export default function Navbar() {
             <a href="#" className="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black">
               Se connecter
             </a>
-            <a href="#" className="rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white">
+            <a href="/inscription" className="rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white">
               S'inscrire
             </a>
           </div>
@@ -62,7 +64,7 @@ export default function Navbar() {
             <a href="#" className="block rounded-md px-3 py-2 text-base font-medium text-white">
               Se connecter
             </a>
-            <a href="#" className="block rounded-md px-3 py-2 text-base font-medium text-white">
+            <a href="/inscription" className="block rounded-md px-3 py-2 text-base font-medium text-white">
               S'inscrire
             </a>
           </div>

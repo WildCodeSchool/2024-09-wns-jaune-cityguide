@@ -1,0 +1,44 @@
+[
+	{
+		"name": "Anthony",
+		"email": "anthony@email.com",
+		"password": "Anthony!123",
+		"city": "Paris",
+		"role": "user"
+	},
+	{
+		"name": "Bechir",
+		"email": "bechir@email.com",
+		"password": "Bechir!123",
+		"city": "Paris",
+		"role": "user"
+	},
+	{
+		"name": "Caroline",
+		"email": "caroline@email.com",
+		"password": "Caroline!123",
+		"city": "Paris",
+		"role": "user"
+	},
+	{
+		"name": "Maëva",
+		"email": "maeva@email.com",
+		"password": "Maeva!123",
+		"city": "Paris",
+		"role": "user"
+	},
+	{
+		"name": "Noëllie",
+		"email": "noellie@email.com",
+		"password": "Noellie!123",
+		"city": "Paris",
+		"role": "user"
+	},
+	{
+		"name": "Raphael",
+		"email": "raphael@email.com",
+		"password": "Raphael!123",
+		"city": "Paris",
+		"role": "user"
+	}
+]
