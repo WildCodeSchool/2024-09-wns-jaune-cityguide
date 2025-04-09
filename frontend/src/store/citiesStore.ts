@@ -6,21 +6,18 @@ import type { City } from "../@types/types";
 type CitiesState = {
 	cities: City[];
 	selectedCity: City | null;
-	isLoaded: boolean;
 	isLoading: boolean;
 	fetchCities: () => Promise<void>;
 	setSelectedCity: (city: City | null) => void;
 };
 
-export const useCitiesStore = create<CitiesState>((set, get) => ({
+export const useCitiesStore = create<CitiesState>((set) => ({
 	cities: [],
 	selectedCity: null,
 	isLoaded: false,
 	isLoading: false,
 
 	fetchCities: async () => {
-		const { isLoaded } = get();
-		if (isLoaded) return;
 		set({ isLoading: true });
 		try {
 			const { data } = await client.query({
@@ -30,7 +27,6 @@ export const useCitiesStore = create<CitiesState>((set, get) => ({
 			if (data?.getCities) {
 				set({
 					cities: data.getCities,
-					isLoaded: true,
 					isLoading: false,
 				});
 				console.log("Cities fetched successfully:", data.getCities);
