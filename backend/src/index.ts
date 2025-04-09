@@ -9,6 +9,7 @@ import { CategoryResolver } from "./resolvers/CategoryResolver";
 import { InterestPointResolver } from "./resolvers/InterestPointResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 import { PictureResolver } from "./resolvers/PictureResolver";
+import { PasswordResolver } from "./resolvers/PasswordResolver";
 import { seedDatabase } from "./data/seeder";
 
 config();
@@ -35,6 +36,7 @@ const start = async () => {
 			InterestPointResolver,
 			UserResolver,
 			PictureResolver,
+			PasswordResolver,
 		],
 		//authChecker: authChecker,
 	});

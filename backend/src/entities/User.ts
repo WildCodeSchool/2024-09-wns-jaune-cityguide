@@ -43,6 +43,14 @@ export class User extends BaseEntity {
     @Column({type: "enum", enum: UserRole, default: UserRole.USER})
     role!: UserRole;
 
+    @Field(() => String, { nullable: true })
+    @Column({ type: String, nullable: true })
+    resetToken?: string | null;
+
+    @Field(() => String, { nullable: true })
+    @Column({ type: String, nullable: true })
+    resetTokenExpiration?: Date | null;
+
     @Field(() => [City])
     @ManyToOne(
         () => City,
