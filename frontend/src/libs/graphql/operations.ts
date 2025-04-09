@@ -10,3 +10,25 @@ export const GET_CITIES = gql`
       longitude
     }
 }`;
+
+export const GET_INTEREST_POINTS = gql`
+query GetInterestPoints {
+  getInterestPoints {
+    id
+    name
+    address
+    description
+    longitude
+    latitude
+    link_url
+    category {
+      id
+      name
+    }
+    city {
+      id
+      name
+      postalCode
+    }
+  }
+}`;
