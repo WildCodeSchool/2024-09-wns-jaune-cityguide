@@ -6,6 +6,17 @@ import { Category } from "../entities/Category";
 import { InterestPoint } from "../entities/InterestPoint";
 import { Picture } from "../entities/Picture";
 
+type InterestPointSeedType = {
+	name: string;
+	description: string;
+	address: string;
+	latitude: number;
+	longitude: number;
+	link_url: string;
+	category: string;
+	city: string;
+};
+
 export async function seedDatabase() {
 	console.log("🔎 Checking database content...");
 
@@ -23,32 +34,11 @@ export async function seedDatabase() {
 	// }
 	// console.log("Table 'Picture' is empty.");
 
-	const interestPointsCount = await interestPointRepository.count();
-	if (interestPointsCount > 0) {
-		console.log("Table 'InterestPoint' already seeded. Deleting data...");
-		interestPointRepository.delete({});
-		console.log("Table cleared.");
-		return;
-	}
-	console.log("Table 'InterestPoint' is empty. Ready for seeding!");
-
-	const categoriesCount = await categoryRepository.count();
-	if (categoriesCount > 0) {
-		console.log("Table 'Category' already seeded. Deleting data...");
-		categoryRepository.delete({});
-		console.log("Table cleared.");
-		return;
-	}
-	console.log("Table 'Category' is empty. Ready for seeding!");
-
-	const citiesCount = await cityRepository.count();
-	if (citiesCount > 0) {
-		console.log("Table 'City' already seeded. Deleting data...");
-		cityRepository.delete({});
-		console.log("Table cleared.");
-		return;
-	}
-	console.log("Table 'City' is empty. Ready for seeding!");
+	console.log("🧹 Cleaning database...");
+	await pictureRepository.delete({});
+	await interestPointRepository.delete({});
+	await categoryRepository.delete({});
+	await cityRepository.delete({});
 
 	console.log("🌱 Seeding begins...");
 
@@ -62,7 +52,6 @@ export async function seedDatabase() {
 		if (!savedCategory) {
 			throw new Error(`Failed to insert category: ${category.name}`);
 		}
-		console.log("Category inserted:", savedCategory);
 	}
 	console.log("✅ Categories inserted successfully!");
 
@@ -75,25 +64,24 @@ export async function seedDatabase() {
 		if (!savedCity) {
 			throw new Error(`Failed to insert city: ${city.name}`);
 		}
-		console.log("City inserted:", savedCity);
 	}
 	console.log("✅ Cities inserted successfully!");
 
 	console.log("⤵️ Inserting interest points...");
-	const interestPoints: InterestPoint[] = JSON.parse(
+	const interestPoints: InterestPointSeedType[] = JSON.parse(
 		fs.readFileSync("src/data/interestPoints.json", "utf8"),
 	);
 
 	for (const interestPoint of interestPoints) {
 		const city = await cityRepository.findOneBy({
-			name: interestPoint.city.name,
+			name: interestPoint.city,
 		});
 		if (!city) {
 			throw new Error(`City not found: ${interestPoint.city}`);
 		}
 
-		const category = await categoryRepository.findOne({
-			where: { name: interestPoint.category.name },
+		const category = await categoryRepository.findOneBy({
+			name: interestPoint.category,
 		});
 		if (!category) {
 			throw new Error(`Category not found: ${interestPoint.category}`);
@@ -108,11 +96,10 @@ export async function seedDatabase() {
 					latitude: interestPoint.latitude,
 					longitude: interestPoint.longitude,
 					link_url: interestPoint.link_url,
-					city: city,
-					category: category,
+					city,
+					category,
 				},
 			]);
-			console.log("Interest point inserted:", savedInterestPoint);
 			if (!savedInterestPoint) {
 				throw new Error(
 					`Failed to insert interest point: ${interestPoint.name}`,
