@@ -32,3 +32,22 @@ query GetInterestPoints {
     }
   }
 }`;
+
+export const GET_INTEREST_POINTS_BY_CITY = gql`
+query GetInterestPointsByCity($cityId: String!) {
+  getInterestPointsByCity(cityId: $cityId) {
+    id
+    name
+    address
+    description
+    link_url
+    latitude
+    longitude
+    city {
+      name
+    }
+    category {
+      name
+    }
+  }
+}`;
