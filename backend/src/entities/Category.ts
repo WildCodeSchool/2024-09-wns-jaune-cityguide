@@ -32,5 +32,5 @@ export class Category extends BaseEntity {
 		() => InterestPoint,
 		(interestPoint) => interestPoint.category,
 	)
-	interestPoints!: InterestPoint[];
+	interestPoints?: InterestPoint[];
 }

@@ -31,6 +31,7 @@ export class Picture extends BaseEntity {
 	@ManyToOne(
 		() => InterestPoint,
 		(interestPoint) => interestPoint.pictures,
+		{ onDelete: "CASCADE" },
 	)
 	interestPoint!: InterestPoint;
 }
