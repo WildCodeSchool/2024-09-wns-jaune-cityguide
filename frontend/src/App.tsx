@@ -6,13 +6,11 @@ import { useCitiesStore } from "./store/citiesStore";
 import { useEffect } from "react";
 
 export function App() {
-	const { fetchCities, isLoaded } = useCitiesStore();
+	const { fetchCities } = useCitiesStore();
 
 	useEffect(() => {
-		if (!isLoaded) {
-			fetchCities();
-		}
-	}, [fetchCities, isLoaded]);
+		fetchCities();
+	}, [fetchCities]);
 
 	return (
 		<div className="flex flex-col min-h-screen">
