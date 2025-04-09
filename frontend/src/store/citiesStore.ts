@@ -3,15 +3,18 @@ import { client } from "../main";
 import { GET_CITIES } from "../libs/graphql/operations";
 import type { City } from "../@types/types";
 
-type State = {
+type CitiesState = {
 	cities: City[];
+	selectedCity: City | null;
 	isLoaded: boolean;
 	isLoading: boolean;
 	fetchCities: () => Promise<void>;
+	setSelectedCity: (city: City | null) => void;
 };
 
-export const useCitiesStore = create<State>((set, get) => ({
+export const useCitiesStore = create<CitiesState>((set, get) => ({
 	cities: [],
+	selectedCity: null,
 	isLoaded: false,
 	isLoading: false,
 
@@ -39,4 +42,5 @@ export const useCitiesStore = create<State>((set, get) => ({
 			set({ isLoading: false });
 		}
 	},
+	setSelectedCity: (city) => set({ selectedCity: city }),
 }));
