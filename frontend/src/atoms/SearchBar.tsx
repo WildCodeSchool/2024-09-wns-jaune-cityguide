@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useCitiesStore } from "../store/citiesStore";
+import { useInterestPointsStore } from "../store/interestPointsStore";
 import type { City } from "../@types/types";
 
 // Useful code snippets: how to build a search bar with dropdown menu in React
@@ -8,7 +9,9 @@ import type { City } from "../@types/types";
 
 export default function SearchBar() {
 	const { cities, setSelectedCity } = useCitiesStore();
-	const [inputText, setInputText] = useState("");
+	const { fetchInterestPointsByCity } = useInterestPointsStore();
+
+	const [inputText, setInputText] = useState<string>("");
 	const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -21,6 +24,7 @@ export default function SearchBar() {
 		setInputText(city.name);
 		setSelectedCity(city);
 		setDropdownIsOpen(false);
+		fetchInterestPointsByCity(city.id);
 	};
 
 	useEffect(() => {
