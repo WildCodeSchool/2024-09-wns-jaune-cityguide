@@ -72,6 +72,11 @@ export class UserResolver {
       throw new Error("Missing env variable");
     }
 
+    const existingUser = await User.findOneBy({ email: data.email });
+      if (existingUser) {
+        throw new Error("Cet email est déjà utilisé.");
+      }
+
     const hashedPassword = await argon.hash(data.password);
     const user = await User.save({
       email: data.email,
@@ -100,11 +105,12 @@ export class UserResolver {
       sameSite: "strict"
     });
 
-    const profile = {
-      mail: user.email,
-      name: user.firstname,
-    };
-    return JSON.stringify(profile);
+    // const profile = {
+    //   mail: user.email,
+    //   name: user.firstname,
+    // };
+    // return JSON.stringify(profile);
+    return user;
   }
 
   @Mutation(() => String)

@@ -7,7 +7,17 @@ export const GET_CITIES = gql`
       id
       name
       postalCode
-      lattitiude
+      lattitude
       longitude
     }
 }`;
+
+export const REGISTER_USER = gql`
+  mutation RegisterUser($data: NewUserInput!) {
+    registerUser(data: $data) {
+      firstname
+      lastname
+      email
+      hashedPassword
+    }
+}`
