@@ -28,5 +28,29 @@
 		"postalCode": "31000",
 		"latitude": 43.6047,
 		"longitude": 1.4442
+	},
+	{
+		"name": "Strasbourg",
+		"postalCode": "67000",
+		"latitude": 48.5734,
+		"longitude": 7.7521
+	},
+	{
+		"name": "Montpellier",
+		"postalCode": "34000",
+		"latitude": 43.6111,
+		"longitude": 3.8777
+	},
+	{
+		"name": "Brest",
+		"postalCode": "29200",
+		"latitude": 48.3904,
+		"longitude": -4.4861
+	},
+	{
+		"name": "Nice",
+		"postalCode": "06000",
+		"latitude": 43.7102,
+		"longitude": 7.262
 	}
 ]
