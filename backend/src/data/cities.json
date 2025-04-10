@@ -2,31 +2,31 @@
 	{
 		"name": "Paris",
 		"postalCode": "75000",
-		"lattitude": 48.8566,
+		"latitude": 48.8566,
 		"longitude": 2.3522
 	},
 	{
 		"name": "Lyon",
 		"postalCode": "69000",
-		"lattitude": 45.764,
+		"latitude": 45.764,
 		"longitude": 4.8357
 	},
 	{
 		"name": "Marseille",
 		"postalCode": "13000",
-		"lattitude": 43.2965,
+		"latitude": 43.2965,
 		"longitude": 5.3698
 	},
 	{
 		"name": "Bordeaux",
 		"postalCode": "33000",
-		"lattitude": 44.8378,
+		"latitude": 44.8378,
 		"longitude": -0.5792
 	},
 	{
 		"name": "Toulouse",
 		"postalCode": "31000",
-		"lattitude": 43.6047,
+		"latitude": 43.6047,
 		"longitude": 1.4442
 	}
 ]
