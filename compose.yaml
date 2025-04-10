@@ -11,6 +11,8 @@ services:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       TOKEN_SECRET_KEY: ${TOKEN_SECRET_KEY}
+      GMAIL_USERNAME: ${GMAIL_USERNAME}
+      GMAIL_PASSWORD: ${GMAIL_PASSWORD}
 
   frontend:
     container_name: cityguide_frontend
