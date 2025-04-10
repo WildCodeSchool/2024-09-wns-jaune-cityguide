@@ -10,14 +10,17 @@ type InterestPointsState = {
 	isLoading: boolean;
 	interestPoints: InterestPoint[] | [];
 	interestPointsByCity: InterestPoint[] | [];
+	selectedInterestPoint: InterestPoint | null;
 	fetchInterestPoints: () => Promise<void>;
 	fetchInterestPointsByCity: (cityId: string) => Promise<void>;
+	setSelectedInterestPoint: (point: InterestPoint | null) => void;
 };
 
 export const useInterestPointsStore = create<InterestPointsState>((set) => ({
 	isLoading: false,
 	interestPoints: [],
 	interestPointsByCity: [],
+	selectedInterestPoint: null,
 	fetchInterestPoints: async () => {
 		set({ isLoading: true });
 		try {
@@ -70,4 +73,6 @@ export const useInterestPointsStore = create<InterestPointsState>((set) => ({
 			set({ isLoading: false });
 		}
 	},
+	setSelectedInterestPoint: (interestPoint) =>
+		set({ selectedInterestPoint: interestPoint }),
 }));
