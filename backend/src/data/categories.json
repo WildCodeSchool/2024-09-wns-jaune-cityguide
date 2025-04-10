@@ -1,0 +1,82 @@
+[
+	{
+		"name": "Restaurants",
+		"description": "Les meilleurs endroits pour manger en ville.",
+		"color": "#FF5733"
+	},
+	{
+		"name": "Gastronomie",
+		"description": "Découvrez les spécialités locales gastronomiques.",
+		"color": "#FFC107"
+	},
+	{
+		"name": "Parcs",
+		"description": "Espaces verts et parcs pour se détendre.",
+		"color": "#4CAF50"
+	},
+	{
+		"name": "Musées",
+		"description": "Découvrez l'art et l'histoire de la région.",
+		"color": "#3F51B5"
+	},
+	{
+		"name": "Bars & Cafés",
+		"description": "Endroits sympas pour boire un verre.",
+		"color": "#FFC107"
+	},
+	{
+		"name": "Monuments historiques",
+		"description": "Sites historiques et incontournables.",
+		"color": "#9C27B0"
+	},
+	{
+		"name": "Commerces",
+		"description": "Boutiques et magasins populaires.",
+		"color": "#FF9800"
+	},
+	{
+		"name": "Activités sportives",
+		"description": "Endroits pour pratiquer du sport.",
+		"color": "#00BCD4"
+	},
+	{
+		"name": "Cinémas & Théâtres",
+		"description": "Lieux pour voir des films et spectacles.",
+		"color": "#E91E63"
+	},
+	{
+		"name": "Hôtels",
+		"description": "Les meilleurs endroits où séjourner.",
+		"color": "#795548"
+	},
+	{
+		"name": "Transports",
+		"description": "Gares, stations et autres moyens de transport.",
+		"color": "#607D8B"
+	},
+	{
+		"name": "Points de vue",
+		"description": "Un point de vue à couper le souffle.",
+		"color": "#FF5722"
+	},
+	{
+		"name": "Patrimoine",
+		"description": "Découvrez le patrimoine historique de la région.",
+		"color": "#9C27B0"
+	},
+	{
+		"name": "Parcs naturels",
+		"description": "Des espaces naturels préservés à visiter.",
+		"color": "#4CAF50"
+	},
+	{
+		"name": "Institutions",
+		"description": "Les hauts lieux de l'administration et de la culture.",
+		"color": "#3F51B5"
+	},
+	{
+		"name": "Promenades et nature",
+		"description": "Des itinéraires de promenade et de randonnée pour profiter d'un paysage hors du commun.",
+		"color": "#4CAF50"
+	}
+]

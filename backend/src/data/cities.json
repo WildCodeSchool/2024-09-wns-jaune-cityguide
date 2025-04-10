@@ -1,0 +1,56 @@
+[
+	{
+		"name": "Paris",
+		"postalCode": "75000",
+		"latitude": 48.8566,
+		"longitude": 2.3522
+	},
+	{
+		"name": "Lyon",
+		"postalCode": "69000",
+		"latitude": 45.764,
+		"longitude": 4.8357
+	},
+	{
+		"name": "Marseille",
+		"postalCode": "13000",
+		"latitude": 43.2965,
+		"longitude": 5.3698
+	},
+	{
+		"name": "Bordeaux",
+		"postalCode": "33000",
+		"latitude": 44.8378,
+		"longitude": -0.5792
+	},
+	{
+		"name": "Toulouse",
+		"postalCode": "31000",
+		"latitude": 43.6047,
+		"longitude": 1.4442
+	},
+	{
+		"name": "Strasbourg",
+		"postalCode": "67000",
+		"latitude": 48.5734,
+		"longitude": 7.7521
+	},
+	{
+		"name": "Montpellier",
+		"postalCode": "34000",
+		"latitude": 43.6111,
+		"longitude": 3.8777
+	},
+	{
+		"name": "Brest",
+		"postalCode": "29200",
+		"latitude": 48.3904,
+		"longitude": -4.4861
+	},
+	{
+		"name": "Nice",
+		"postalCode": "06000",
+		"latitude": 43.7102,
+		"longitude": 7.262
+	}
+]

@@ -43,7 +43,7 @@ export class InterestPointResolver {
 		return interestPoints;
 	}
 	
-	@Query(() => InterestPoint)
+	@Query(() => [InterestPoint])
 	async getInterestPointsByCategory(@Arg("categoryId") id: string) {
 		const interestPoints = await InterestPoint.find({ 
 			where: { category: { id } } ,
@@ -52,10 +52,11 @@ export class InterestPointResolver {
 		return interestPoints;
 	}
 	
-	@Query(() => InterestPoint)
+	@Query(() => [InterestPoint])
 	async getInterestPointsByCity(@Arg("cityId") id: string) {
 		const interestPoints = await InterestPoint.find({ 
-			where: { city: { id } } 
+			where: { city: { id } },
+			relations: ["category", "city", "pictures"]
 		});
 		return interestPoints;
 	}

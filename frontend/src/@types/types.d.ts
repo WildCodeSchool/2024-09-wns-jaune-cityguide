@@ -3,7 +3,6 @@ export type Category = {
 	name: string;
 	description?: string;
 	color: string;
-	// interestPoints: InterestPoint[];
 };
 
 export type City = {
@@ -12,8 +11,6 @@ export type City = {
 	postalCode: string;
 	latitude: number;
 	longitude: number;
-	interestPoints: InterestPoint[];
-	users: User[];
 };
 
 export type InterestPoint = {
@@ -24,9 +21,13 @@ export type InterestPoint = {
 	latitude: number;
 	longitude: number;
 	link_url: string;
-	category: Category; // TODO: replace by category id as string
-	// city: string; // city id
-	// pictures: Picture[];
+	city: {
+		id: string;
+		name: string;
+		postalCode: string;
+	};
+	category: Category;
+	pictures: Picture[];
 };
 
 export type Picture = {
@@ -34,5 +35,4 @@ export type Picture = {
 	name: string;
 	description: string;
 	url: string;
-	interestPoint: InterestPoint;
 };

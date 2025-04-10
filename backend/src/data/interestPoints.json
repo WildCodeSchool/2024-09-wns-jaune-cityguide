@@ -1,0 +1,375 @@
+[
+	{
+		"name": "Tour Eiffel",
+		"description": "Monument emblématique de Paris offrant une vue panoramique.",
+		"address": "Champ de Mars, 5 Avenue Anatole France, 75007 Paris",
+		"latitude": 48.8584,
+		"longitude": 2.2945,
+		"link_url": "https://www.toureiffel.paris/",
+		"category": "Monuments historiques",
+		"city": "Paris"
+	},
+	{
+		"name": "Musée du Louvre",
+		"description": "L'un des plus grands musées du monde, célèbre pour la Joconde.",
+		"address": "Rue de Rivoli, 75001 Paris",
+		"latitude": 48.8606,
+		"longitude": 2.3376,
+		"link_url": "https://www.louvre.fr/",
+		"category": "Musées",
+		"city": "Paris"
+	},
+	{
+		"name": "Cathédrale Notre-Dame de Paris",
+		"description": "Un chef-d'œuvre de l'architecture gothique.",
+		"address": "6 Parvis Notre-Dame - Pl. Jean-Paul II, 75004 Paris",
+		"latitude": 48.852968,
+		"longitude": 2.349902,
+		"link_url": "https://www.notredamedeparis.fr/",
+		"category": "Monuments historiques",
+		"city": "Paris"
+	},
+	{
+		"name": "Montmartre et le Sacré-Cœur",
+		"description": "Quartier bohème de Paris avec une basilique majestueuse.",
+		"address": "35 Rue du Chevalier de la Barre, 75018 Paris",
+		"latitude": 48.8867,
+		"longitude": 2.3431,
+		"link_url": "https://www.sacre-coeur-montmartre.com/",
+		"category": "Monuments historiques",
+		"city": "Paris"
+	},
+	{
+		"name": "Champs-Élysées et Arc de Triomphe",
+		"description": "Une des avenues les plus célèbres du monde.",
+		"address": "Place Charles de Gaulle, 75008 Paris",
+		"latitude": 48.8738,
+		"longitude": 2.295,
+		"link_url": "https://www.paris-arc-de-triomphe.fr/",
+		"category": "Monuments historiques",
+		"city": "Paris"
+	},
+	{
+		"name": "Basilique Notre-Dame de Fourvière",
+		"description": "Un monument religieux offrant une vue imprenable sur Lyon.",
+		"address": "8 Place de Fourvière, 69005 Lyon",
+		"latitude": 45.7625,
+		"longitude": 4.8224,
+		"link_url": "https://www.fourviere.org/",
+		"category": "Monuments historiques",
+		"city": "Lyon"
+	},
+	{
+		"name": "Vieux Lyon",
+		"description": "Quartier médiéval et renaissance, classé au patrimoine mondial.",
+		"address": "69005 Lyon",
+		"latitude": 45.764043,
+		"longitude": 4.835659,
+		"link_url": "https://www.lyon-france.com/",
+		"category": "Patrimoine",
+		"city": "Lyon"
+	},
+	{
+		"name": "Musée des Confluences",
+		"description": "Musée d'histoire naturelle et des sciences humaines.",
+		"address": "86 Quai Perrache, 69002 Lyon",
+		"latitude": 45.7335,
+		"longitude": 4.8192,
+		"link_url": "https://www.museedesconfluences.fr/",
+		"category": "Musées",
+		"city": "Lyon"
+	},
+	{
+		"name": "Parc de la Tête d'Or",
+		"description": "Un immense parc avec un zoo gratuit et un lac.",
+		"address": "69006 Lyon",
+		"latitude": 45.784,
+		"longitude": 4.8527,
+		"link_url": "https://www.lyon.fr/lieu/parcs/parc-de-la-tete-dor",
+		"category": "Parcs",
+		"city": "Lyon"
+	},
+	{
+		"name": "Place de la Bourse",
+		"description": "Un lieu emblématique de Bordeaux avec le miroir d'eau.",
+		"address": "Place de la Bourse, 33000 Bordeaux",
+		"latitude": 44.841,
+		"longitude": -0.5721,
+		"link_url": "https://www.bordeaux-tourisme.com/",
+		"category": "Patrimoine",
+		"city": "Bordeaux"
+	},
+	{
+		"name": "Cité du Vin",
+		"description": "Un musée interactif dédié au vin et à son histoire.",
+		"address": "134 Quai de Bacalan, 33300 Bordeaux",
+		"latitude": 44.8626,
+		"longitude": -0.5508,
+		"link_url": "https://www.laciteduvin.com/",
+		"category": "Gastronomie",
+		"city": "Bordeaux"
+	},
+	{
+		"name": "Vieux-Port de Marseille",
+		"description": "Le cœur historique de Marseille avec ses bateaux et ses restaurants.",
+		"address": "Quai des Belges, 13001 Marseille",
+		"latitude": 43.2965,
+		"longitude": 5.3698,
+		"link_url": "https://www.marseille-tourisme.com/",
+		"category": "Patrimoine",
+		"city": "Marseille"
+	},
+	{
+		"name": "Calanques de Cassis",
+		"description": "Un site naturel époustouflant entre falaises et mer turquoise.",
+		"address": "13260 Cassis",
+		"latitude": 43.213,
+		"longitude": 5.505,
+		"link_url": "https://www.calanques-parcnational.fr/fr",
+		"category": "Parcs naturels",
+		"city": "Marseille"
+	},
+	{
+		"name": "Place du Capitole",
+		"description": "Le centre historique de Toulouse, entouré de restaurants et commerces.",
+		"address": "31000 Toulouse",
+		"latitude": 43.6043,
+		"longitude": 1.4437,
+		"link_url": "https://www.toulouse-tourisme.com/",
+		"category": "Patrimoine",
+		"city": "Toulouse"
+	},
+	{
+		"name": "Jardin des Plantes",
+		"description": "Un magnifique jardin botanique en plein cœur de la ville.",
+		"address": "Allée Jules Guesde, 31400 Toulouse",
+		"latitude": 43.5961,
+		"longitude": 1.4525,
+		"link_url": "https://www.toulouse.fr/",
+		"category": "Parcs",
+		"city": "Toulouse"
+	},
+	{
+		"name": "Parc des Buttes-Chaumont",
+		"description": "L'un des plus grands espaces verts de Paris, offrant une belle vue sur la ville.",
+		"address": "1 Rue Botzaris, 75019 Paris",
+		"latitude": 48.8809,
+		"longitude": 2.3827,
+		"link_url": "https://www.paris.fr/equipements/parc-des-buttes-chaumont-1753",
+		"category": "Parcs",
+		"city": "Paris"
+	},
+	{
+		"name": "Opéra Garnier",
+		"description": "Un chef-d'œuvre architectural du XIXe siècle, connu pour son intérieur somptueux.",
+		"address": "Place de l'Opéra, 75009 Paris",
+		"latitude": 48.8719,
+		"longitude": 2.3316,
+		"link_url": "https://www.operadeparis.fr/",
+		"category": "Monuments historiques",
+		"city": "Paris"
+	},
+	{
+		"name": "Musée d'Orsay",
+		"description": "Musée célèbre pour ses collections d'œuvres impressionnistes.",
+		"address": "1 Rue de la Légion d'Honneur, 75007 Paris",
+		"latitude": 48.8599,
+		"longitude": 2.3266,
+		"link_url": "https://www.musee-orsay.fr/",
+		"category": "Musées",
+		"city": "Paris"
+	},
+	{
+		"name": "Halles de Lyon - Paul Bocuse",
+		"description": "Un marché couvert emblématique, réputé pour ses produits gastronomiques.",
+		"address": "102 Cours Lafayette, 69003 Lyon",
+		"latitude": 45.7635,
+		"longitude": 4.8509,
+		"link_url": "https://www.halles-de-lyon-paulbocuse.com/",
+		"category": "Gastronomie",
+		"city": "Lyon"
+	},
+	{
+		"name": "Palais Longchamp",
+		"description": "Un monument architectural impressionnant avec un jardin et un musée.",
+		"address": "Boulevard Jardin Zoologique, 13004 Marseille",
+		"latitude": 43.3033,
+		"longitude": 5.395,
+		"link_url": "https://musees.marseille.fr/palais-longchamp",
+		"category": "Monuments historiques",
+		"city": "Marseille"
+	},
+	{
+		"name": "Jardin Public de Bordeaux",
+		"description": "Un magnifique parc urbain parfait pour se détendre.",
+		"address": "Cours de Verdun, 33000 Bordeaux",
+		"latitude": 44.8497,
+		"longitude": -0.5792,
+		"link_url": "https://www.bordeaux.fr/ebx/PGFICHELieuPratique/2857",
+		"category": "Parcs",
+		"city": "Bordeaux"
+	},
+	{
+		"name": "Cathédrale Notre-Dame de Strasbourg",
+		"description": "Une cathédrale gothique emblématique au cœur de la ville.",
+		"address": "Place de la Cathédrale, 67000 Strasbourg",
+		"latitude": 48.5818,
+		"longitude": 7.7508,
+		"link_url": "https://www.cathedrale-strasbourg.fr/",
+		"category": "Monuments historiques",
+		"city": "Strasbourg"
+	},
+	{
+		"name": "Petite France",
+		"description": "Un quartier pittoresque avec des maisons à colombages et des canaux.",
+		"address": "Quartier de la Petite France, 67000 Strasbourg",
+		"latitude": 48.5795,
+		"longitude": 7.7393,
+		"link_url": "https://www.visitstrasbourg.fr/decouvrir/patrimoine/la-petite-france/",
+		"category": "Patrimoine",
+		"city": "Strasbourg"
+	},
+	{
+		"name": "Parlement Européen",
+		"description": "Le siège officiel du Parlement européen.",
+		"address": "Allée du Printemps, 67070 Strasbourg",
+		"latitude": 48.5958,
+		"longitude": 7.7714,
+		"link_url": "https://www.europarl.europa.eu/visiting/fr/strasbourg",
+		"category": "Institutions",
+		"city": "Strasbourg"
+	},
+	{
+		"name": "Jardin des Deux Rives",
+		"description": "Un parc transfrontalier entre la France et l’Allemagne.",
+		"address": "Rue des Cavaliers, 67100 Strasbourg",
+		"latitude": 48.5618,
+		"longitude": 7.8278,
+		"link_url": "https://www.strasbourg.eu/jardin-deux-rives",
+		"category": "Parcs",
+		"city": "Strasbourg"
+	},
+
+	{
+		"name": "Place de la Comédie",
+		"description": "Cœur historique de Montpellier, animée et entourée de bâtiments haussmanniens.",
+		"address": "Place de la Comédie, 34000 Montpellier",
+		"latitude": 43.6108,
+		"longitude": 3.8767,
+		"link_url": "https://www.montpellier-tourisme.fr/",
+		"category": "Patrimoine",
+		"city": "Montpellier"
+	},
+	{
+		"name": "Musée Fabre",
+		"description": "Musée d’art célèbre de Montpellier avec des collections du XIVe au XXIe siècle.",
+		"address": "39 Boulevard Bonne Nouvelle, 34000 Montpellier",
+		"latitude": 43.6119,
+		"longitude": 3.8822,
+		"link_url": "https://museefabre.montpellier3m.fr/",
+		"category": "Musées",
+		"city": "Montpellier"
+	},
+	{
+		"name": "Jardin des Plantes",
+		"description": "Un des plus anciens jardins botaniques de France.",
+		"address": "Boulevard Henri IV, 34000 Montpellier",
+		"latitude": 43.614,
+		"longitude": 3.8743,
+		"link_url": "https://jardin-des-plantes.univ-montp.fr/",
+		"category": "Parcs",
+		"city": "Montpellier"
+	},
+	{
+		"name": "Promenade du Peyrou",
+		"description": "Un belvédère offrant une vue panoramique sur les Cévennes.",
+		"address": "Rue Foch, 34000 Montpellier",
+		"latitude": 43.6133,
+		"longitude": 3.8701,
+		"link_url": "https://www.montpellier-tourisme.fr/",
+		"category": "Promenades et nature",
+		"city": "Montpellier"
+	},
+
+	{
+		"name": "Château de Brest",
+		"description": "Forteresse historique avec vue sur la rade.",
+		"address": "Boulevard de la Marine, 29200 Brest",
+		"latitude": 48.3826,
+		"longitude": -4.4941,
+		"link_url": "https://musee-marine.fr/brest",
+		"category": "Patrimoine",
+		"city": "Brest"
+	},
+	{
+		"name": "Océanopolis",
+		"description": "Centre de culture scientifique dédié aux océans.",
+		"address": "Port de Plaisance du Moulin Blanc, 29200 Brest",
+		"latitude": 48.3901,
+		"longitude": -4.4507,
+		"link_url": "https://www.oceanopolis.com/",
+		"category": "Musées",
+		"city": "Brest"
+	},
+	{
+		"name": "Tour Tanguy",
+		"description": "Tour médiévale transformée en musée sur l’histoire de Brest.",
+		"address": "Square Pierre Péron, 29200 Brest",
+		"latitude": 48.3856,
+		"longitude": -4.4915,
+		"link_url": "https://www.brest.fr/",
+		"category": "Patrimoine",
+		"city": "Brest"
+	},
+	{
+		"name": "Port de Commerce",
+		"description": "Zone animée avec bars, restaurants et vue sur les bateaux.",
+		"address": "Quai de la Douane, 29200 Brest",
+		"latitude": 48.3841,
+		"longitude": -4.4919,
+		"link_url": "https://www.brest.fr/",
+		"category": "Promenades et nature",
+		"city": "Brest"
+	},
+
+	{
+		"name": "Promenade des Anglais",
+		"description": "La promenade mythique qui longe la mer à Nice.",
+		"address": "Prom. des Anglais, 06000 Nice",
+		"latitude": 43.6953,
+		"longitude": 7.2654,
+		"link_url": "https://www.nicetourisme.com/",
+		"category": "Promenades et nature",
+		"city": "Nice"
+	},
+	{
+		"name": "Vieux-Nice",
+		"description": "Quartier historique avec ruelles, marché et ambiance méditerranéenne.",
+		"address": "Vieux-Nice, 06300 Nice",
+		"latitude": 43.6978,
+		"longitude": 7.2766,
+		"link_url": "https://www.nicetourisme.com/",
+		"category": "Patrimoine",
+		"city": "Nice"
+	},
+	{
+		"name": "Colline du Château",
+		"description": "Vue panoramique sur la baie de Nice et ruines historiques.",
+		"address": "Parc de la Colline du Château, 06300 Nice",
+		"latitude": 43.6957,
+		"longitude": 7.2816,
+		"link_url": "https://www.nicetourisme.com/",
+		"category": "Promenades et nature",
+		"city": "Nice"
+	},
+	{
+		"name": "Musée Matisse",
+		"description": "Musée dédié au peintre Henri Matisse dans une villa génoise.",
+		"address": "164 Avenue des Arènes de Cimiez, 06000 Nice",
+		"latitude": 43.7206,
+		"longitude": 7.2769,
+		"link_url": "https://www.musee-matisse-nice.org/",
+		"category": "Musées",
+		"city": "Nice"
+	}
+]

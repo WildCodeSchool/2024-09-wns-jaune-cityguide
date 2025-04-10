@@ -1,10 +1,12 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import L from "leaflet";
 
+import { useCitiesStore } from "../store/citiesStore";
+import { useInterestPointsStore } from "../store/interestPointsStore";
+
 import type { InterestPoint } from "../@types/types";
-import sampleData from "../data/sample.json";
 
 const customIcon = new L.Icon({
   iconUrl:
@@ -14,44 +16,72 @@ const customIcon = new L.Icon({
   popupAnchor: [1, -34],
 });
 
-export default function MapComponent({ onSelectPoint }: { onSelectPoint: (point: InterestPoint) => void }) {
-  const [interestPoints, setInterestPoints] = useState<InterestPoint[]>([]);
+export default function MapComponent({
+	onSelectPoint,
+}: { onSelectPoint: (pointOfInterest: InterestPoint) => void }) {
+	const [interestPoints, setInterestPoints] = useState<InterestPoint[]>([]);
+	const { selectedCity } = useCitiesStore();
+	const { interestPointsByCity } = useInterestPointsStore();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const interestPoints: InterestPoint[] = sampleData.interestPoints;
-      setInterestPoints(interestPoints);
-    };
-    fetchData();
-  }, []);
+	const [mapCenter, setMapCenter] = useState<[number, number]>([
+		48.8566,
+		2.3522, // Paris coordinates by default
+	]);
 
-  return (
-    <div className="relative w-full h-[500px] z-0">
-      <MapContainer
-        center={[48.8566, 2.3522]}
-        zoom={13}
-        className="w-full h-full rounded-lg"
-        id="map"
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {interestPoints.map((point) => (
-          <Marker
-            key={point.id}
-            position={[point.latitude, point.longitude]}
-            icon={customIcon as L.Icon}
-            eventHandlers={{
-              click: () => onSelectPoint(point),
-            }}
-          >
-            <Popup>
-              <div className="text-center">
-                <h2 className="font-bold text-lg">{point.name}</h2>
-                <p className="text-sm text-gray-600">{point.address}</p>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-    </div>
-  );
+	function FlyToCity({ coords }: { coords: [number, number] }) {
+		const map = useMap();
+
+		useEffect(() => {
+			const [lat, lng] = coords;
+			if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+				map.flyTo(coords, map.getZoom(), {
+					duration: 3,
+					animate: true,
+				});
+			}
+		}, [coords, map]);
+
+		return null;
+	}
+
+	useEffect(() => {
+		if (selectedCity && interestPointsByCity) {
+			setInterestPoints(interestPointsByCity);
+			setMapCenter([
+				Number(selectedCity.latitude),
+				Number(selectedCity.longitude),
+			]);
+		}
+	}, [selectedCity, interestPointsByCity]);
+
+	return (
+		<div className="w-full h-[700px] z-0">
+			<MapContainer
+				center={mapCenter}
+				zoom={13}
+				className="w-full h-full"
+				id="map"
+			>
+				<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+				<FlyToCity coords={mapCenter} />
+				{interestPoints.map((point) => (
+					<Marker
+						key={point.id}
+						position={[point.latitude, point.longitude]}
+						icon={customIcon as L.Icon}
+						eventHandlers={{
+							click: () => onSelectPoint(point),
+						}}
+					>
+						<Popup>
+							<div className="text-center">
+								<h2 className="font-bold text-lg">{point.name}</h2>
+								<p className="text-sm text-gray-600">{point.address}</p>
+							</div>
+						</Popup>
+					</Marker>
+				))}
+			</MapContainer>
+		</div>
+	);
 }

@@ -39,10 +39,10 @@ export class City extends BaseEntity {
 	)
 	interestPoints?: InterestPoint[];
 
-	 @Field(() => [User])
-	 @OneToMany(
-	 	() => User,
-	 	(user) => user.city,
-	 )
-	 users!: User[];
+	@Field(() => [User])
+	@OneToMany(
+		() => User,
+		(user) => user.city,
+	)
+	users!: User[];
 }
