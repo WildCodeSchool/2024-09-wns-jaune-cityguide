@@ -90,3 +90,13 @@ query GetInterestPointsByCity($cityId: String!) {
     }
   }
 }`;
+
+export const REGISTER_USER = gql`
+  mutation RegisterUser($data: NewUserInput!) {
+    registerUser(data: $data) {
+      firstname
+      lastname
+      email
+      hashedPassword
+    }
+}`
