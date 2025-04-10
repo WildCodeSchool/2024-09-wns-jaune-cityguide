@@ -197,7 +197,7 @@
 		"longitude": 5.395,
 		"link_url": "https://musees.marseille.fr/palais-longchamp",
 		"category": "Monuments historiques",
-		"city": "Paris"
+		"city": "Marseille"
 	},
 	{
 		"name": "Jardin Public de Bordeaux",
@@ -208,5 +208,168 @@
 		"link_url": "https://www.bordeaux.fr/ebx/PGFICHELieuPratique/2857",
 		"category": "Parcs",
 		"city": "Bordeaux"
+	},
+	{
+		"name": "Cathédrale Notre-Dame de Strasbourg",
+		"description": "Une cathédrale gothique emblématique au cœur de la ville.",
+		"address": "Place de la Cathédrale, 67000 Strasbourg",
+		"latitude": 48.5818,
+		"longitude": 7.7508,
+		"link_url": "https://www.cathedrale-strasbourg.fr/",
+		"category": "Monuments historiques",
+		"city": "Strasbourg"
+	},
+	{
+		"name": "Petite France",
+		"description": "Un quartier pittoresque avec des maisons à colombages et des canaux.",
+		"address": "Quartier de la Petite France, 67000 Strasbourg",
+		"latitude": 48.5795,
+		"longitude": 7.7393,
+		"link_url": "https://www.visitstrasbourg.fr/decouvrir/patrimoine/la-petite-france/",
+		"category": "Patrimoine",
+		"city": "Strasbourg"
+	},
+	{
+		"name": "Parlement Européen",
+		"description": "Le siège officiel du Parlement européen.",
+		"address": "Allée du Printemps, 67070 Strasbourg",
+		"latitude": 48.5958,
+		"longitude": 7.7714,
+		"link_url": "https://www.europarl.europa.eu/visiting/fr/strasbourg",
+		"category": "Institutions",
+		"city": "Strasbourg"
+	},
+	{
+		"name": "Jardin des Deux Rives",
+		"description": "Un parc transfrontalier entre la France et l’Allemagne.",
+		"address": "Rue des Cavaliers, 67100 Strasbourg",
+		"latitude": 48.5618,
+		"longitude": 7.8278,
+		"link_url": "https://www.strasbourg.eu/jardin-deux-rives",
+		"category": "Parcs",
+		"city": "Strasbourg"
+	},
+
+	{
+		"name": "Place de la Comédie",
+		"description": "Cœur historique de Montpellier, animée et entourée de bâtiments haussmanniens.",
+		"address": "Place de la Comédie, 34000 Montpellier",
+		"latitude": 43.6108,
+		"longitude": 3.8767,
+		"link_url": "https://www.montpellier-tourisme.fr/",
+		"category": "Patrimoine",
+		"city": "Montpellier"
+	},
+	{
+		"name": "Musée Fabre",
+		"description": "Musée d’art célèbre de Montpellier avec des collections du XIVe au XXIe siècle.",
+		"address": "39 Boulevard Bonne Nouvelle, 34000 Montpellier",
+		"latitude": 43.6119,
+		"longitude": 3.8822,
+		"link_url": "https://museefabre.montpellier3m.fr/",
+		"category": "Musées",
+		"city": "Montpellier"
+	},
+	{
+		"name": "Jardin des Plantes",
+		"description": "Un des plus anciens jardins botaniques de France.",
+		"address": "Boulevard Henri IV, 34000 Montpellier",
+		"latitude": 43.614,
+		"longitude": 3.8743,
+		"link_url": "https://jardin-des-plantes.univ-montp.fr/",
+		"category": "Parcs",
+		"city": "Montpellier"
+	},
+	{
+		"name": "Promenade du Peyrou",
+		"description": "Un belvédère offrant une vue panoramique sur les Cévennes.",
+		"address": "Rue Foch, 34000 Montpellier",
+		"latitude": 43.6133,
+		"longitude": 3.8701,
+		"link_url": "https://www.montpellier-tourisme.fr/",
+		"category": "Promenades et nature",
+		"city": "Montpellier"
+	},
+
+	{
+		"name": "Château de Brest",
+		"description": "Forteresse historique avec vue sur la rade.",
+		"address": "Boulevard de la Marine, 29200 Brest",
+		"latitude": 48.3826,
+		"longitude": -4.4941,
+		"link_url": "https://musee-marine.fr/brest",
+		"category": "Patrimoine",
+		"city": "Brest"
+	},
+	{
+		"name": "Océanopolis",
+		"description": "Centre de culture scientifique dédié aux océans.",
+		"address": "Port de Plaisance du Moulin Blanc, 29200 Brest",
+		"latitude": 48.3901,
+		"longitude": -4.4507,
+		"link_url": "https://www.oceanopolis.com/",
+		"category": "Musées",
+		"city": "Brest"
+	},
+	{
+		"name": "Tour Tanguy",
+		"description": "Tour médiévale transformée en musée sur l’histoire de Brest.",
+		"address": "Square Pierre Péron, 29200 Brest",
+		"latitude": 48.3856,
+		"longitude": -4.4915,
+		"link_url": "https://www.brest.fr/",
+		"category": "Patrimoine",
+		"city": "Brest"
+	},
+	{
+		"name": "Port de Commerce",
+		"description": "Zone animée avec bars, restaurants et vue sur les bateaux.",
+		"address": "Quai de la Douane, 29200 Brest",
+		"latitude": 48.3841,
+		"longitude": -4.4919,
+		"link_url": "https://www.brest.fr/",
+		"category": "Promenades et nature",
+		"city": "Brest"
+	},
+
+	{
+		"name": "Promenade des Anglais",
+		"description": "La promenade mythique qui longe la mer à Nice.",
+		"address": "Prom. des Anglais, 06000 Nice",
+		"latitude": 43.6953,
+		"longitude": 7.2654,
+		"link_url": "https://www.nicetourisme.com/",
+		"category": "Promenades et nature",
+		"city": "Nice"
+	},
+	{
+		"name": "Vieux-Nice",
+		"description": "Quartier historique avec ruelles, marché et ambiance méditerranéenne.",
+		"address": "Vieux-Nice, 06300 Nice",
+		"latitude": 43.6978,
+		"longitude": 7.2766,
+		"link_url": "https://www.nicetourisme.com/",
+		"category": "Patrimoine",
+		"city": "Nice"
+	},
+	{
+		"name": "Colline du Château",
+		"description": "Vue panoramique sur la baie de Nice et ruines historiques.",
+		"address": "Parc de la Colline du Château, 06300 Nice",
+		"latitude": 43.6957,
+		"longitude": 7.2816,
+		"link_url": "https://www.nicetourisme.com/",
+		"category": "Promenades et nature",
+		"city": "Nice"
+	},
+	{
+		"name": "Musée Matisse",
+		"description": "Musée dédié au peintre Henri Matisse dans une villa génoise.",
+		"address": "164 Avenue des Arènes de Cimiez, 06000 Nice",
+		"latitude": 43.7206,
+		"longitude": 7.2769,
+		"link_url": "https://www.musee-matisse-nice.org/",
+		"category": "Musées",
+		"city": "Nice"
 	}
 ]
