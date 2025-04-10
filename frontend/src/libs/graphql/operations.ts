@@ -6,7 +6,7 @@ export const GET_CITIES = gql`
       id
       name
       postalCode
-      lattitude
+      latitude
       longitude
     }
 }`;
