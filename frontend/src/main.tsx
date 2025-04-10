@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
+import {App} from './App.tsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import HomePage from "./pages/Home/HomePage.tsx";
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   uri: `http://localhost:${import.meta.env.VITE_GATEWAY_PORT}/api`,
   cache: new InMemoryCache(),
 });

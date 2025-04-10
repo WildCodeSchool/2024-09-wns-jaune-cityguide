@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
 import { NewUserInput, useRegisterUserMutation } from "../../libs/graphql/generated/graphql-types";
 import { useNavigate } from "react-router-dom";
+import { useCitiesStore } from "../../store/citiesStore";
 
 type FormDataType = {
   firstname: string;
@@ -9,6 +10,7 @@ type FormDataType = {
   email: string;
   password: string;
   confirmPassword?: string;
+  cityId: string;
 };
 
 type ErrorsType = {
@@ -17,6 +19,7 @@ type ErrorsType = {
   email?: string;
   password?: string;
   confirmPassword?: string;
+  cityId?: string;
 };
 
 function Inscription() {
@@ -26,6 +29,7 @@ function Inscription() {
     email: "",
     password: "",
     confirmPassword:"",
+    cityId:"",
   });
 
   const [errors, setErrors] = useState<ErrorsType>({});
@@ -39,6 +43,12 @@ function Inscription() {
 
   const [showPopup, setShowPopup] = useState(false); 
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
+
+  const { cities, fetchCities } = useCitiesStore();
+
+    useEffect(() => {
+      fetchCities();
+    }, []);
 
   const validate = (): ErrorsType => {
     const newErrors: ErrorsType = {};
@@ -62,6 +72,10 @@ function Inscription() {
       newErrors.confirmPassword = "Les mots de passe ne correspondent pas.";
     }
 
+    if (!formData.cityId) {
+      newErrors.cityId = "La ville est requise.";
+    }
+    
     return newErrors;
   };
 
@@ -208,6 +222,27 @@ function Inscription() {
               )}
             </div>
           ))}
+
+          <div className="w-full">
+            <div className="border border-gray-300 rounded-[25px] px-3 py-2">
+              <select
+                name="cityId"
+                value={formData.cityId || ""}
+                onChange={(e) => setFormData((prev) => ({ ...prev, cityId: e.target.value }))}
+                className="w-full outline-none bg-transparent text-gray-800"
+              >
+                <option value="" disabled>Sélectionnez votre ville</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {errors.cityId && (
+              <p className="text-red-500 text-xs mt-1 ml-2">{errors.cityId}</p>
+            )}
+          </div>
 
           <button
             type="submit"

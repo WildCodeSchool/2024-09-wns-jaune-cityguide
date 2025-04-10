@@ -37,7 +37,7 @@ export type City = {
   __typename?: 'City';
   id: Scalars['String']['output'];
   interestPoints: Array<InterestPoint>;
-  lattitude: Scalars['Float']['output'];
+  latitude: Scalars['Float']['output'];
   longitude: Scalars['Float']['output'];
   name: Scalars['String']['output'];
   postalCode: Scalars['String']['output'];
@@ -197,6 +197,7 @@ export type MutationUpdateUserArgs = {
 };
 
 export type NewUserInput = {
+  cityId: Scalars['String']['input'];
   email: Scalars['String']['input'];
   firstname: Scalars['String']['input'];
   lastname: Scalars['String']['input'];
@@ -227,8 +228,8 @@ export type Query = {
   getCityById: City;
   getInterestPointById: InterestPoint;
   getInterestPoints: Array<InterestPoint>;
-  getInterestPointsByCategory: InterestPoint;
-  getInterestPointsByCity: InterestPoint;
+  getInterestPointsByCategory: Array<InterestPoint>;
+  getInterestPointsByCity: Array<InterestPoint>;
   getPictureById: Picture;
   getPictures: Array<Picture>;
   getPicturesByInterestPoint: Array<Picture>;
@@ -284,7 +285,7 @@ export type UpdateUserInput = {
 
 export type User = {
   __typename?: 'User';
-  city: Array<City>;
+  city: City;
   email: Scalars['String']['output'];
   firstname: Scalars['String']['output'];
   hashedPassword: Scalars['String']['output'];
@@ -311,7 +312,19 @@ export enum UserRole {
 export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', id: string, name: string, postalCode: string, lattitude: number, longitude: number }> };
+export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', id: string, name: string, postalCode: string, latitude: number, longitude: number }> };
+
+export type GetInterestPointsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetInterestPointsQuery = { __typename?: 'Query', getInterestPoints: Array<{ __typename?: 'InterestPoint', id: string, name: string, description: string, address: string, latitude: number, longitude: number, link_url: string, city: { __typename?: 'City', id: string, name: string, postalCode: string }, category: { __typename?: 'Category', id: string, name: string, description?: string | null, color: string }, pictures: Array<{ __typename?: 'Picture', id: string, url: string, name: string, description: string }> }> };
+
+export type GetInterestPointsByCityQueryVariables = Exact<{
+  cityId: Scalars['String']['input'];
+}>;
+
+
+export type GetInterestPointsByCityQuery = { __typename?: 'Query', getInterestPointsByCity: Array<{ __typename?: 'InterestPoint', id: string, name: string, description: string, address: string, latitude: number, longitude: number, link_url: string, city: { __typename?: 'City', id: string, name: string, postalCode: string }, category: { __typename?: 'Category', id: string, name: string, description?: string | null, color: string }, pictures: Array<{ __typename?: 'Picture', id: string, url: string, name: string, description: string }> }> };
 
 export type RegisterUserMutationVariables = Exact<{
   data: NewUserInput;
@@ -327,7 +340,7 @@ export const GetCitiesDocument = gql`
     id
     name
     postalCode
-    lattitude
+    latitude
     longitude
   }
 }
@@ -364,6 +377,131 @@ export type GetCitiesQueryHookResult = ReturnType<typeof useGetCitiesQuery>;
 export type GetCitiesLazyQueryHookResult = ReturnType<typeof useGetCitiesLazyQuery>;
 export type GetCitiesSuspenseQueryHookResult = ReturnType<typeof useGetCitiesSuspenseQuery>;
 export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQueryVariables>;
+export const GetInterestPointsDocument = gql`
+    query GetInterestPoints {
+  getInterestPoints {
+    id
+    name
+    description
+    address
+    latitude
+    longitude
+    link_url
+    city {
+      id
+      name
+      postalCode
+    }
+    category {
+      id
+      name
+      description
+      color
+    }
+    pictures {
+      id
+      url
+      name
+      description
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetInterestPointsQuery__
+ *
+ * To run a query within a React component, call `useGetInterestPointsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInterestPointsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInterestPointsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetInterestPointsQuery(baseOptions?: Apollo.QueryHookOptions<GetInterestPointsQuery, GetInterestPointsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInterestPointsQuery, GetInterestPointsQueryVariables>(GetInterestPointsDocument, options);
+      }
+export function useGetInterestPointsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInterestPointsQuery, GetInterestPointsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInterestPointsQuery, GetInterestPointsQueryVariables>(GetInterestPointsDocument, options);
+        }
+export function useGetInterestPointsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetInterestPointsQuery, GetInterestPointsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetInterestPointsQuery, GetInterestPointsQueryVariables>(GetInterestPointsDocument, options);
+        }
+export type GetInterestPointsQueryHookResult = ReturnType<typeof useGetInterestPointsQuery>;
+export type GetInterestPointsLazyQueryHookResult = ReturnType<typeof useGetInterestPointsLazyQuery>;
+export type GetInterestPointsSuspenseQueryHookResult = ReturnType<typeof useGetInterestPointsSuspenseQuery>;
+export type GetInterestPointsQueryResult = Apollo.QueryResult<GetInterestPointsQuery, GetInterestPointsQueryVariables>;
+export const GetInterestPointsByCityDocument = gql`
+    query GetInterestPointsByCity($cityId: String!) {
+  getInterestPointsByCity(cityId: $cityId) {
+    id
+    name
+    description
+    address
+    latitude
+    longitude
+    link_url
+    city {
+      id
+      name
+      postalCode
+    }
+    category {
+      id
+      name
+      description
+      color
+    }
+    pictures {
+      id
+      url
+      name
+      description
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetInterestPointsByCityQuery__
+ *
+ * To run a query within a React component, call `useGetInterestPointsByCityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInterestPointsByCityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInterestPointsByCityQuery({
+ *   variables: {
+ *      cityId: // value for 'cityId'
+ *   },
+ * });
+ */
+export function useGetInterestPointsByCityQuery(baseOptions: Apollo.QueryHookOptions<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables> & ({ variables: GetInterestPointsByCityQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>(GetInterestPointsByCityDocument, options);
+      }
+export function useGetInterestPointsByCityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>(GetInterestPointsByCityDocument, options);
+        }
+export function useGetInterestPointsByCitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>(GetInterestPointsByCityDocument, options);
+        }
+export type GetInterestPointsByCityQueryHookResult = ReturnType<typeof useGetInterestPointsByCityQuery>;
+export type GetInterestPointsByCityLazyQueryHookResult = ReturnType<typeof useGetInterestPointsByCityLazyQuery>;
+export type GetInterestPointsByCitySuspenseQueryHookResult = ReturnType<typeof useGetInterestPointsByCitySuspenseQuery>;
+export type GetInterestPointsByCityQueryResult = Apollo.QueryResult<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>;
 export const RegisterUserDocument = gql`
     mutation RegisterUser($data: NewUserInput!) {
   registerUser(data: $data) {

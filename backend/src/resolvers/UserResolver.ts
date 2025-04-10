@@ -3,6 +3,7 @@ import { User, UserRole } from "../entities/User";
 import { Response } from "express";
 import * as argon from "argon2";
 import * as jwt from "jsonwebtoken";
+import { City } from "../entities/City";
 
 
 @InputType()
@@ -18,6 +19,9 @@ export class NewUserInput {
 
   @Field()
   password!: string;
+
+  @Field()
+  cityId!: string;
 }
 
 
@@ -76,6 +80,11 @@ export class UserResolver {
       if (existingUser) {
         throw new Error("Cet email est déjà utilisé.");
       }
+    
+    const city = await City.findOneBy({ id: data.cityId });
+    if (!city) {
+      throw new Error("Ville introuvable");
+    }
 
     const hashedPassword = await argon.hash(data.password);
     const user = await User.save({
@@ -84,6 +93,7 @@ export class UserResolver {
       lastname: data.lastname,
       hashedPassword: hashedPassword,
       role: UserRole.USER,
+      city,
     });
 
     const tokenContent = {
