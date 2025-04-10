@@ -50,7 +50,7 @@
 		"color": "#795548"
 	},
 	{
-		"name": "Transport",
+		"name": "Transports",
 		"description": "Gares, stations et autres moyens de transport.",
 		"color": "#607D8B"
 	},
@@ -67,6 +67,16 @@
 	{
 		"name": "Parcs naturels",
 		"description": "Des espaces naturels préservés à visiter.",
+		"color": "#4CAF50"
+	},
+	{
+		"name": "Institutions",
+		"description": "Les hauts lieux de l'administration et de la culture.",
+		"color": "#3F51B5"
+	},
+	{
+		"name": "Promenades et nature",
+		"description": "Des itinéraires de promenade et de randonnée pour profiter d'un paysage hors du commun.",
 		"color": "#4CAF50"
 	}
 ]
