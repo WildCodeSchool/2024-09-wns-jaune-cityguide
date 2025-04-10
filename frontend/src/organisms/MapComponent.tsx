@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
-import L from "leaflet";
+import L, { point } from "leaflet";
 
 import { useCitiesStore } from "../store/citiesStore";
 import { useInterestPointsStore } from "../store/interestPointsStore";
@@ -16,6 +16,8 @@ export default function MapComponent({
 	const customIcon = new L.Icon({
 		iconUrl:
 			"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+		shadowUrl:
+			"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 		iconSize: [25, 41],
 		iconAnchor: [12, 41],
 		popupAnchor: [1, -34],
