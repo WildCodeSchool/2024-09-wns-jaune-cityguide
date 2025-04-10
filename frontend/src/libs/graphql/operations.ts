@@ -16,19 +16,27 @@ query GetInterestPoints {
   getInterestPoints {
     id
     name
-    address
     description
-    longitude
+    address
     latitude
+    longitude
     link_url
-    category {
-      id
-      name
-    }
     city {
       id
       name
       postalCode
+    }
+    category {
+      id
+      name
+      description
+      color
+    }
+    pictures {
+      id
+      url
+      name
+      description
     }
   }
 }`;
@@ -38,16 +46,27 @@ query GetInterestPointsByCity($cityId: String!) {
   getInterestPointsByCity(cityId: $cityId) {
     id
     name
-    address
     description
-    link_url
+    address
     latitude
     longitude
+    link_url
     city {
+      id
       name
+      postalCode
     }
     category {
+      id
       name
+      description
+      color
+    }
+    pictures {
+      id
+      url
+      name
+      description
     }
   }
 }`;
