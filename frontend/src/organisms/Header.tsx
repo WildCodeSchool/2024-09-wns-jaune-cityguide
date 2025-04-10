@@ -1,5 +1,6 @@
 import { useState } from "react";
 import logo from "../assets/logo_city_guide_good.png";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -47,9 +48,9 @@ export default function Navbar() {
 
           {/* Boutons de connexion (uniquement en version desktop) */}
           <div className="hidden sm:flex space-x-4">
-            <a href="#" className="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black">
+            <Link to={"/login"} className="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black">
               Se connecter
-            </a>
+            </Link>
             <a href="/inscription" className="rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white">
               S'inscrire
             </a>

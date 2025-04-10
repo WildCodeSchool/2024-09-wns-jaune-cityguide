@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import HomePage from "./pages/Home/HomePage.tsx";
 import Inscription from './pages/Inscription/Inscription.tsx';
+import Login from './pages/Login/Login.tsx';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "/inscription",
         element: <Inscription />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
       },
     ],
   },
