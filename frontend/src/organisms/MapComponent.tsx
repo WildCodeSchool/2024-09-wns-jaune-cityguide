@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import L from "leaflet";
@@ -19,7 +19,7 @@ const customIcon = new L.Icon({
 
 export default function MapComponent({
 	onSelectPoint,
-}: { onSelectPoint: (point: InterestPoint) => void }) {
+}: { onSelectPoint: (pointOfInterest: InterestPoint) => void }) {
 	const [interestPoints, setInterestPoints] = useState<InterestPoint[]>([]);
 	const { selectedCity } = useCitiesStore();
 	const { interestPointsByCity } = useInterestPointsStore();
@@ -28,6 +28,22 @@ export default function MapComponent({
 		48.8566,
 		2.3522, // Paris coordinates by default
 	]);
+
+	function FlyToCity({ coords }: { coords: [number, number] }) {
+		const map = useMap();
+
+		useEffect(() => {
+			const [lat, lng] = coords;
+			if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+				map.flyTo(coords, map.getZoom(), {
+					duration: 3,
+					animate: true,
+				});
+			}
+		}, [coords, map]);
+
+		return null;
+	}
 
 	useEffect(() => {
 		if (selectedCity && interestPointsByCity) {
@@ -39,7 +55,6 @@ export default function MapComponent({
 		}
 	}, [selectedCity, interestPointsByCity]);
 
-	// TODO: flyto the selected city when it changes
 	return (
 		<div className="w-full h-[700px] z-0">
 			<MapContainer
@@ -49,7 +64,7 @@ export default function MapComponent({
 				id="map"
 			>
 				<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
+				<FlyToCity coords={mapCenter} />
 				{interestPoints.map((point) => (
 					<Marker
 						key={point.id}
