@@ -26,7 +26,7 @@ export class City extends BaseEntity {
 
 	@Field()
 	@Column("float")
-	lattitude!: number;
+	latitude!: number;
 
 	@Field()
 	@Column("float")

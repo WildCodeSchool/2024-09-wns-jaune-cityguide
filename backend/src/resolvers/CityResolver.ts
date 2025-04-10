@@ -20,7 +20,7 @@ export class CityInput {
   postalCode!: string;
 
   @Field()
-  lattitude!: number;
+  latitude!: number;
 
   @Field()
   longitude!: number;
