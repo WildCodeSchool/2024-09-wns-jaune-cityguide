@@ -1,38 +1,38 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import { App } from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import HomePage from "./pages/Home/HomePage.tsx";
-import Inscription from './pages/Inscription/Inscription.tsx';
+import Inscription from "./pages/Inscription/Inscription.tsx";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "/",
-        element: <HomePage />,
-      },
-      {
-        path: "/inscription",
-        element: <Inscription />,
-      },
-    ],
-  },
+	{
+		path: "/",
+		element: <App />,
+		children: [
+			{
+				path: "/",
+				element: <HomePage />,
+			},
+			{
+				path: "/inscription",
+				element: <Inscription />,
+			},
+		],
+	},
 ]);
 
-const client = new ApolloClient({
-  uri: `http://localhost:${import.meta.env.VITE_GATEWAY_PORT}/api`,
-  cache: new InMemoryCache(),
+export const client = new ApolloClient({
+	uri: `http://localhost:${import.meta.env.VITE_GATEWAY_PORT}/api`,
+	cache: new InMemoryCache(),
 });
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ApolloProvider client={client}>
-    <RouterProvider router={router} />
-    </ApolloProvider>
-  </StrictMode>,
-)
+createRoot(document.getElementById("root")!).render(
+	<StrictMode>
+		<ApolloProvider client={client}>
+			<RouterProvider router={router} />
+		</ApolloProvider>
+	</StrictMode>,
+);
