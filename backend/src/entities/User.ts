@@ -14,8 +14,6 @@ registerEnumType(UserRole, {
     description: "Defines the role of the user",
 });
 
-
-
 @Entity()
 @ObjectType()
 export class User extends BaseEntity {
@@ -51,10 +49,11 @@ export class User extends BaseEntity {
     @Column({ type: String, nullable: true })
     resetTokenExpiration?: Date | null;
 
-    @Field(() => [City])
+    @Field(() => City)
     @ManyToOne(
         () => City,
         (city) => city.users,
+        { nullable: true, onDelete: 'CASCADE' }
     )
-    city!: City[];
+    city!: City;
 }
