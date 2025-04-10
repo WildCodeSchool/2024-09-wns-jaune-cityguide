@@ -2,7 +2,7 @@
 import "./Home.css";
 import MapComponent from "../../organisms/MapComponent";
 import InterestPointDetails from "../../organisms/InterestPointDetails";
-import EditPointModal from "../../organisms/EditPointModal";
+import EditInterestPointModal from "../../organisms/EditInterestPointModal";
 import { useState } from "react";
 
 export default function HomePage() {
@@ -38,7 +38,7 @@ export default function HomePage() {
       </div>
 
       {editModalOpen && selectedPoint && (
-        <EditPointModal
+        <EditInterestPointModal
           point={selectedPoint}
           onClose={() => setEditModalOpen(false)}
           onSave={handleSaveEdit}

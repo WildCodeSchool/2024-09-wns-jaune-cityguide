@@ -7,7 +7,6 @@ const images = [
 ];
 
 export default function InterestPointDetails({ onClose, point }) {
-  console.log("Point received:", point);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false); // Ajout d'état pour ouvrir la modal
 
@@ -39,11 +38,13 @@ export default function InterestPointDetails({ onClose, point }) {
           </button>
 
           <div className="relative w-70 h-36 lg:w-110 lg:h-60 overflow-hidden rounded-xl">
-            <img
-              src={point.pictures[currentIndex].url}
-              alt={point.name}
-              className="w-full h-full object-cover"
-            />
+            {point.pictures && point.pictures.length > 0 && (
+              <img
+                src={point.pictures[0].url}
+                alt={point.name}
+                className="rounded-md max-h-48 object-cover w-full"
+              />
+            )}
             <button
               className="absolute top-1/2 left-2 transform -translate-y-1/2 w-7 h-7 rounded-full border-2 shadow"
               onClick={prevSlide}

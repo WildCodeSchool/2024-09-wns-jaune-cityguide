@@ -6,7 +6,7 @@ import {
 	useGetCategoriesQuery,
 } from "../libs/graphql/generated/graphql-types";
 
-export default function InterestPointCreationForm() {
+export default function CreateInterestPointModal() {
 	const { loading, error, data } = useGetCategoriesQuery();
 	const [createInterestPoint, { data: dataSub, loading: subLoading, error: subError }] =
 		useCreateInterestPointMutation();
@@ -39,8 +39,8 @@ export default function InterestPointCreationForm() {
 					<input className="text-field" name="description" />
 				</label>
 				<label>
-					Adress:
-					<input className="text-field" name="adress" />
+					Address:
+					<input className="text-field" name="address" />
 				</label>
 				<label>
 					Latitude:

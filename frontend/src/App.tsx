@@ -10,9 +10,7 @@ export function App() {
 
 	useEffect(() => {
 		fetchCities();
-		fetchInterestPoints();
-		fetchInterestPointsByCity("1");
-	}, [fetchCities, fetchInterestPoints, fetchInterestPointsByCity]);
+	}, [fetchCities]);
 
 	return (
 		<div className="flex flex-col min-h-screen">
