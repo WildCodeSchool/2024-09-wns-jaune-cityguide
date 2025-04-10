@@ -7,6 +7,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import HomePage from "./pages/Home/HomePage.tsx";
 import Inscription from "./pages/Inscription/Inscription.tsx";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.tsx";
+import Login from './pages/Login/Login.tsx';
 
 const router = createBrowserRouter([
 	{
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
 				path: "/dashboard",
 				element: <AdminDashboard userRole={"superAdmin"} />, // Une fois le role mis dans le contexte il faudra passer la props à ce composant
 			},
+      {
+        path: "/login",
+        element: <Login />,
+      },
 		],
 	},
 ]);

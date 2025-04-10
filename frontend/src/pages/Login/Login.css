@@ -1,0 +1,5 @@
+@layer utilities {
+    .placeholder-bold::placeholder {
+        font-weight: 700;
+    }
+}

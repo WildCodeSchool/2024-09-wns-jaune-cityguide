@@ -1,5 +1,6 @@
 import { useState } from "react";
 import logo from "../assets/logo_city_guide_good.png";
+import { Link } from "react-router-dom";
 import SearchBar from "../atoms/SearchBar";
 
 export default function Navbar() {
@@ -22,14 +23,15 @@ export default function Navbar() {
 						</div>
 					</div>
 
+					{/* Boutons de connexion (uniquement en version desktop) */}
 					<div>
 						<div className="hidden sm:flex space-x-4">
-							<a
-								href="/"
+							<Link
+								to={"/login"}
 								className="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
 							>
-								<button type="button">Se connecter</button>
-							</a>
+								Se connecter
+							</Link>
 							<a
 								href="/inscription"
 								className="rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
@@ -88,12 +90,12 @@ export default function Navbar() {
 				{isMobileMenuOpen && (
 					<div className="sm:hidden secondary-bg" id="mobile-menu">
 						<div className="space-y-1 px-2 pt-2 pb-3">
-							<a
-								href="/"
+							<Link
+								to={"/login"}
 								className="block rounded-md px-3 py-2 text-base font-medium text-white"
 							>
 								Se connecter
-							</a>
+							</Link>
 							<a
 								href="/inscription"
 								className="block rounded-md px-3 py-2 text-base font-medium text-white"
@@ -104,11 +106,6 @@ export default function Navbar() {
 					</div>
 				)}
 			</nav>
-			{isMobileMenuOpen && (
-				<div className="sm:hidden bg-white py-2 px-4 shadow-md z-40 relative">
-					<SearchBar />
-				</div>
-			)}
 		</>
 	);
 }
