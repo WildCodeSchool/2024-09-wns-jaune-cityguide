@@ -11,6 +11,26 @@ export const GET_CITIES = gql`
     }
 }`;
 
+
+export const LOGIN = gql`
+  mutation LoginUser($data: UserInput!) {
+    loginUser(data: $data)
+  }
+`;
+
+
+export const FORGOT_PASSWORD = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email)
+  }
+`;
+
+
+export const RESET_PASSWORD = gql`
+  mutation resetPassword($newPassword: String!, $token: String!){
+    resetPassword(newPassword: $newPassword, token: $token)
+  }
+`;
 export const GET_INTEREST_POINTS = gql`
 query GetInterestPoints {
   getInterestPoints {
