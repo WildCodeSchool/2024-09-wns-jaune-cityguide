@@ -37,7 +37,7 @@ export type City = {
   __typename?: 'City';
   id: Scalars['String']['output'];
   interestPoints: Array<InterestPoint>;
-  lattitude: Scalars['Float']['output'];
+  latitude: Scalars['Float']['output'];
   longitude: Scalars['Float']['output'];
   name: Scalars['String']['output'];
   postalCode: Scalars['String']['output'];
@@ -46,7 +46,7 @@ export type City = {
 
 export type CityInput = {
   interestPoints: Array<Scalars['ID']['input']>;
-  lattitude: Scalars['Float']['input'];
+  latitude: Scalars['Float']['input'];
   longitude: Scalars['Float']['input'];
   name: Scalars['String']['input'];
   postalCode: Scalars['String']['input'];
@@ -296,7 +296,7 @@ export enum UserRole {
 export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', id: string, name: string, postalCode: string, lattitude: number, longitude: number }> };
+export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', id: string, name: string, postalCode: string, latitude: number, longitude: number }> };
 
 export type CreateInterestPointMutationVariables = Exact<{
   data: InterestPointInput;
@@ -332,7 +332,7 @@ export const GetCitiesDocument = gql`
     id
     name
     postalCode
-    lattitude
+    latitude
     longitude
   }
 }

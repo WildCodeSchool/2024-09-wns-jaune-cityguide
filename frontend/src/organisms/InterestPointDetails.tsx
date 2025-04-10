@@ -1,12 +1,15 @@
 import { useState } from "react";
+import EditInterestPointModal from "./EditInterestPointModal"; // Assurez-vous d'importer la modal
 
 const images = [
   "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg",
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtiQ_Pcwlc6qydBsUKAmQwTUsiq1TIZkMOXezMfCXBxmqlDwM&s",
 ];
 
-export default function InterestPointDetails({ onClose, point, onEdit }) {
+export default function InterestPointDetails({ onClose, point }) {
+  console.log("Point received:", point);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Ajout d'état pour ouvrir la modal
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -14,6 +17,14 @@ export default function InterestPointDetails({ onClose, point, onEdit }) {
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleEditClick = () => {
+    setIsModalOpen(true); // Ouvrir la modal lorsque le bouton éditer est cliqué
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false); // Fermer la modal
   };
 
   return (
@@ -53,7 +64,7 @@ export default function InterestPointDetails({ onClose, point, onEdit }) {
             {point.name}
             <span
               className="material-symbols-outlined text-sm absolute right-3 cursor-pointer"
-              onClick={onEdit}
+              onClick={handleEditClick} // Appeler la fonction handleEditClick pour ouvrir la modal
             >
               edit
             </span>
@@ -63,6 +74,14 @@ export default function InterestPointDetails({ onClose, point, onEdit }) {
           </div>
         </div>
       </div>
+
+      {/* Modal d'édition */}
+      {isModalOpen && (
+        <EditInterestPointModal
+          point={point} // Passer le point d'intérêt à la modal
+          onClose={handleModalClose} // Fonction pour fermer la modal
+        />
+      )}
     </div>
   );
 }
