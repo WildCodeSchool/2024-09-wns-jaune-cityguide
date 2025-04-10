@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import HomePage from "./pages/Home/HomePage.tsx";
 import Inscription from "./pages/Inscription/Inscription.tsx";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
 			{
 				path: "/inscription",
 				element: <Inscription />,
+			},
+			{
+				path: "/dashboard",
+				element: <AdminDashboard userRole={"superAdmin"} />, // Une fois le role mis dans le contexte il faudra passer la props à ce composant
 			},
 		],
 	},
