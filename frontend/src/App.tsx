@@ -2,17 +2,25 @@ import { Outlet } from "react-router-dom";
 import "./App.css";
 import Footer from "./organisms/Footer";
 import Header from "./organisms/Header";
+import { useCitiesStore } from "./store/citiesStore";
+import { useEffect } from "react";
 
-function App() {
-  return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
-  );
+export function App() {
+	const { fetchCities } = useCitiesStore();
+
+	useEffect(() => {
+		fetchCities();
+		fetchInterestPoints();
+		fetchInterestPointsByCity("1");
+	}, [fetchCities, fetchInterestPoints, fetchInterestPointsByCity]);
+
+	return (
+		<div className="flex flex-col min-h-screen">
+			<Header />
+			<main className="flex-1">
+				<Outlet />
+			</main>
+			<Footer />
+		</div>
+	);
 }
-
-export default App;
