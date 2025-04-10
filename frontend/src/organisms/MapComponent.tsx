@@ -8,21 +8,23 @@ import { useInterestPointsStore } from "../store/interestPointsStore";
 
 import type { InterestPoint } from "../@types/types";
 
-// About custom icons: https://leafletjs.com/examples/custom-icons/
-const customIcon = new L.Icon({
-	iconUrl:
-		"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-	iconSize: [25, 41],
-	iconAnchor: [12, 41],
-	popupAnchor: [1, -34],
-});
-
 export default function MapComponent({
 	onSelectPoint,
 }: { onSelectPoint: (pointOfInterest: InterestPoint) => void }) {
+	// About custom icons: https://leafletjs.com/examples/custom-icons/
+	// TODO: customize color per category
+	const customIcon = new L.Icon({
+		iconUrl:
+			"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+		iconSize: [25, 41],
+		iconAnchor: [12, 41],
+		popupAnchor: [1, -34],
+	});
+
 	const [interestPoints, setInterestPoints] = useState<InterestPoint[]>([]);
 	const { selectedCity } = useCitiesStore();
-	const { interestPointsByCity } = useInterestPointsStore();
+	const { interestPointsByCity, setSelectedInterestPoint } =
+		useInterestPointsStore();
 
 	const [mapCenter, setMapCenter] = useState<[number, number]>([
 		48.8566,
@@ -56,7 +58,7 @@ export default function MapComponent({
 	}, [selectedCity, interestPointsByCity]);
 
 	return (
-		<div className="w-full h-[700px] z-0">
+		<div className="w-full h-[800px] z-0">
 			<MapContainer
 				center={mapCenter}
 				zoom={13}
@@ -72,12 +74,16 @@ export default function MapComponent({
 						icon={customIcon as L.Icon}
 						eventHandlers={{
 							click: () => onSelectPoint(point),
+							popupclose: () => {
+								setSelectedInterestPoint(null);
+							},
 						}}
 					>
 						<Popup>
-							<div className="text-center">
+							<div className="text-center gap-0.5">
 								<h2 className="font-bold text-lg">{point.name}</h2>
-								<p className="text-sm text-gray-600">{point.address}</p>
+								<p className="text-sm text-gray-600">{point.category.name}</p>
+								<p className="text-md text-gray-600">{point.address}</p>
 							</div>
 						</Popup>
 					</Marker>
