@@ -1,11 +1,11 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 import * as dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 const config: CodegenConfig = {
     overwrite: true,
-    schema: `http://localhost:${process.env.GATEWAY_PORT || '7000'}/api`,
+    schema: `http://localhost:${process.env.GATEWAY_PORT}/api`,
     documents: "./src/libs/graphql/operations.ts",
     generates: {
         "./src/libs/graphql/generated/graphql-types.ts": {

@@ -89,10 +89,12 @@ export type Mutation = {
   deleteInterestPointById: Scalars['Boolean']['output'];
   deletePictureById: Scalars['Boolean']['output'];
   deleteUser: User;
+  forgotPassword: Scalars['String']['output'];
   loginUser: Scalars['String']['output'];
   registerUser: User;
   replaceCategoryById: Category;
   replaceInterestPointById: InterestPoint;
+  resetPassword: Scalars['String']['output'];
   updateCityById: City;
   updatePictureById: Picture;
   updateUser: User;
@@ -144,6 +146,11 @@ export type MutationDeleteUserArgs = {
 };
 
 
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String']['input'];
+};
+
+
 export type MutationLoginUserArgs = {
   data: UserInput;
 };
@@ -163,6 +170,12 @@ export type MutationReplaceCategoryByIdArgs = {
 export type MutationReplaceInterestPointByIdArgs = {
   data: InterestPointInput;
   interestPointId: Scalars['String']['input'];
+};
+
+
+export type MutationResetPasswordArgs = {
+  newPassword: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
 
 
@@ -277,6 +290,8 @@ export type User = {
   hashedPassword: Scalars['String']['output'];
   id: Scalars['String']['output'];
   lastname: Scalars['String']['output'];
+  resetToken?: Maybe<Scalars['String']['output']>;
+  resetTokenExpiration?: Maybe<Scalars['String']['output']>;
   role: UserRole;
 };
 
