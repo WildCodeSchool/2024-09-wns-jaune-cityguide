@@ -30,7 +30,7 @@ export default function Navbar() {
 								to={"/login"}
 								className="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
 							>
-								Se connecter
+								<button type="button">Se connecter</button>
 							</Link>
 							<a
 								href="/inscription"
@@ -88,24 +88,29 @@ export default function Navbar() {
 
 				{/* Mobile Menu */}
 				{isMobileMenuOpen && (
-					<div className="sm:hidden secondary-bg" id="mobile-menu">
-						<div className="space-y-1 px-2 pt-2 pb-3">
+					<div className="sm:hidden" id="mobile-menu">
+						<div className="space-x-2 px-2 pt-2 pb-3 flex">
 							<Link
 								to={"/login"}
-								className="block rounded-md px-3 py-2 text-base font-medium text-white"
+								className="block rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
 							>
-								Se connecter
+								<button type="button">Se connecter</button>
 							</Link>
 							<a
 								href="/inscription"
-								className="block rounded-md px-3 py-2 text-base font-medium text-white"
+								className="block rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
 							>
-								S'inscrire
+								<button type="button">S&rsquo;inscrire</button>
 							</a>
 						</div>
 					</div>
 				)}
 			</nav>
+			{isMobileMenuOpen && (
+				<div className="sm:hidden bg-white py-2 px-4 shadow-md z-40 relative">
+					<SearchBar />
+				</div>
+			)}
 		</>
 	);
 }
