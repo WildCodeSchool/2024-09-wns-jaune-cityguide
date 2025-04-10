@@ -9,7 +9,7 @@ export function App() {
 	const { fetchCities } = useCitiesStore();
 
 	useEffect(() => {
-		fetchCities();
+		fetchCities();	
 	}, [fetchCities]);
 
 	return (

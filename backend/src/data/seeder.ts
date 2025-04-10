@@ -17,6 +17,13 @@ type InterestPointSeedType = {
 	city: string;
 };
 
+type PictureSeedType = {
+	name: string;
+	description: string;
+	url: string;
+	interestPoint: string;
+};
+
 export async function seedDatabase() {
 	console.log("🔎 Checking database content...");
 
@@ -24,15 +31,6 @@ export async function seedDatabase() {
 	const cityRepository = dataSource.getRepository(City);
 	const interestPointRepository = dataSource.getRepository(InterestPoint);
 	const pictureRepository = dataSource.getRepository(Picture);
-
-	// const picturesCount = await pictureRepository.count();
-	// if (picturesCount > 0) {
-	// 	console.log("Table 'Picture' already seeded. Deleting data...");
-	// 	pictureRepository.delete({});
-	// 	console.log("Table cleared.");
-	// 	return;
-	// }
-	// console.log("Table 'Picture' is empty.");
 
 	console.log("🧹 Cleaning database...");
 	await pictureRepository.delete({});
@@ -108,5 +106,28 @@ export async function seedDatabase() {
 		}
 	}
 	console.log("✅ Interest points inserted successfully!");
+
+	console.log("⤵️ Inserting pictures...");
+	const pictures: PictureSeedType[] = JSON.parse(
+		fs.readFileSync("src/data/pictures.json", "utf8"),
+	);
+
+	for (const picture of pictures) {
+		const interestPoint = await interestPointRepository.findOneBy({
+			name: picture.interestPoint,
+		});
+		if (!interestPoint)
+			throw new Error(`Interest point not found: ${picture.interestPoint}`);
+
+		const savedPicture = await pictureRepository.save([
+			{
+				name: picture.name,
+				description: picture.description,
+				url: picture.url,
+				interestPoint,
+			},
+		]);
+	}
+	console.log("✅ Pictures inserted successfully!");
 	console.log("🌱 Seeding complete!");
 }

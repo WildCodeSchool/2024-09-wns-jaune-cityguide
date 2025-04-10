@@ -3,6 +3,7 @@ import { User, UserRole } from "../entities/User";
 import { Response } from "express";
 import * as argon from "argon2";
 import * as jwt from "jsonwebtoken";
+import { GraphQLError } from "graphql";
 import { City } from "../entities/City";
 
 
@@ -127,19 +128,23 @@ export class UserResolver {
   async loginUser(
     @Arg("data") data: UserInput,
     @Ctx() { res }: { res: Response }) {
-      
+
     if (!process.env.TOKEN_SECRET_KEY) {
       throw new Error("Missing env variable");
     }
 
     const user = await User.findOneBy({ email: data.email });
     if (!user) {
-      throw new Error("User not found");
+      throw new GraphQLError("Le compte avec cet email n'existe pas.", {
+        extensions: { code: "USER_NOT_FOUND" },
+      });
     };
 
     const validPassword = await argon.verify(user.hashedPassword, data.password);
     if (!validPassword) {
-      throw new Error("Invalid password");
+      throw new GraphQLError("Email ou mot de passe invalide.", {
+        extensions: { code: "INVALID_PASSWORD" },
+      });
     };
 
     const tokenContent = {
@@ -157,7 +162,7 @@ export class UserResolver {
       secure: true,
       sameSite: "strict"
     });
-    
+
     const profile = {
       mail: user.email,
       name: user.firstname,
