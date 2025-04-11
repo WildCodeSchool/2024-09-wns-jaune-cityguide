@@ -3,6 +3,8 @@ import { User, UserRole } from "../entities/User";
 import { Response } from "express";
 import * as argon from "argon2";
 import * as jwt from "jsonwebtoken";
+import { GraphQLError } from "graphql";
+import { City } from "../entities/City";
 
 
 @InputType()
@@ -18,6 +20,9 @@ export class NewUserInput {
 
   @Field()
   password!: string;
+
+  @Field()
+  cityId!: string;
 }
 
 
@@ -72,6 +77,16 @@ export class UserResolver {
       throw new Error("Missing env variable");
     }
 
+    const existingUser = await User.findOneBy({ email: data.email });
+      if (existingUser) {
+        throw new Error("Cet email est déjà utilisé.");
+      }
+    
+    const city = await City.findOneBy({ id: data.cityId });
+    if (!city) {
+      throw new Error("Ville introuvable");
+    }
+
     const hashedPassword = await argon.hash(data.password);
     const user = await User.save({
       email: data.email,
@@ -79,6 +94,7 @@ export class UserResolver {
       lastname: data.lastname,
       hashedPassword: hashedPassword,
       role: UserRole.USER,
+      city,
     });
 
     const tokenContent = {
@@ -100,30 +116,35 @@ export class UserResolver {
       sameSite: "strict"
     });
 
-    const profile = {
-      mail: user.email,
-      name: user.firstname,
-    };
-    return JSON.stringify(profile);
+    // const profile = {
+    //   mail: user.email,
+    //   name: user.firstname,
+    // };
+    // return JSON.stringify(profile);
+    return user;
   }
 
   @Mutation(() => String)
   async loginUser(
     @Arg("data") data: UserInput,
     @Ctx() { res }: { res: Response }) {
-      
+
     if (!process.env.TOKEN_SECRET_KEY) {
       throw new Error("Missing env variable");
     }
 
     const user = await User.findOneBy({ email: data.email });
     if (!user) {
-      throw new Error("User not found");
+      throw new GraphQLError("Le compte avec cet email n'existe pas.", {
+        extensions: { code: "USER_NOT_FOUND" },
+      });
     };
 
     const validPassword = await argon.verify(user.hashedPassword, data.password);
     if (!validPassword) {
-      throw new Error("Invalid password");
+      throw new GraphQLError("Email ou mot de passe invalide.", {
+        extensions: { code: "INVALID_PASSWORD" },
+      });
     };
 
     const tokenContent = {
@@ -141,7 +162,7 @@ export class UserResolver {
       secure: true,
       sameSite: "strict"
     });
-    
+
     const profile = {
       mail: user.email,
       name: user.firstname,

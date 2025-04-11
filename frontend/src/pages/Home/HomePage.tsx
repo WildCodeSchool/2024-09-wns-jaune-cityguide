@@ -3,47 +3,56 @@ import "./Home.css";
 import MapComponent from "../../organisms/MapComponent";
 import InterestPointDetails from "../../organisms/InterestPointDetails";
 import EditInterestPointModal from "../../organisms/EditInterestPointModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useInterestPointsStore } from "../../store/interestPointsStore";
+import type { InterestPoint } from "../../@types/types";
 
 export default function HomePage() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedPoint, setSelectedPoint] = useState(null);
+	const [isOpen, setIsOpen] = useState(false);
+	const { selectedInterestPoint, setSelectedInterestPoint } = useInterestPointsStore();
   const [editModalOpen, setEditModalOpen] = useState(false);
 
-  const toggleDetails = () => setIsOpen(!isOpen);
-  const handleSelectPoint = (point) => {
-    setSelectedPoint(point);
-    setIsOpen(true);
+  const toggleDetails = () => {
+    setIsOpen(!isOpen);
   };
+  const handleSelectPoint = (interestPoint: InterestPoint) => {
+		setSelectedInterestPoint(interestPoint);
+		setIsOpen(true);
+	};
 
   const handleSaveEdit = (updatedPoint) => {
-    setSelectedPoint(updatedPoint);
+    setSelectedInterestPoint(updatedPoint);
     setEditModalOpen(false);
   };
 
-  return (
-    <div className="flex flex-col flex-1 relative z-0">
-      <MapComponent onSelectPoint={handleSelectPoint} />
+  useEffect(() => {
+		if (!selectedInterestPoint) {
+			setIsOpen(false);
+		}
+	}, [selectedInterestPoint]);
 
-      <div className="w-full mx-auto z-10">
-        {isOpen && selectedPoint && (
-          <div className="top-full left-0 w-full h-[75vh] overflow-y-auto">
-            <InterestPointDetails
-              point={selectedPoint}
-              onClose={toggleDetails}
-              onEdit={() => setEditModalOpen(true)}
-            />
-          </div>
-        )}
-      </div>
+	return (
+		<div className="home-container flex flex-col h-full relative grow">
+			<div className="map-container flex grow items-center">
+				<MapComponent onSelectPoint={handleSelectPoint} />
+			</div>
 
-      {editModalOpen && selectedPoint && (
+			{isOpen && selectedInterestPoint && (
+				<InterestPointDetails
+					interestPoint={selectedInterestPoint}
+					onClose={toggleDetails}
+          onEdit={() => setEditModalOpen(true)}
+				/>
+			)}
+
+      {editModalOpen && selectedInterestPoint && (
         <EditInterestPointModal
-          point={selectedPoint}
+          interestPoint={selectedInterestPoint}
           onClose={() => setEditModalOpen(false)}
           onSave={handleSaveEdit}
         />
-      )}
-    </div>
-  );
+    )}
+</div>
+	);
 }
+

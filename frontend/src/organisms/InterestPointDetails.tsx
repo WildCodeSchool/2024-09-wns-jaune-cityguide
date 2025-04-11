@@ -1,88 +1,173 @@
 import { useState } from "react";
 import EditInterestPointModal from "./EditInterestPointModal"; // Assurez-vous d'importer la modal
+import type { InterestPoint } from "../@types/types";
+import { useInterestPointsStore } from "../store/interestPointsStore";
 
-const images = [
-  "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtiQ_Pcwlc6qydBsUKAmQwTUsiq1TIZkMOXezMfCXBxmqlDwM&s",
-];
+type InterestPointCardProps = {
+	interestPoint: InterestPoint | null;
+	onClose: () => void;
+};
 
-export default function InterestPointDetails({ onClose, point }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Ajout d'état pour ouvrir la modal
+export default function InterestPointDetails({
+	onClose,
+}: InterestPointCardProps) {
+	const [currentIndex, setCurrentIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+	const { selectedInterestPoint } = useInterestPointsStore();
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
+	const prevSlide = () => {
+		setCurrentIndex((prev) =>
+			prev === 0
+				? (selectedInterestPoint?.pictures?.length ?? 0) - 1
+				: prev - 1,
+		);
+	};
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
+	const nextSlide = () => {
+		setCurrentIndex((prev) =>
+			prev === (selectedInterestPoint?.pictures?.length ?? 0) - 1
+				? 0
+				: prev + 1,
+		);
+	};
 
   const handleEditClick = () => {
-    setIsModalOpen(true); // Ouvrir la modal lorsque le bouton éditer est cliqué
+    setIsModalOpen(true); 
   };
 
   const handleModalClose = () => {
     setIsModalOpen(false); // Fermer la modal
   };
 
-  return (
-    <div className="bg-[#706EEB] flex flex-col md:items-center md:justify-center lg:flex-row lg:justify-center p-2 lg:p-0 lg:m-0">
-      <div className="bg-white lg:bg-transparent flex flex-col md:flex-row items-center lg:justify-center gap-6 lg:gap-50 pt-5 pb-10 px-10 lg:p-10 rounded-3xl w-90 lg:w-full lg:max-w-5xl m-auto">
-        <div className="pb-6 lg:pb-0 border-b-2 border-[#706EEB] flex flex-col lg:border-0 lg:w-100">
-          <button
-            className="text-black pr-0 rounded-full flex justify-end lg:hidden"
-            onClick={onClose}
-          >
-            <span className="text-lg font-bold"> X </span>
-          </button>
-
-          <div className="relative w-70 h-36 lg:w-110 lg:h-60 overflow-hidden rounded-xl">
-            {point.pictures && point.pictures.length > 0 && (
-              <img
-                src={point.pictures[0].url}
-                alt={point.name}
-                className="rounded-md max-h-48 object-cover w-full"
-              />
-            )}
-            <button
-              className="absolute top-1/2 left-2 transform -translate-y-1/2 w-7 h-7 rounded-full border-2 shadow"
-              onClick={prevSlide}
-            >
-              ←
-            </button>
-            <button
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 w-7 h-7 rounded-full border-2 shadow"
-              onClick={nextSlide}
-            >
-              →
-            </button>
-          </div>
-        </div>
-
-        <div className="flex flex-col w-70 lg:min-w-110 lg:min-h-60 bg-gray-100 rounded-xl overflow-hidden border-1">
-          <div className="relative bg-gray-300 h-11 p-2 text-center font-semibold border-b-1 flex items-center justify-center">
-            {point.name}
+	// TODO: fix mobile view
+	return (
+		<div className="bg-[#706EEB]/80 flex justify-around h-80 absolute w-full z-10 bottom-0 border-b-2 border-b-white p-3">
+			<button
+				type="button"
+				className="text-white transform pr-0 rounded-full flex justify-end absolute top-3 right-3 sm:top-2 sm:right-2 hover:cursor-pointer hover:bg-gray-200 hover:text-gray-500"
+				onClick={onClose}
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					className="lucide lucide-x-icon lucide-x"
+				>
+					<title>Fermer le bandeau</title>
+					<path d="M18 6 6 18" />
+					<path d="m6 6 12 12" />
+				</svg>
+			</button>
+			<div className="carousel-container m-auto">
+				<div className="relative w-full sm:w-96 lg:w-110 h-36 lg:h-60 overflow-hidden rounded-xl">
+					{(selectedInterestPoint?.pictures?.length ?? 0) > 0 ? (
+						<>
+							<img
+								src={selectedInterestPoint?.pictures[currentIndex].url}
+								alt={selectedInterestPoint?.name}
+								className="w-full h-full object-cover"
+							/>
+							{(selectedInterestPoint?.pictures?.length ?? 0) > 1 && (
+								<>
+									<button
+										type="button"
+										className="absolute top-1/2 left-2 transform -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 shadow text-white hover:cursor-pointer hover:bg-gray-700"
+										onClick={prevSlide}
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="24"
+											height="24"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											className="lucide lucide-chevron-left-icon lucide-chevron-left"
+										>
+											<title>Précédent</title>
+											<path d="m15 18-6-6 6-6" />
+										</svg>
+									</button>
+									<button
+										type="button"
+										className="absolute top-1/2 right-2 transform -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 shadow text-white hover:cursor-pointer hover:bg-gray-700"
+										onClick={nextSlide}
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="24"
+											height="24"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											className="lucide lucide-chevron-right-icon lucide-chevron-right"
+										>
+											<title>Suivant</title>
+											<path d="m9 18 6-6-6-6" />
+										</svg>
+									</button>
+								</>
+							)}
+						</>
+					) : (
+						<img
+							src="https://placehold.co/200x300"
+							alt="Alternative"
+							className="w-full h-full object-cover"
+						/>
+					)}
+				</div>
+			</div>
+			<div className="card-container m-auto flex-col w-full sm:w-96 lg:min-w-110 lg:min-h-60 bg-gray-100 rounded-2xl overflow-y-auto p-3 sm:p-5">
+				<div className="card-header flex flex-col bg-gray-300 h-12">
+					<p className="text-center font-semibold text-xl max-sm:text-sm m-auto">
+						{selectedInterestPoint?.name}
             <span
               className="material-symbols-outlined text-sm absolute right-3 cursor-pointer"
-              onClick={handleEditClick} // Appeler la fonction handleEditClick pour ouvrir la modal
+              onClick={handleEditClick} 
             >
               edit
             </span>
-          </div>
-          <div className="p-2 text-center h-auto lg:h-full text-sm">
-            {point.description}
-          </div>
-        </div>
-      </div>
-
+						<p className="text-gray-500 text-sm m-auto">
+							{selectedInterestPoint?.address}
+						</p>
+					</p>
+				</div>
+				<div className="flex flex-col space-y-3">
+					<p className="text-base">{selectedInterestPoint?.description}</p>
+					<p className="text-sm flex mt-auto">
+						Site internet&nbsp;: &nbsp;
+						<span>
+							<a
+								href={selectedInterestPoint?.link_url || "#"}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{selectedInterestPoint?.link_url}
+							</a>
+						</span>
+					</p>
+				</div>
+			</div>
+      
       {/* Modal d'édition */}
-      {isModalOpen && (
-        <EditInterestPointModal
-          point={point} // Passer le point d'intérêt à la modal
-          onClose={handleModalClose} // Fonction pour fermer la modal
-        />
-      )}
-    </div>
-  );
+        {isModalOpen && (
+          <EditInterestPointModal
+          InterestPointCardProps={InterestPointCardProps} // Passer le point d'intérêt à la modal
+            onClose={handleModalClose}
+          />
+        )}
+		</div>
+	);
 }

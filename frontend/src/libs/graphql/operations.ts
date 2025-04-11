@@ -11,6 +11,26 @@ export const GET_CITIES = gql`
     }
 }`;
 
+
+export const LOGIN = gql`
+  mutation LoginUser($data: UserInput!) {
+    loginUser(data: $data)
+  }
+`;
+
+
+export const FORGOT_PASSWORD = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email)
+  }
+`;
+
+
+export const RESET_PASSWORD = gql`
+  mutation resetPassword($newPassword: String!, $token: String!){
+    resetPassword(newPassword: $newPassword, token: $token)
+  }
+`;
 export const CREATE_INTERESTPOINT = gql`
   mutation CreateInterestPoint($data: InterestPointInput!) {
     createInterestPoint(data: $data) {
@@ -98,3 +118,13 @@ query GetInterestPointsByCity($cityId: String!) {
     }
   }
 }`;
+
+export const REGISTER_USER = gql`
+  mutation RegisterUser($data: NewUserInput!) {
+    registerUser(data: $data) {
+      firstname
+      lastname
+      email
+      hashedPassword
+    }
+}`
