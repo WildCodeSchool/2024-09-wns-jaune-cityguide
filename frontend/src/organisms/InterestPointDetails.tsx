@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { InterestPoint } from "../@types/types";
 import { useInterestPointsStore } from "../store/interestPointsStore";
 
@@ -12,22 +12,26 @@ export default function InterestPointDetails({
 	isOpen,
 	onClose,
 }: InterestPointSheetProps) {
+	// Handling click outside of the sheet: https://dev.to/rashed_iqbal/how-to-handle-outside-clicks-in-react-with-typescript-4lmc
+	const sheetRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const handleClickOutside = (event: MouseEvent) => {
+			const currentSheet = sheetRef.current;
+			if (currentSheet && !currentSheet.contains(event.target as Node)) {
+				onClose();
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [isOpen, onClose]);
 	return (
 		<>
-			{isOpen && (
-				<div
-					className="absolute inset-0 transition-opacity duration-300"
-					onClick={onClose}
-					onKeyUp={(e) => {
-						if (e.key === "Escape") {
-							onClose();
-						}
-					}}
-					tabIndex={0}
-					role="button"
-					aria-label="Close"
-				/>
-			)}
 			<aside
 				className={`absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-white text-black p-4 transform transition-transform duration-300 z-50 ${
 					isOpen ? "translate-x-0" : "translate-x-full"
