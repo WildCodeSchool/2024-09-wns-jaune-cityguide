@@ -107,7 +107,7 @@ export default function InterestPointDetails({
 
 					{selectedInterestPoint?.link_url && (
 						<div>
-							<h4 className="font-semibold text-amber-600">
+							<h4 className="font-semibold text-[#706eeb]">
 								🔗&nbsp;Site officiel
 							</h4>
 							<a
