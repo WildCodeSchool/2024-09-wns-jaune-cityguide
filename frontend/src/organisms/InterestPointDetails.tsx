@@ -30,7 +30,7 @@ export default function InterestPointDetails({
 			)}
 			<aside
 				className={`absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-white text-black p-4 transform transition-transform duration-300 z-50 ${
-					isOpen ? "translate-x-0" : "translate-x-[100%]"
+					isOpen ? "translate-x-0" : "translate-x-full"
 				} rounded-tl-xl rounded-bl-xl p-6 shadow-xl`}
 			>
 				<button
