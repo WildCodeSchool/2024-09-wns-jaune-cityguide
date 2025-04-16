@@ -1,7 +1,6 @@
 import { useState } from "react";
 import logo from "../assets/logo_city_guide_good.png";
 import { Link } from "react-router-dom";
-import SearchBar from "../atoms/SearchBar";
 
 export default function Navbar() {
 	const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,12 +14,6 @@ export default function Navbar() {
 						<a href="/" className="flex-shrink-0">
 							<img className="h-14 w-auto" src={logo} alt="City Guide" />
 						</a>
-					</div>
-					{/* Search bar */}
-					<div className="searchbar-container">
-						<div className="flex-grow flex justify-center">
-							<SearchBar />
-						</div>
 					</div>
 
 					{/* Boutons de connexion (uniquement en version desktop) */}
@@ -106,11 +99,6 @@ export default function Navbar() {
 					</div>
 				)}
 			</nav>
-			{isMobileMenuOpen && (
-				<div className="sm:hidden bg-white py-2 px-4 shadow-md z-40 relative">
-					<SearchBar />
-				</div>
-			)}
 		</>
 	);
 }
