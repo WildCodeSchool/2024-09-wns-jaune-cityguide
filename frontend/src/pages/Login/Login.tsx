@@ -72,11 +72,13 @@ const Login = () => {
       <div className="flex items-center justify-center min-h-[80vh] secondary-bg">
         <div className="bg-white p-6 rounded-2xl shadow-lg w-80 lg:w-[60vh] h-140 lg:h-150">
           <div className="flex justify-center -mt-12 lg:-mt-16">
-            <img
-              className="w-16 h-16 rounded-full border-4 border-white lg:w-24 lg:h-24"
-              src={logo}
-              alt="City Guide"
-            />
+            <Link to={"/LandingPage"}>
+              <img
+                className="w-16 h-16 rounded-full border-4 border-white lg:w-24 lg:h-24"
+                src={logo}
+                alt="City Guide"
+              />
+            </Link>
           </div>
           <h2 className="text-center text-2xl font-semibold text-[#706EEB] mt-4 mb-6">
             Connexion à votre compte
@@ -89,7 +91,7 @@ const Login = () => {
               alt="City Guide connexion"
             />
             <p className="italic text-[#B0AFE4] text-sm lg:text-lg">
-              "Découvrez les secrets de votre ville."
+              "Découvrez les secrets de votre ville"
             </p>
           </div>
 
@@ -104,7 +106,6 @@ const Login = () => {
                 name="email"
                 type="email"
                 placeholder="Email"
-                required
               />
             </div>
             <div className="border border-gray-300 rounded-[25px] px-3 py-2 flex items-center justify-between w-full">
@@ -114,7 +115,6 @@ const Login = () => {
                 name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Mot de passe"
-                required
               />
               <button
                 type="button"
@@ -131,18 +131,10 @@ const Login = () => {
               </Link>
             </div>
 
-            <button
-              className="w-full max-w-[150px] text-white py-1 rounded-[25px] bg-black hover:bg-secondary mt-5"
-              type="submit"
-            >
-              Me connecter
-            </button>
-
-            {/* Message d'erreur ou de succès */}
             {message && (
               <div
-                className={`mt-4 text-sm text-center flex items-center justify-center gap-2 ${
-                  message.type === "error" ? "text-red-600" : "text-green-600"
+                className={`mt-1 text-sm text-center flex items-center justify-center gap-2 ${
+                  message.type === "error" ? "text-red-500" : "text-green-600"
                 }`}
               >
                 {message.type === "success" && (
@@ -170,6 +162,15 @@ const Login = () => {
                 {message.text}
               </div>
             )}
+
+            <button
+              className={`w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] ${
+                message ? "mt-0" : "mt-5"
+              }`}
+              type="submit"
+            >
+              Me connecter
+            </button>
           </form>
         </div>
       </div>
