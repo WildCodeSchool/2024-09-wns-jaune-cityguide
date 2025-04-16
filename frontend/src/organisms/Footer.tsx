@@ -7,7 +7,7 @@ import instagram from "../assets/instagram.svg";
 const Footer: FC = () => {
 	// How to hide a component based on the url: https://medium.com/@PikoCanFly/react-js-conditionally-hide-components-according-the-current-relative-url-6012a187794a
 	const location = useLocation();
-	const isMapPage = location.pathname === "/carte";
+	const isMapPage = location.pathname === "/map";
 	return (
 		<footer
 			className="bg-[rgb(112,110,235)]"
