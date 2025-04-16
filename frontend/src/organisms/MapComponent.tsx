@@ -77,7 +77,7 @@ export default function MapComponent({
 	}, [selectedCity, interestPointsByCity]);
 
 	return (
-		<div className="w-full h-[800px] z-0">
+		<div className="w-full h-[1500px] z-0">
 			<MapContainer
 				center={mapCenter}
 				zoom={13}
