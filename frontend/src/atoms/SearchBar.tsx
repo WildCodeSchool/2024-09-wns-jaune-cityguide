@@ -21,7 +21,7 @@ export default function SearchBar() {
 	);
 
 	const handleCitySelect = (city: City) => {
-		setInputText(city.name);
+		setInputText(`${city.name} (${city.postalCode})`);
 		setSelectedCity(city);
 		setDropdownIsOpen(false);
 		fetchInterestPointsByCity(city.id);
