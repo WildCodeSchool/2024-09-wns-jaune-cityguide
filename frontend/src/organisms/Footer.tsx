@@ -1,13 +1,20 @@
 import type { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import twitter from "../assets/twitter.svg";
 import linkedin from "../assets/linkedin.svg";
 import instagram from "../assets/instagram.svg";
 import youtube from "../assets/youtube.svg";
 
 const Footer: FC = () => {
+	// How to hide a component based on the url: https://medium.com/@PikoCanFly/react-js-conditionally-hide-components-according-the-current-relative-url-6012a187794a
+	const location = useLocation();
+	const isMapPage = location.pathname === "/carte";
+
 	return (
-		<footer className="pt-16 bg-[rgb(112,110,235)] mt-auto">
+		<footer
+			className="pt-16 bg-[rgb(112,110,235)] mt-auto"
+			style={{ display: isMapPage ? "none" : "block" }}
+		>
 			<div className="container mx-auto h-52 lg:max-w-screen-xl md:max-w-screen-md px-4">
 				<div className="grid grid-cols-1 sm:grid-cols-5 lg:gap-20 md:gap-6 sm:gap-12 gap-6  pb-16">
 					<div className="col-span-2">
