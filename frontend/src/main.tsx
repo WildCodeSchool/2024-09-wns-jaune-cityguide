@@ -24,7 +24,7 @@ const router = createBrowserRouter([
 				element: <Inscription />,
 			},
 			{
-				path: "/carte",
+				path: "/map",
 				element: <MapPage />,
 			},
 			{
