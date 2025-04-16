@@ -13,7 +13,7 @@ export function App() {
 	}, [fetchCities]);
 
 	return (
-		<div className="flex flex-col min-h-screen max-h-screen overflow-y-hidden">
+		<div className="flex flex-col min-h-screen max-h-screen">
 			<Header />
 			<Outlet />
 			<Footer />
