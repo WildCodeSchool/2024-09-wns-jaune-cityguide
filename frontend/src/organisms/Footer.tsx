@@ -5,8 +5,14 @@ import linkedin from "../assets/linkedin.svg";
 import instagram from "../assets/instagram.svg";
 
 const Footer: FC = () => {
+	// How to hide a component based on the url: https://medium.com/@PikoCanFly/react-js-conditionally-hide-components-according-the-current-relative-url-6012a187794a
+	const location = useLocation();
+	const isMapPage = location.pathname === "/carte";
 	return (
-		<footer className="bg-[rgb(112,110,235)]">
+		<footer
+			className="bg-[rgb(112,110,235)]"
+			style={{ display: isMapPage ? "none" : "block" }}
+		>
 			<div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md py-9 px-4">
 				<div className="flex flex-col sm:flex-row justify-between items-center h-full gap-y-6 sm:gap-y-0">
 					<div className="flex gap-8">
