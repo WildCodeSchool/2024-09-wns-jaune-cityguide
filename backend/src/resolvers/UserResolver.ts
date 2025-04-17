@@ -68,7 +68,7 @@ export class UserResolver {
     return user;
   }
 
-  @Mutation(() => User)
+  @Mutation(() => String)
   async registerUser(
     @Arg("data") data: NewUserInput,
     @Ctx() { res }: { res: Response }) {
@@ -78,10 +78,10 @@ export class UserResolver {
     }
 
     const existingUser = await User.findOneBy({ email: data.email });
-      if (existingUser) {
-        throw new Error("Cet email est déjà utilisé.");
-      }
-    
+    if (existingUser) {
+      throw new Error("Cet email est déjà utilisé.");
+    }
+
     const city = await City.findOneBy({ id: data.cityId });
     if (!city) {
       throw new Error("Ville introuvable");
@@ -94,7 +94,7 @@ export class UserResolver {
       lastname: data.lastname,
       hashedPassword: hashedPassword,
       role: UserRole.USER,
-      city,
+      city: city,
     });
 
     const tokenContent = {
@@ -116,12 +116,11 @@ export class UserResolver {
       sameSite: "strict"
     });
 
-    // const profile = {
-    //   mail: user.email,
-    //   name: user.firstname,
-    // };
-    // return JSON.stringify(profile);
-    return user;
+    const profile = {
+      mail: user.email,
+      firstname: user.firstname,
+    };
+    return JSON.stringify(profile);
   }
 
   @Mutation(() => String)
@@ -165,9 +164,19 @@ export class UserResolver {
 
     const profile = {
       mail: user.email,
-      name: user.firstname,
+      firstname: user.firstname,
     };
     return JSON.stringify(profile);
+  }
+
+  @Mutation(() => String)
+  async logoutUser(@Ctx() { res }: { res: Response }) {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict"
+    });
+    return "Déconnexion réussie !";
   }
 
 
