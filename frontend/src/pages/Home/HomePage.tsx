@@ -30,22 +30,34 @@ export default function HomePage() {
 				name: "Point de démonstration",
 				description: "Ceci est un exemple.",
 				coordinates: [0, 0],
-			} as InterestPoint;
+			} as unknown as InterestPoint;
 			setSelectedInterestPoint(fakePoint);
 			setIsOpen(true);
 		}
-	}, [showTutorial]);
+	}, [setSelectedInterestPoint, showTutorial]);
 
 	const steps = [
+		{
+			selector: ".inscription-button",
+			title: "Bouton d'inscription",
+			description: "Inscrivez-vous pour accéder à toutes les fonctionnalités.",
+		},
+		{
+			selector: ".connexion-button",
+			title: "Bouton de connexion",
+			description: "Si tu as déjà créer un compte, connectez-vous ici pour accéder à toutes les fonctionnalités.",
+		},
 		{
 			selector: ".map-container",
 			title: "Carte interactive",
 			description: "Clique sur un point d'intérêt pour voir les détails.",
+			tooltipOffset: -150,
 		},
 		{
 			selector: ".interest-point-details",
 			title: "Fiche d'information",
 			description: "Voici les détails d'un lieu sélectionné.",
+			tooltipOffset: -150,
 		},
 	];
 
@@ -56,12 +68,10 @@ export default function HomePage() {
 			</div>
 
 			{(isOpen && selectedInterestPoint) && (
-				<div className="interest-point-details">
 					<InterestPointDetails
 						interestPoint={selectedInterestPoint}
-						onClose={toggleDetails} 
+						onClose={toggleDetails}
 						isOpen={false}					/>
-				</div>
 			)}
 
 			{showTutorial && (

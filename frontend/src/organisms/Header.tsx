@@ -3,7 +3,7 @@ import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
-	const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+	const [isMobileMenuOpen, setMobileMenuOpen] = useState(true);
 
 	return (
 		<>
@@ -26,13 +26,13 @@ export default function Navbar() {
 						<div className="hidden sm:flex space-x-4">
 							<Link
 								to={"/login"}
-								className="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
+								className="connexion-button hidden sm:flex rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
 							>
 								<button type="button">CONNEXION</button>
 							</Link>
 							<Link
 								to={"/inscription"}
-								className="rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
+								className="inscription-button hidden sm:flex rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
 							>
 								<button type="button" className="">
 									INSCRIPTION
@@ -90,15 +90,15 @@ export default function Navbar() {
 								<div className="space-x-2 px-2 flex">
 									<Link
 										to={"/login"}
-										className="block rounded-md bg-white px-2 py-2 text-sm font-small text-gray-500 hover:text-black"
+										className="connexion-button block rounded-md bg-white px-2 py-2 text-sm font-small text-gray-500 hover:text-black"
 									>
-										<button type="button">CONNEXION</button>
+										<button className="connexion-button" type="button">CONNEXION</button>
 									</Link>
 									<a
 										href="/inscription"
-										className="block rounded-md px-2 py-2 text-sm font-small bg-gray-700 text-gray-300 hover:text-white"
+										className="inscription-button block rounded-md px-2 py-2 text-sm font-small bg-gray-700 text-gray-300 hover:text-white"
 									>
-										<button type="button">INSCRIPTION</button>
+										<button className="inscription-button" type="button">INSCRIPTION</button>
 									</a>
 								</div>
 							</div>

@@ -5,6 +5,7 @@ type Step = {
   selector: string;
   title: string;
   description: string;
+  tooltipOffset?: number;
 };
 
 type TutorialOverlayProps = {
@@ -12,21 +13,42 @@ type TutorialOverlayProps = {
   onClose: () => void;
 };
 
+type Position = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+};
+
 export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
+  const [targetPos, setTargetPos] = useState<Position | null>(null);
 
   const step = steps[currentStep];
 
   useEffect(() => {
     const tryFindElement = () => {
-      const el = document.querySelector(step.selector);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        setTargetRect(rect);
+      const el = document.querySelector(step.selector) as HTMLElement;
+      const scrollContainer = document.querySelector(".home-container") as HTMLElement;
+
+      if (el && scrollContainer) {
+        // Scroll into view si besoin
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        // Laisse le temps à l'élément de se positionner
+        setTimeout(() => {
+          const rect = el.getBoundingClientRect();
+          const containerRect = scrollContainer.getBoundingClientRect();
+
+          setTargetPos({
+            top: rect.top - containerRect.top + scrollContainer.scrollTop,
+            left: rect.left - containerRect.left + scrollContainer.scrollLeft,
+            width: rect.width,
+            height: rect.height,
+          });
+        }, 300);
       } else {
-        // Retry until found (with a limit to avoid infinite loop)
-        setTimeout(tryFindElement, 100); // retry every 100ms
+        setTimeout(tryFindElement, 100);
       }
     };
 
@@ -36,40 +58,48 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
   const handleNext = () => {
     if (currentStep + 1 < steps.length) {
       setCurrentStep(currentStep + 1);
-      setTargetRect(null); // reset to wait for the next element
+      setTargetPos(null);
     } else {
       onClose();
     }
   };
 
+  if (!targetPos) return <div className="tutorial-overlay" />;
+
+  // Position du tooltip : dessous si possible, sinon au-dessus
+  const tooltipHeight = 140;
+  const placeAbove = window.innerHeight - (targetPos.top - window.scrollY) < tooltipHeight;
+  const tooltipOffset = step.tooltipOffset ?? 0;
+
   return (
     <>
       <div className="tutorial-overlay" />
 
-      {targetRect && (
-        <>
-          <div
-            className="highlight-box"
-            style={{
-              top: targetRect.top + window.scrollY - 80,
-              left: targetRect.left + window.scrollX,
-              width: targetRect.width,
-              height: targetRect.height,
-            }}
-          />
-          <div
-            className="tooltip-box"
-            style={{
-              top: targetRect.bottom + window.scrollY - 150,
-              left: targetRect.left + window.scrollX,
-            }}
-          >
-            <h3>{step.title}</h3>
-            <p>{step.description}</p>
-            <button onClick={handleNext}>Suivant</button>
-          </div>
-        </>
-      )}
+      <div
+        className="highlight-box"
+        style={{
+          top: `${targetPos.top}px`,
+          left: `${targetPos.left}px`,
+          width: `${targetPos.width}px`,
+          height: `${targetPos.height}px`,
+        }}
+      />
+
+      <div
+        className="tooltip-box"
+        style={{
+          top: placeAbove
+          ? targetPos.top - tooltipHeight - 10 + tooltipOffset
+          : targetPos.top + targetPos.height + 10 + tooltipOffset,
+          left: targetPos.left,
+        }}
+      >
+        <h3 className="font-bold mb-2">{step.title}</h3>
+        <p className="mb-2">{step.description}</p>
+        <button className="font-bold text-blue-800" onClick={handleNext}>
+          Suivant
+        </button>
+      </div>
     </>
   );
 }
