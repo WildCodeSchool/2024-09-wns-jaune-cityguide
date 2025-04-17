@@ -139,7 +139,7 @@ function Inscription() {
     <div className="flex items-center justify-center min-h-[80vh] bg-[#B0AFE4]">
       <div className="bg-white p-6 rounded-2xl shadow-lg w-80 lg:w-[60vh] h-140 lg:h-150">
         <div className="flex justify-center -mt-12 lg:-mt-16">
-          <Link to={"/LandingPage"}>
+          <Link to={"/"}>
             <img
               src={logo}
               alt="City Guide logo"

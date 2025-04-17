@@ -11,7 +11,7 @@ export default function Navbar() {
 				<div className="desktop-nav hidden sm:flex items-center justify-between h-full w-full p-14">
 					{/* Logo */}
 					<div className="flex justify-center -mt-12 lg:mt-12">
-						<a href="/map" className="flex-shrink-0">
+						<a href="/" className="flex-shrink-0">
 							<img
 								className="rounded-full border-5 lg:w-28 lg:h-28"
 								style={{ borderColor: "#706EEB" }}
