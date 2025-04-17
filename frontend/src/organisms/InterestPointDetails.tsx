@@ -12,7 +12,7 @@ export default function InterestPointDetails({
 	onClose,
 }: InterestPointCardProps) {
 	const [currentIndex, setCurrentIndex] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { selectedInterestPoint } = useInterestPointsStore();
 
 	const prevSlide = () => {
@@ -31,13 +31,13 @@ export default function InterestPointDetails({
 		);
 	};
 
-  const handleEditClick = () => {
-    setIsModalOpen(true); 
-  };
+	const handleEditClick = () => {
+		setIsModalOpen(true);
+	};
 
-  const handleModalClose = () => {
-    setIsModalOpen(false); // Fermer la modal
-  };
+	const handleModalClose = () => {
+		setIsModalOpen(false); // Fermer la modal
+	};
 
 	// TODO: fix mobile view
 	return (
@@ -131,22 +131,22 @@ export default function InterestPointDetails({
 			</div>
 			<div className="card-container m-auto flex-col w-full sm:w-96 lg:min-w-110 lg:min-h-60 bg-gray-100 rounded-2xl overflow-y-auto p-3 sm:p-5">
 				<div className="card-header flex flex-col bg-gray-300 h-12">
-					<p className="text-center font-semibold text-xl max-sm:text-sm m-auto">
+					<div className="text-center font-semibold text-xl max-sm:text-sm m-auto">
 						{selectedInterestPoint?.name}
-            <span
-              className="material-symbols-outlined text-sm absolute right-3 cursor-pointer"
-              onClick={handleEditClick} 
-            >
-              edit
-            </span>
-						<p className="text-gray-500 text-sm m-auto">
+						<span
+							className="material-symbols-outlined text-sm absolute right-3 cursor-pointer"
+							onClick={handleEditClick}
+						>
+							edit
+						</span>
+						<div className="text-gray-500 text-sm mt-1">
 							{selectedInterestPoint?.address}
-						</p>
-					</p>
+						</div>
+					</div>
 				</div>
 				<div className="flex flex-col space-y-3">
-					<p className="text-base">{selectedInterestPoint?.description}</p>
-					<p className="text-sm flex mt-auto">
+					<div className="text-base">{selectedInterestPoint?.description}</div>
+					<div className="text-sm flex mt-auto">
 						Site internet&nbsp;: &nbsp;
 						<span>
 							<a
@@ -157,17 +157,17 @@ export default function InterestPointDetails({
 								{selectedInterestPoint?.link_url}
 							</a>
 						</span>
-					</p>
+					</div>
 				</div>
 			</div>
-      
-      {/* Modal d'édition */}
-        {isModalOpen && (
-          <EditInterestPointModal
-          InterestPointCardProps={InterestPointCardProps} // Passer le point d'intérêt à la modal
-            onClose={handleModalClose}
-          />
-        )}
+
+			{/* Modal d'édition */}
+			{isModalOpen && (
+				<EditInterestPointModal
+					interestPoint={selectedInterestPoint} // Passer le point d'intérêt à la modal
+					onClose={handleModalClose}
+				/>
+			)}
 		</div>
 	);
 }

@@ -92,9 +92,22 @@ export class InterestPointResolver {
 	
 	@Mutation(() => InterestPoint)
 	async replaceInterestPointById( @Arg("interestPointId") id: string, @Arg("data") data: InterestPointInput ) {
-		let interestPoint = await InterestPoint.findOneByOrFail({id})
-		interestPoint = Object.assign(interestPoint, data);
+		let interestPoint = await InterestPoint.findOne({
+			where: {id: id},
+			relations: ["category", "pictures"]
+		})
+		if (!interestPoint) throw new Error("oupsi.")
+		console.log(interestPoint)
+		let newcategory: Category
+		if(interestPoint.category.id !== data.category) {
+			newcategory = await Category.findOneByOrFail({id: data.category})
+		} else newcategory = interestPoint.category
+		interestPoint = Object.assign(interestPoint, {
+			...data,
+			category: newcategory
+		})
 		await interestPoint.save()
+		console.log(interestPoint)
 		return interestPoint;
 	}
 }

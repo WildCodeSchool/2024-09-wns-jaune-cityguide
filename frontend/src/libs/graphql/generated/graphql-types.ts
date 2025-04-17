@@ -33,27 +33,9 @@ export type CategoryInput = {
   name: Scalars['String']['input'];
 };
 
-export type Category = {
-  __typename?: 'Category';
-  color: Scalars['String']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-  interestPoints: InterestPoint;
-  name: Scalars['String']['output'];
-};
-
-export type CategoryInput = {
-  color: Scalars['String']['input'];
-  description?: InputMaybe<Scalars['String']['input']>;
-  interestPoints: Array<Scalars['ID']['input']>;
-  name: Scalars['String']['input'];
-};
-
 export type City = {
   __typename?: 'City';
   id: Scalars['String']['output'];
-  interestPoints: Array<InterestPoint>;
-  latitude: Scalars['Float']['output'];
   interestPoints: Array<InterestPoint>;
   latitude: Scalars['Float']['output'];
   longitude: Scalars['Float']['output'];
@@ -215,6 +197,7 @@ export type MutationUpdateUserArgs = {
 };
 
 export type NewUserInput = {
+  cityId: Scalars['String']['input'];
   email: Scalars['String']['input'];
   firstname: Scalars['String']['input'];
   lastname: Scalars['String']['input'];
@@ -239,8 +222,6 @@ export type PictureInput = {
 
 export type Query = {
   __typename?: 'Query';
-  getCategories: Array<Category>;
-  getCategoryById: Category;
   getCategories: Array<Category>;
   getCategoryById: Category;
   getCities: Array<City>;
@@ -304,7 +285,7 @@ export type UpdateUserInput = {
 
 export type User = {
   __typename?: 'User';
-  city: Array<City>;
+  city: City;
   email: Scalars['String']['output'];
   firstname: Scalars['String']['output'];
   hashedPassword: Scalars['String']['output'];
@@ -333,6 +314,28 @@ export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename?: 'City', id: string, name: string, postalCode: string, latitude: number, longitude: number }> };
 
+export type LoginUserMutationVariables = Exact<{
+  data: UserInput;
+}>;
+
+
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: string };
+
+export type ForgotPasswordMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: string };
+
+export type ResetPasswordMutationVariables = Exact<{
+  newPassword: Scalars['String']['input'];
+  token: Scalars['String']['input'];
+}>;
+
+
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: string };
+
 export type CreateInterestPointMutationVariables = Exact<{
   data: InterestPointInput;
 }>;
@@ -346,7 +349,7 @@ export type ReplaceInterestPointByIdMutationVariables = Exact<{
 }>;
 
 
-export type ReplaceInterestPointByIdMutation = { __typename?: 'Mutation', replaceInterestPointById: { __typename?: 'InterestPoint', id: string } };
+export type ReplaceInterestPointByIdMutation = { __typename?: 'Mutation', replaceInterestPointById: { __typename?: 'InterestPoint', id: string, name: string, description: string, address: string, link_url: string, category: { __typename?: 'Category', id: string, name: string, color: string }, pictures: Array<{ __typename?: 'Picture', id: string, url: string, name: string }> } };
 
 export type DeleteInterestPointByIdMutationVariables = Exact<{
   interestPointId: Scalars['String']['input'];
@@ -372,6 +375,13 @@ export type GetInterestPointsByCityQueryVariables = Exact<{
 
 export type GetInterestPointsByCityQuery = { __typename?: 'Query', getInterestPointsByCity: Array<{ __typename?: 'InterestPoint', id: string, name: string, description: string, address: string, latitude: number, longitude: number, link_url: string, city: { __typename?: 'City', id: string, name: string, postalCode: string }, category: { __typename?: 'Category', id: string, name: string, description?: string | null, color: string }, pictures: Array<{ __typename?: 'Picture', id: string, url: string, name: string, description: string }> }> };
 
+export type RegisterUserMutationVariables = Exact<{
+  data: NewUserInput;
+}>;
+
+
+export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'User', firstname: string, lastname: string, email: string, hashedPassword: string } };
+
 
 export const GetCitiesDocument = gql`
     query GetCities {
@@ -379,7 +389,6 @@ export const GetCitiesDocument = gql`
     id
     name
     postalCode
-    latitude
     latitude
     longitude
   }
@@ -402,21 +411,115 @@ export const GetCitiesDocument = gql`
  * });
  */
 export function useGetCitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
+      }
 export function useGetCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
+        }
 export function useGetCitiesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
+        }
 export type GetCitiesQueryHookResult = ReturnType<typeof useGetCitiesQuery>;
 export type GetCitiesLazyQueryHookResult = ReturnType<typeof useGetCitiesLazyQuery>;
 export type GetCitiesSuspenseQueryHookResult = ReturnType<typeof useGetCitiesSuspenseQuery>;
 export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQueryVariables>;
+export const LoginUserDocument = gql`
+    mutation LoginUser($data: UserInput!) {
+  loginUser(data: $data)
+}
+    `;
+export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, LoginUserMutationVariables>;
+
+/**
+ * __useLoginUserMutation__
+ *
+ * To run a mutation, you first call `useLoginUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginUserMutation, { data, loading, error }] = useLoginUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<LoginUserMutation, LoginUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginUserMutation, LoginUserMutationVariables>(LoginUserDocument, options);
+      }
+export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
+export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
+export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
+export const ForgotPasswordDocument = gql`
+    mutation ForgotPassword($email: String!) {
+  forgotPassword(email: $email)
+}
+    `;
+export type ForgotPasswordMutationFn = Apollo.MutationFunction<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+
+/**
+ * __useForgotPasswordMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordMutation, { data, loading, error }] = useForgotPasswordMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument, options);
+      }
+export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
+export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordMutation>;
+export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+export const ResetPasswordDocument = gql`
+    mutation resetPassword($newPassword: String!, $token: String!) {
+  resetPassword(newPassword: $newPassword, token: $token)
+}
+    `;
+export type ResetPasswordMutationFn = Apollo.MutationFunction<ResetPasswordMutation, ResetPasswordMutationVariables>;
+
+/**
+ * __useResetPasswordMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordMutation, { data, loading, error }] = useResetPasswordMutation({
+ *   variables: {
+ *      newPassword: // value for 'newPassword'
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, options);
+      }
+export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
+export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const CreateInterestPointDocument = gql`
     mutation CreateInterestPoint($data: InterestPointInput!) {
   createInterestPoint(data: $data) {
@@ -444,9 +547,9 @@ export type CreateInterestPointMutationFn = Apollo.MutationFunction<CreateIntere
  * });
  */
 export function useCreateInterestPointMutation(baseOptions?: Apollo.MutationHookOptions<CreateInterestPointMutation, CreateInterestPointMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<CreateInterestPointMutation, CreateInterestPointMutationVariables>(CreateInterestPointDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateInterestPointMutation, CreateInterestPointMutationVariables>(CreateInterestPointDocument, options);
+      }
 export type CreateInterestPointMutationHookResult = ReturnType<typeof useCreateInterestPointMutation>;
 export type CreateInterestPointMutationResult = Apollo.MutationResult<CreateInterestPointMutation>;
 export type CreateInterestPointMutationOptions = Apollo.BaseMutationOptions<CreateInterestPointMutation, CreateInterestPointMutationVariables>;
@@ -454,6 +557,20 @@ export const ReplaceInterestPointByIdDocument = gql`
     mutation ReplaceInterestPointById($data: InterestPointInput!, $interestPointId: String!) {
   replaceInterestPointById(data: $data, interestPointId: $interestPointId) {
     id
+    name
+    description
+    address
+    link_url
+    category {
+      id
+      name
+      color
+    }
+    pictures {
+      id
+      url
+      name
+    }
   }
 }
     `;
@@ -478,9 +595,9 @@ export type ReplaceInterestPointByIdMutationFn = Apollo.MutationFunction<Replace
  * });
  */
 export function useReplaceInterestPointByIdMutation(baseOptions?: Apollo.MutationHookOptions<ReplaceInterestPointByIdMutation, ReplaceInterestPointByIdMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<ReplaceInterestPointByIdMutation, ReplaceInterestPointByIdMutationVariables>(ReplaceInterestPointByIdDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReplaceInterestPointByIdMutation, ReplaceInterestPointByIdMutationVariables>(ReplaceInterestPointByIdDocument, options);
+      }
 export type ReplaceInterestPointByIdMutationHookResult = ReturnType<typeof useReplaceInterestPointByIdMutation>;
 export type ReplaceInterestPointByIdMutationResult = Apollo.MutationResult<ReplaceInterestPointByIdMutation>;
 export type ReplaceInterestPointByIdMutationOptions = Apollo.BaseMutationOptions<ReplaceInterestPointByIdMutation, ReplaceInterestPointByIdMutationVariables>;
@@ -509,9 +626,9 @@ export type DeleteInterestPointByIdMutationFn = Apollo.MutationFunction<DeleteIn
  * });
  */
 export function useDeleteInterestPointByIdMutation(baseOptions?: Apollo.MutationHookOptions<DeleteInterestPointByIdMutation, DeleteInterestPointByIdMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<DeleteInterestPointByIdMutation, DeleteInterestPointByIdMutationVariables>(DeleteInterestPointByIdDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteInterestPointByIdMutation, DeleteInterestPointByIdMutationVariables>(DeleteInterestPointByIdDocument, options);
+      }
 export type DeleteInterestPointByIdMutationHookResult = ReturnType<typeof useDeleteInterestPointByIdMutation>;
 export type DeleteInterestPointByIdMutationResult = Apollo.MutationResult<DeleteInterestPointByIdMutation>;
 export type DeleteInterestPointByIdMutationOptions = Apollo.BaseMutationOptions<DeleteInterestPointByIdMutation, DeleteInterestPointByIdMutationVariables>;
@@ -541,17 +658,17 @@ export const GetCategoriesDocument = gql`
  * });
  */
 export function useGetCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
+      }
 export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
+        }
 export function useGetCategoriesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
+        }
 export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
 export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
 export type GetCategoriesSuspenseQueryHookResult = ReturnType<typeof useGetCategoriesSuspenseQuery>;
@@ -603,17 +720,17 @@ export const GetInterestPointsDocument = gql`
  * });
  */
 export function useGetInterestPointsQuery(baseOptions?: Apollo.QueryHookOptions<GetInterestPointsQuery, GetInterestPointsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetInterestPointsQuery, GetInterestPointsQueryVariables>(GetInterestPointsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInterestPointsQuery, GetInterestPointsQueryVariables>(GetInterestPointsDocument, options);
+      }
 export function useGetInterestPointsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInterestPointsQuery, GetInterestPointsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetInterestPointsQuery, GetInterestPointsQueryVariables>(GetInterestPointsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInterestPointsQuery, GetInterestPointsQueryVariables>(GetInterestPointsDocument, options);
+        }
 export function useGetInterestPointsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetInterestPointsQuery, GetInterestPointsQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<GetInterestPointsQuery, GetInterestPointsQueryVariables>(GetInterestPointsDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetInterestPointsQuery, GetInterestPointsQueryVariables>(GetInterestPointsDocument, options);
+        }
 export type GetInterestPointsQueryHookResult = ReturnType<typeof useGetInterestPointsQuery>;
 export type GetInterestPointsLazyQueryHookResult = ReturnType<typeof useGetInterestPointsLazyQuery>;
 export type GetInterestPointsSuspenseQueryHookResult = ReturnType<typeof useGetInterestPointsSuspenseQuery>;
@@ -665,19 +782,55 @@ export const GetInterestPointsByCityDocument = gql`
  *   },
  * });
  */
-export function useGetInterestPointsByCityQuery(baseOptions: Apollo.QueryHookOptions<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables> & ({ variables: GetInterestPointsByCityQueryVariables; skip?: boolean; } | { skip: boolean; })) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>(GetInterestPointsByCityDocument, options);
-}
+export function useGetInterestPointsByCityQuery(baseOptions: Apollo.QueryHookOptions<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables> & ({ variables: GetInterestPointsByCityQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>(GetInterestPointsByCityDocument, options);
+      }
 export function useGetInterestPointsByCityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>(GetInterestPointsByCityDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>(GetInterestPointsByCityDocument, options);
+        }
 export function useGetInterestPointsByCitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>(GetInterestPointsByCityDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>(GetInterestPointsByCityDocument, options);
+        }
 export type GetInterestPointsByCityQueryHookResult = ReturnType<typeof useGetInterestPointsByCityQuery>;
 export type GetInterestPointsByCityLazyQueryHookResult = ReturnType<typeof useGetInterestPointsByCityLazyQuery>;
 export type GetInterestPointsByCitySuspenseQueryHookResult = ReturnType<typeof useGetInterestPointsByCitySuspenseQuery>;
 export type GetInterestPointsByCityQueryResult = Apollo.QueryResult<GetInterestPointsByCityQuery, GetInterestPointsByCityQueryVariables>;
+export const RegisterUserDocument = gql`
+    mutation RegisterUser($data: NewUserInput!) {
+  registerUser(data: $data) {
+    firstname
+    lastname
+    email
+    hashedPassword
+  }
+}
+    `;
+export type RegisterUserMutationFn = Apollo.MutationFunction<RegisterUserMutation, RegisterUserMutationVariables>;
+
+/**
+ * __useRegisterUserMutation__
+ *
+ * To run a mutation, you first call `useRegisterUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerUserMutation, { data, loading, error }] = useRegisterUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions<RegisterUserMutation, RegisterUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterUserMutation, RegisterUserMutationVariables>(RegisterUserDocument, options);
+      }
+export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
+export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
+export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;

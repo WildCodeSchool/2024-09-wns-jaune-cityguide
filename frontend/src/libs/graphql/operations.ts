@@ -42,6 +42,20 @@ export const REPLACE_INTERESTPOINT = gql`
   mutation ReplaceInterestPointById($data: InterestPointInput!, $interestPointId: String!) {
     replaceInterestPointById(data: $data, interestPointId: $interestPointId) {
       id
+      name
+      description
+      address
+      link_url
+      category {
+        id
+        name
+        color
+      }
+      pictures {
+        id
+        url
+        name
+      }
     }
 }`;
 
