@@ -1,148 +1,127 @@
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import type { InterestPoint } from "../@types/types";
 import { useInterestPointsStore } from "../store/interestPointsStore";
+import { Carousel } from "../atoms/Carousel";
 
-type InterestPointCardProps = {
+type InterestPointSheetProps = {
+	isOpen: boolean;
 	interestPoint: InterestPoint | null;
 	onClose: () => void;
 };
 
 export default function InterestPointDetails({
+	isOpen,
 	onClose,
-}: InterestPointCardProps) {
-	const [currentIndex, setCurrentIndex] = useState(0);
+}: InterestPointSheetProps) {
 	const { selectedInterestPoint } = useInterestPointsStore();
 
-	const prevSlide = () => {
-		setCurrentIndex((prev) =>
-			prev === 0
-				? (selectedInterestPoint?.pictures?.length ?? 0) - 1
-				: prev - 1,
-		);
-	};
+	// Handling click outside of the sheet: https://dev.to/rashed_iqbal/how-to-handle-outside-clicks-in-react-with-typescript-4lmc
+	const sheetRef = useRef<HTMLDivElement>(null);
 
-	const nextSlide = () => {
-		setCurrentIndex((prev) =>
-			prev === (selectedInterestPoint?.pictures?.length ?? 0) - 1
-				? 0
-				: prev + 1,
-		);
-	};
-	// TODO: fix mobile view
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const handleClickOutside = (event: MouseEvent) => {
+			const currentSheet = sheetRef.current;
+			if (currentSheet && !currentSheet.contains(event.target as Node)) {
+				onClose();
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [isOpen, onClose]);
 	return (
-		<div className="bg-[#706EEB]/80 flex justify-around h-80 absolute w-full z-10 bottom-0 border-b-2 border-b-white p-3">
-			<button
-				type="button"
-				className="text-white transform pr-0 rounded-full flex justify-end absolute top-3 right-3 sm:top-2 sm:right-2 hover:cursor-pointer hover:bg-gray-200 hover:text-gray-500"
-				onClick={onClose}
+		<>
+			<aside
+				className={`absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-50 ${
+					isOpen ? "translate-x-0" : "translate-x-full"
+				} rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					strokeWidth="2"
-					strokeLinecap="round"
-					strokeLinejoin="round"
-					className="lucide lucide-x-icon lucide-x"
+				<button
+					type="button"
+					onClick={onClose}
+					className="text-gray-800 transform pr-0 rounded-full flex justify-end absolute top-6 right-6 sm:top-2 sm:right-2 hover:cursor-pointer hover:bg-gray-200 hover:text-gray-500"
+					aria-label="Fermer les détails"
 				>
-					<title>Fermer le bandeau</title>
-					<path d="M18 6 6 18" />
-					<path d="m6 6 12 12" />
-				</svg>
-			</button>
-			<div className="carousel-container m-auto">
-				<div className="relative w-full sm:w-96 lg:w-110 h-36 lg:h-60 overflow-hidden rounded-xl">
-					{(selectedInterestPoint?.pictures?.length ?? 0) > 0 ? (
-						<>
-							<img
-								src={selectedInterestPoint?.pictures[currentIndex].url}
-								alt={selectedInterestPoint?.name}
-								className="w-full h-full object-cover"
-							/>
-							{(selectedInterestPoint?.pictures?.length ?? 0) > 1 && (
-								<>
-									<button
-										type="button"
-										className="absolute top-1/2 left-2 transform -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 shadow text-white hover:cursor-pointer hover:bg-gray-700"
-										onClick={prevSlide}
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											width="24"
-											height="24"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											className="lucide lucide-chevron-left-icon lucide-chevron-left"
-										>
-											<title>Précédent</title>
-											<path d="m15 18-6-6 6-6" />
-										</svg>
-									</button>
-									<button
-										type="button"
-										className="absolute top-1/2 right-2 transform -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 shadow text-white hover:cursor-pointer hover:bg-gray-700"
-										onClick={nextSlide}
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											width="24"
-											height="24"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											className="lucide lucide-chevron-right-icon lucide-chevron-right"
-										>
-											<title>Suivant</title>
-											<path d="m9 18 6-6-6-6" />
-										</svg>
-									</button>
-								</>
-							)}
-						</>
-					) : (
-						<img
-							src="https://placehold.co/200x300"
-							alt="Alternative"
-							className="w-full h-full object-cover"
-						/>
-					)}
-				</div>
-			</div>
-			<div className="card-container m-auto flex-col w-full sm:w-96 lg:min-w-110 lg:min-h-60 bg-gray-100 rounded-2xl overflow-y-auto p-3 sm:p-5">
-				<div className="card-header flex flex-col bg-gray-300 h-12">
-					<p className="text-center font-semibold text-xl max-sm:text-sm m-auto">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						className="lucide lucide-x-icon lucide-x"
+					>
+						<path d="M18 6 6 18" />
+						<path d="m6 6 12 12" />
+						<title>Fermer les détails</title>
+					</svg>
+				</button>
+
+				<div className="sheet-header w-full flex items-center justify-center space-x-4 py-4 text-gray-600">
+					<div className="h-[1.5px] w-full bg-gray-600 rounded-full flex-grow" />
+					<h3 className="text-2xl font-semibold whitespace-nowrap">
 						{selectedInterestPoint?.name}
-						<p className="text-gray-500 text-sm m-auto">
-							{selectedInterestPoint?.address}
-						</p>
-					</p>
+					</h3>
+					<div className="h-[1.5px] w-full  bg-gray-600 rounded-full flex-grow" />
 				</div>
-				<div className="flex flex-col space-y-3">
-					<p className="text-base">{selectedInterestPoint?.description}</p>
-					<p className="text-sm flex mt-auto">
-						Site internet&nbsp;: &nbsp;
-						<span>
+				<div className="carousel-container w-full flex justify-center">
+					<Carousel />
+				</div>
+				<div className="details-content space-y-4 text-sm sm:text-base">
+					{selectedInterestPoint?.description && (
+						<p className="text-gray-700 italic">
+							{selectedInterestPoint.description}
+						</p>
+					)}
+
+					{selectedInterestPoint?.address && (
+						<div>
+							<h4 className="font-semibold text-[#706eeb]">📍&nbsp;Adresse</h4>
+							<p>{selectedInterestPoint.address}</p>
+						</div>
+					)}
+
+					<div className="grid grid-cols-2 gap-4">
+						{selectedInterestPoint?.city && (
+							<div>
+								<h4 className="font-semibold text-[#706eeb]">🏙️&nbsp;Ville</h4>
+								<p>{selectedInterestPoint?.city.name}</p>
+							</div>
+						)}
+						{selectedInterestPoint?.category && (
+							<div>
+								<h4 className="font-semibold text-[#706eeb]">
+									📁&nbsp;Catégorie
+								</h4>
+								<p>{selectedInterestPoint.category.name}</p>
+							</div>
+						)}
+					</div>
+
+					{selectedInterestPoint?.link_url && (
+						<div>
+							<h4 className="font-semibold text-[#706eeb]">
+								🔗&nbsp;Site officiel
+							</h4>
 							<a
-								href={selectedInterestPoint?.link_url || "#"}
+								href={selectedInterestPoint.link_url}
 								target="_blank"
 								rel="noopener noreferrer"
+								className="text-blue-600 underline hover:text-blue-800"
 							>
-								{selectedInterestPoint?.link_url}
+								{selectedInterestPoint.link_url}
 							</a>
-						</span>
-					</p>
+						</div>
+					)}
 				</div>
-			</div>
-		</div>
+			</aside>
+		</>
 	);
 }

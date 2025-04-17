@@ -59,8 +59,8 @@ export default function HomePage() {
 				<div className="interest-point-details">
 					<InterestPointDetails
 						interestPoint={selectedInterestPoint}
-						onClose={toggleDetails}
-					/>
+						onClose={toggleDetails} 
+						isOpen={false}					/>
 				</div>
 			)}
 
