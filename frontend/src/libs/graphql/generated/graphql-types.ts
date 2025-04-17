@@ -236,7 +236,6 @@ export type Query = {
   getPicturesByInterestPoint: Array<Picture>;
   getUserById: User;
   getUsers: Array<User>;
-  persistUser?: Maybe<Scalars['String']['output']>;
 };
 
 

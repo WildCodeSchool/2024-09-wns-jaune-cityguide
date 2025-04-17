@@ -103,10 +103,9 @@ function Inscription() {
       const { confirmPassword, ...dataToSend } = formData;
 
       const { data } = await register({
-        variables: { data: dataToSend as NewUserInput }
-      })
+        variables: { data: dataToSend as NewUserInput },
+      });
       if (data?.registerUser) {
-    
         const parsed = JSON.parse(data.registerUser);
         setUser({
           id: parsed.id,
@@ -123,7 +122,7 @@ function Inscription() {
 
         setTimeout(() => {
           setShowPopup(false);
-          navigate("/");
+          navigate("/map");
         }, 3000);
       }
     } catch (error) {
@@ -209,22 +208,22 @@ function Inscription() {
                         ? "text"
                         : "password"
                       : field === "confirmPassword"
-                        ? showConfirmPassword
-                          ? "text"
-                          : "password"
-                        : "text"
+                      ? showConfirmPassword
+                        ? "text"
+                        : "password"
+                      : "text"
                   }
                   name={field}
                   placeholder={
                     field === "password"
                       ? "Mot de passe"
                       : field === "confirmPassword"
-                        ? "Confirmer mot de passe"
-                        : field === "firstname"
-                          ? "Prénom"
-                          : field === "lastname"
-                            ? "Nom"
-                            : field.charAt(0).toUpperCase() + field.slice(1)
+                      ? "Confirmer mot de passe"
+                      : field === "firstname"
+                      ? "Prénom"
+                      : field === "lastname"
+                      ? "Nom"
+                      : field.charAt(0).toUpperCase() + field.slice(1)
                   }
                   value={formData[field]}
                   onChange={handleChange}
@@ -245,8 +244,8 @@ function Inscription() {
                         ? "Cacher"
                         : "Afficher"
                       : showConfirmPassword
-                        ? "Cacher"
-                        : "Afficher"}
+                      ? "Cacher"
+                      : "Afficher"}
                   </button>
                 )}
               </div>
