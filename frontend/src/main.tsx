@@ -8,6 +8,7 @@ import HomePage from "./pages/Home/HomePage.tsx";
 import Inscription from "./pages/Inscription/Inscription.tsx";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.tsx";
 import Login from './pages/Login/Login.tsx';
+import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "/",
+				element: <LandingPage />,
+			},
+			{
+				path: "/homepage",
 				element: <HomePage />,
 			},
 			{
