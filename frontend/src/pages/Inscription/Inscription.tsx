@@ -6,6 +6,7 @@ import {
 } from "../../libs/graphql/generated/graphql-types";
 import { Link, useNavigate } from "react-router-dom";
 import { useCitiesStore } from "../../store/citiesStore";
+import { useUserStore } from "../../store/userStore";
 
 type FormDataType = {
   firstname: string;
@@ -48,6 +49,8 @@ function Inscription() {
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
   const { cities, fetchCities } = useCitiesStore();
+
+  const { setUser } = useUserStore();
 
   useEffect(() => {
     fetchCities();
@@ -100,9 +103,17 @@ function Inscription() {
       const { confirmPassword, ...dataToSend } = formData;
 
       const { data } = await register({
-        variables: { data: dataToSend as NewUserInput },
-      });
-      if (data) {
+        variables: { data: dataToSend as NewUserInput }
+      })
+      if (data?.registerUser) {
+    
+        const parsed = JSON.parse(data.registerUser);
+        setUser({
+          id: parsed.id,
+          firstname: parsed.firstname,
+          role: parsed.role,
+        });
+
         setPopupMessage([
           "Félicitations, votre compte a été créé avec succès ! 🎉",
           "Vous pouvez désormais profiter de toutes les fonctionnalités de notre site.",
@@ -198,22 +209,22 @@ function Inscription() {
                         ? "text"
                         : "password"
                       : field === "confirmPassword"
-                      ? showConfirmPassword
-                        ? "text"
-                        : "password"
-                      : "text"
+                        ? showConfirmPassword
+                          ? "text"
+                          : "password"
+                        : "text"
                   }
                   name={field}
                   placeholder={
                     field === "password"
                       ? "Mot de passe"
                       : field === "confirmPassword"
-                      ? "Confirmer mot de passe"
-                      : field === "firstname"
-                      ? "Prénom"
-                      : field === "lastname"
-                      ? "Nom"
-                      : field.charAt(0).toUpperCase() + field.slice(1)
+                        ? "Confirmer mot de passe"
+                        : field === "firstname"
+                          ? "Prénom"
+                          : field === "lastname"
+                            ? "Nom"
+                            : field.charAt(0).toUpperCase() + field.slice(1)
                   }
                   value={formData[field]}
                   onChange={handleChange}
@@ -234,8 +245,8 @@ function Inscription() {
                         ? "Cacher"
                         : "Afficher"
                       : showConfirmPassword
-                      ? "Cacher"
-                      : "Afficher"}
+                        ? "Cacher"
+                        : "Afficher"}
                   </button>
                 )}
               </div>

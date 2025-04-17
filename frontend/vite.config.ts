@@ -5,5 +5,5 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: { allowedHosts: true, host: true, hmr: { path: "hmr" } },
+  server: { allowedHosts: true, host: true, hmr: { port: 7000, path: "hmr" } },
 })
