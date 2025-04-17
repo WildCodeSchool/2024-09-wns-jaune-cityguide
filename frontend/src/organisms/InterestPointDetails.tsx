@@ -1,61 +1,127 @@
-import { useState } from "react";
+import { useEffect, useRef } from "react";
+import type { InterestPoint } from "../@types/types";
+import { useInterestPointsStore } from "../store/interestPointsStore";
+import { Carousel } from "../atoms/Carousel";
 
-const images = [
-  "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtiQ_Pcwlc6qydBsUKAmQwTUsiq1TIZkMOXezMfCXBxmqlDwM&s",
-];
+type InterestPointSheetProps = {
+	isOpen: boolean;
+	interestPoint: InterestPoint | null;
+	onClose: () => void;
+};
 
-export default function InterestPointDetails({ onClose, point }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function InterestPointDetails({
+	isOpen,
+	onClose,
+}: InterestPointSheetProps) {
+	const { selectedInterestPoint } = useInterestPointsStore();
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
+	// Handling click outside of the sheet: https://dev.to/rashed_iqbal/how-to-handle-outside-clicks-in-react-with-typescript-4lmc
+	const sheetRef = useRef<HTMLDivElement>(null);
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
+	useEffect(() => {
+		if (!isOpen) return;
 
-  return (
-    <div className=" bg-[#706EEB] flex flex-col md:items-center md:justify-center lg:flex-row lg:justify-center p-2 lg:p-0 lg:m-0">
-      <div className="bg-[#FFFFFF] lg:bg-transparent flex flex-col md:flex-row items-center lg:justify-center gap-6 lg:gap-50 pt-5 pb-10 px-10 lg:p-10 rounded-3xl w-90 lg:w-full lg:max-w-5xl m-auto">
-        <div className="pb-6 lg:pb-0 border-b-2 border-[#706EEB] flex flex-col lg:border-0 lg:w-100">
-          <button
-            className="static text-black transform pr-0 rounded-full flex justify-end lg:hidden"
-            onClick={onClose}
-          >
-            <span className="text-lg font-bold">X</span>
-          </button>
-          <div className="relative w-70 h-36 lg:w-110 lg:h-60 overflow-hidden rounded-xl">
-            <img
-              src={point.pictures[currentIndex].url}
-              alt={point.name}
-              className="w-full h-full object-cover"
-            />
-            <button
-              className="absolute top-1/2 left-2 transform -translate-y-1/2 w-7 h-7 rounded-full border-2 shadow"
-              onClick={prevSlide}
-            >
-              ←
-            </button>
-            <button
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 w-7 h-7 rounded-full border-2 shadow"
-              onClick={nextSlide}
-            >
-              →
-            </button>
-          </div>
-        </div>
+		const handleClickOutside = (event: MouseEvent) => {
+			const currentSheet = sheetRef.current;
+			if (currentSheet && !currentSheet.contains(event.target as Node)) {
+				onClose();
+			}
+		};
 
-        <div className="flex flex-col w-70 lg:min-w-110 lg:min-h-60 bg-gray-100 rounded-xl overflow-hidden border-1">
-          <div className="bg-gray-300 h-11 p-2 text-center font-semibold border-b-1">
-            {point.name}
-          </div>
-          <div className="p-2 text-center h-auto lg:h-full text-sm">
-            {point.description}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [isOpen, onClose]);
+	return (
+		<>
+			<aside
+				className={`absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-50 ${
+					isOpen ? "translate-x-0" : "translate-x-full"
+				} rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
+			>
+				<button
+					type="button"
+					onClick={onClose}
+					className="text-gray-800 transform pr-0 rounded-full flex justify-end absolute top-6 right-6 sm:top-2 sm:right-2 hover:cursor-pointer hover:bg-gray-200 hover:text-gray-500"
+					aria-label="Fermer les détails"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						className="lucide lucide-x-icon lucide-x"
+					>
+						<path d="M18 6 6 18" />
+						<path d="m6 6 12 12" />
+						<title>Fermer les détails</title>
+					</svg>
+				</button>
+
+				<div className="sheet-header w-full flex items-center justify-center space-x-4 py-4 text-gray-600">
+					<div className="h-[1.5px] w-full bg-gray-600 rounded-full flex-grow" />
+					<h3 className="text-2xl font-semibold whitespace-nowrap">
+						{selectedInterestPoint?.name}
+					</h3>
+					<div className="h-[1.5px] w-full  bg-gray-600 rounded-full flex-grow" />
+				</div>
+				<div className="carousel-container w-full flex justify-center">
+					<Carousel />
+				</div>
+				<div className="details-content space-y-4 text-sm sm:text-base">
+					{selectedInterestPoint?.description && (
+						<p className="text-gray-700 italic">
+							{selectedInterestPoint.description}
+						</p>
+					)}
+
+					{selectedInterestPoint?.address && (
+						<div>
+							<h4 className="font-semibold text-[#706eeb]">📍&nbsp;Adresse</h4>
+							<p>{selectedInterestPoint.address}</p>
+						</div>
+					)}
+
+					<div className="grid grid-cols-2 gap-4">
+						{selectedInterestPoint?.city && (
+							<div>
+								<h4 className="font-semibold text-[#706eeb]">🏙️&nbsp;Ville</h4>
+								<p>{selectedInterestPoint?.city.name}</p>
+							</div>
+						)}
+						{selectedInterestPoint?.category && (
+							<div>
+								<h4 className="font-semibold text-[#706eeb]">
+									📁&nbsp;Catégorie
+								</h4>
+								<p>{selectedInterestPoint.category.name}</p>
+							</div>
+						)}
+					</div>
+
+					{selectedInterestPoint?.link_url && (
+						<div>
+							<h4 className="font-semibold text-[#706eeb]">
+								🔗&nbsp;Site officiel
+							</h4>
+							<a
+								href={selectedInterestPoint.link_url}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-blue-600 underline hover:text-blue-800"
+							>
+								{selectedInterestPoint.link_url}
+							</a>
+						</div>
+					)}
+				</div>
+			</aside>
+		</>
+	);
 }

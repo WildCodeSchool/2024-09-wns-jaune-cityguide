@@ -24,57 +24,19 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="primary-bg z-50">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 items-center justify-between">
+    <>
+      <nav className="nav-container primary-bg z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between h-auto sm:h-20">
+        <div className="desktop-nav hidden sm:flex items-center justify-between h-full w-full p-14">
           {/* Logo */}
-          <div className="flex items-center">
-            <a href="/">
-              <img className="h-14 w-auto" src={logo} alt="City Guide" />
+          <div className="flex justify-center -mt-12 lg:mt-12">
+            <a href="/map" className="flex-shrink-0">
+              <img
+                className="rounded-full border-5 lg:w-28 lg:h-28"
+                style={{ borderColor: "#706EEB" }}
+                src={logo}
+                alt="City Guide"
+              />
             </a>
-          </div>
-          {/* Search bar */}
-          <SearchBar />
-          {/* Menu Burger (droite) */}
-          <div className="sm:hidden flex items-center">
-            <button
-              type="button"
-              className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-none"
-              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              <span className="sr-only">Open main menu</span>
-              {isMobileMenuOpen ? (
-                <svg
-                  className="size-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                >
-                  <title>Close menu</title>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="size-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                >
-                  <title>Open menu</title>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                  />
-                </svg>
-              )}
-            </button>
           </div>
 
           {/* Boutons de connexion (uniquement en version desktop) */}
@@ -144,7 +106,7 @@ export default function Navbar() {
                         >
                           Dashboard
                         </a>
-                        )}
+                      )}
 
                       <button
                         onClick={handleLogout}
@@ -162,57 +124,91 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link to={"/login"} className="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black">
-                  Connexion
-                </Link>
-                <a
-                  href="/inscription"
-                  className="rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
-                >
-                  Inscription
-                </a>
+                <div>
+                  <div className="hidden sm:flex space-x-4">
+                    <Link
+                      to={"/login"}
+                      className="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
+                    >
+                      <button type="button">CONNEXION</button>
+                    </Link>
+                    <Link
+                      to={"/inscription"}
+                      className="rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
+                    >
+                      <button type="button" className="">
+                        INSCRIPTION
+                      </button>
+                    </Link>
+                  </div>
+                </div>
               </>
             )}
           </div>
         </div>
-      </div>
+        {/* Menu Burger */}
+        <div className="w-full h-14 sm:hidden px-1 py-2">
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              className="relative inline-flex items-center justify-center p-2 text-white hover:text-gray-400"
+              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <span className="sr-only">Open main menu</span>
+              {isMobileMenuOpen ? (
+                <svg
+                  className="size-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2.5"
+                  stroke="currentColor"
+                >
+                  <title>Fermer le menu</title>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="size-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2.5"
+                  stroke="currentColor"
+                >
+                  <title>Ouvrir le menu</title>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                </svg>
+              )}
+            </button>
 
-
-      {/* Menu Burger (droite) */}
-      <div className="sm:hidden flex items-center">
-        <button
-          type="button"
-          className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-none"
-          onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          <span className="sr-only">Open main menu</span>
-          {isMobileMenuOpen ? (
-            <svg className="size-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg className="size-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-          )}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {
-        isMobileMenuOpen && (
-          <div className="sm:hidden secondary-bg" id="mobile-menu">
-            <div className="space-y-1 px-2 pt-2 pb-3">
-              <a href="#" className="block rounded-md px-3 py-2 text-base font-medium text-white">
-                Se connecter
-              </a>
-              <a href="/inscription" className="block rounded-md px-3 py-2 text-base font-medium text-white">
-                S'inscrire
-              </a>
-            </div>
+            {/* Mobile Menu */}
+            {isMobileMenuOpen && (
+              <div className="sm:hidden" id="mobile-menu">
+                <div className="space-x-2 px-2 flex">
+                  <Link
+                    to={"/login"}
+                    className="block rounded-md bg-white px-2 py-2 text-sm font-small text-gray-500 hover:text-black">
+                    <button type="button">CONNEXION</button>
+                  </Link>
+                  <a
+                    href="/inscription"
+                    className="block rounded-md px-2 py-2 text-sm font-small bg-gray-700 text-gray-300 hover:text-white"
+                  >
+                    <button type="button">INSCRIPTION</button>
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
-        )
-      }
-    </nav >
+        </div>
+      </nav>
+    </>
   );
 }

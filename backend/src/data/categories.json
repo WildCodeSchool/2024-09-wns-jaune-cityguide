@@ -2,81 +2,86 @@
 	{
 		"name": "Restaurants",
 		"description": "Les meilleurs endroits pour manger en ville.",
-		"color": "#FF5733"
+		"color": "#D84315"
 	},
 	{
 		"name": "Gastronomie",
 		"description": "Découvrez les spécialités locales gastronomiques.",
-		"color": "#FFC107"
+		"color": "#C0A060"
 	},
 	{
 		"name": "Parcs",
 		"description": "Espaces verts et parcs pour se détendre.",
-		"color": "#4CAF50"
+		"color": "#66BB6A"
 	},
 	{
 		"name": "Musées",
 		"description": "Découvrez l'art et l'histoire de la région.",
-		"color": "#3F51B5"
+		"color": "#5C6BC0"
 	},
 	{
-		"name": "Bars & Cafés",
+		"name": "Bars et Cafés",
 		"description": "Endroits sympas pour boire un verre.",
-		"color": "#FFC107"
+		"color": "#6D4C41"
 	},
 	{
 		"name": "Monuments historiques",
 		"description": "Sites historiques et incontournables.",
-		"color": "#9C27B0"
+		"color": "#8B4513"
 	},
 	{
 		"name": "Commerces",
 		"description": "Boutiques et magasins populaires.",
-		"color": "#FF9800"
+		"color": "#F57C00"
 	},
 	{
 		"name": "Activités sportives",
 		"description": "Endroits pour pratiquer du sport.",
-		"color": "#00BCD4"
+		"color": "#0288D1"
 	},
 	{
 		"name": "Cinémas & Théâtres",
 		"description": "Lieux pour voir des films et spectacles.",
-		"color": "#E91E63"
+		"color": "#9C27B0"
 	},
 	{
 		"name": "Hôtels",
 		"description": "Les meilleurs endroits où séjourner.",
-		"color": "#795548"
+		"color": "#BDB76B"
 	},
 	{
 		"name": "Transports",
 		"description": "Gares, stations et autres moyens de transport.",
-		"color": "#607D8B"
+		"color": "#455A64"
 	},
 	{
 		"name": "Points de vue",
 		"description": "Un point de vue à couper le souffle.",
-		"color": "#FF5722"
+		"color": "#FFA726"
 	},
 	{
 		"name": "Patrimoine",
 		"description": "Découvrez le patrimoine historique de la région.",
-		"color": "#9C27B0"
+		"color": "#B8860B"
 	},
 	{
 		"name": "Parcs naturels",
 		"description": "Des espaces naturels préservés à visiter.",
-		"color": "#4CAF50"
+		"color": "#2E7D32"
 	},
 	{
 		"name": "Institutions",
 		"description": "Les hauts lieux de l'administration et de la culture.",
-		"color": "#3F51B5"
+		"color": "#1E88E5"
 	},
 	{
 		"name": "Promenades et nature",
 		"description": "Des itinéraires de promenade et de randonnée pour profiter d'un paysage hors du commun.",
-		"color": "#4CAF50"
+		"color": "#81C784"
+	},
+	{
+		"name": "Lieux insolites",
+		"description": "Des lieux uniques et surprenants à découvrir.",
+		"color": "#FF7043"
 	}
 ]
