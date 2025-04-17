@@ -37,6 +37,7 @@ const router = createBrowserRouter([
 export const client = new ApolloClient({
 	uri: `http://localhost:${import.meta.env.VITE_GATEWAY_PORT}/api`,
 	cache: new InMemoryCache(),
+	credentials: "include",
 });
 
 createRoot(document.getElementById("root")!).render(

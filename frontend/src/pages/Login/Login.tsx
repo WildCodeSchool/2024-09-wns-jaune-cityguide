@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo_city_guide_good.png";
 import { FormEvent, useState } from "react";
 import { useLoginUserMutation, UserInput } from "../../libs/graphql/generated/graphql-types";
+import { useUserStore } from "../../store/userStore";
 
 
 const Login = () => {
@@ -9,6 +10,7 @@ const Login = () => {
   const [login] = useLoginUserMutation();
   const navigate = useNavigate();
   const [message, setMessage] = useState<{ type: string; text: string } | null>(null);
+  const setUser = useUserStore((state) => state.setUser);
 
 
   const handleLogin = async (evt: FormEvent) => {
@@ -29,7 +31,15 @@ const Login = () => {
         variables: { data: formJson },
       });
 
-      if (data) {
+      if (data?.loginUser) {
+        const parsed = JSON.parse(data.loginUser);
+        
+        setUser({
+          id: parsed.id,
+          firstname: parsed.firstname,
+          role: parsed.role,
+        });
+
         setMessage({ type: "success", text: "Connexion réussie ! Redirection..." });
         setTimeout(() => {
           navigate("/");

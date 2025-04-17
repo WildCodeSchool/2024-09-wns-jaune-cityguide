@@ -3,6 +3,7 @@ import logo from "../../assets/logo.png";
 import { NewUserInput, useRegisterUserMutation } from "../../libs/graphql/generated/graphql-types";
 import { useNavigate } from "react-router-dom";
 import { useCitiesStore } from "../../store/citiesStore";
+import { useUserStore } from "../../store/userStore";
 
 type FormDataType = {
   firstname: string;
@@ -28,8 +29,8 @@ function Inscription() {
     lastname: "",
     email: "",
     password: "",
-    confirmPassword:"",
-    cityId:"",
+    confirmPassword: "",
+    cityId: "",
   });
 
   const [errors, setErrors] = useState<ErrorsType>({});
@@ -41,14 +42,16 @@ function Inscription() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [showPopup, setShowPopup] = useState(false); 
+  const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
   const { cities, fetchCities } = useCitiesStore();
 
-    useEffect(() => {
-      fetchCities();
-    }, []);
+  const { setUser } = useUserStore();
+
+  useEffect(() => {
+    fetchCities();
+  }, []);
 
   const validate = (): ErrorsType => {
     const newErrors: ErrorsType = {};
@@ -75,7 +78,7 @@ function Inscription() {
     if (!formData.cityId) {
       newErrors.cityId = "La ville est requise.";
     }
-    
+
     return newErrors;
   };
 
@@ -91,22 +94,29 @@ function Inscription() {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) return;
-    
+
     try {
       const { confirmPassword, ...dataToSend } = formData;
 
-      const {data} = await register({
-        variables: {data: dataToSend as NewUserInput}
+      const { data } = await register({
+        variables: { data: dataToSend as NewUserInput }
       })
-      if (data){
+      if (data?.registerUser) {
+    
+        const parsed = JSON.parse(data.registerUser);
+        setUser({
+          id: parsed.id,
+          firstname: parsed.firstname,
+          role: parsed.role,
+        });
 
         setPopupMessage([
           "Félicitations, votre compte a été créé avec succès ! 🎉",
           "Vous pouvez désormais profiter de toutes les fonctionnalités de notre site.",
         ]);
-        
+
         setShowPopup(true);
-        
+
         setTimeout(() => {
           setShowPopup(false);
           navigate("/")
@@ -176,23 +186,23 @@ function Inscription() {
                         ? "text"
                         : "password"
                       : field === "confirmPassword"
-                      ? showConfirmPassword
-                        ? "text"
-                        : "password"
-                      : "text"
+                        ? showConfirmPassword
+                          ? "text"
+                          : "password"
+                        : "text"
                   }
                   name={field}
                   placeholder={
                     field === "password"
                       ? "Mot de passe"
                       : field === "confirmPassword"
-                      ? "Confirmer mot de passe"
-                      : field === "firstname"
-                      ? "Prénom"
-                      : field === "lastname"
-                      ? "Nom"
-                      : field.charAt(0).toUpperCase() + field.slice(1)
-                  }                  
+                        ? "Confirmer mot de passe"
+                        : field === "firstname"
+                          ? "Prénom"
+                          : field === "lastname"
+                            ? "Nom"
+                            : field.charAt(0).toUpperCase() + field.slice(1)
+                  }
                   value={formData[field]}
                   onChange={handleChange}
                   className="w-full outline-none text-gray-800 bg-transparent"
@@ -212,8 +222,8 @@ function Inscription() {
                         ? "Cacher"
                         : "Afficher"
                       : showConfirmPassword
-                      ? "Cacher"
-                      : "Afficher"}
+                        ? "Cacher"
+                        : "Afficher"}
                   </button>
                 )}
               </div>
