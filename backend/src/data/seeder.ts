@@ -32,6 +32,20 @@ export async function seedDatabase() {
 	const interestPointRepository = dataSource.getRepository(InterestPoint);
 	const pictureRepository = dataSource.getRepository(Picture);
 
+	const categoriesCount = await categoryRepository.count();
+	const citiesCount = await cityRepository.count();
+	const interestPointsCount = await interestPointRepository.count();
+	const picturesCount = await pictureRepository.count();
+	if (
+		categoriesCount > 0 ||
+		citiesCount > 0 ||
+		interestPointsCount > 0 ||
+		picturesCount > 0
+	) {
+		console.log("⛔️ Database already seeded, skipping...");
+		return;
+	}
+
 	console.log("🧹 Cleaning database...");
 	await pictureRepository.delete({});
 	await interestPointRepository.delete({});
