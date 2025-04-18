@@ -80,7 +80,7 @@ export default function SearchBar() {
 		<div ref={containerRef} className="relative w-full sm:w-96">
 			<input
 				ref={inputRef}
-				className="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 bg-white border border-gray-300 shadow-xl transition-all duration-300"
+				className="search-bar-city w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 bg-white border border-gray-300 shadow-xl transition-all duration-300"
 				type="search"
 				placeholder="Rechercher une ville..."
 				value={inputText}

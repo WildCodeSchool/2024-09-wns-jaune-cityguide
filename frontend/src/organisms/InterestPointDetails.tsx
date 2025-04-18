@@ -36,7 +36,7 @@ export default function InterestPointDetails({
 	return (
 		<>
 			<aside
-				className={`absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-50 ${
+				className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-50 ${
 					isOpen ? "translate-x-0" : "translate-x-full"
 				} rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
 			>
