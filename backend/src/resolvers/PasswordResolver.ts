@@ -11,7 +11,7 @@ export class PasswordResolver {
   @Mutation(() => String)
   async forgotPassword(@Arg("email") email: string): Promise<string> {
 
-    const { GMAIL_USERNAME, GMAIL_PASSWORD } = process.env;
+    const { GMAIL_USERNAME, GMAIL_PASSWORD, GATEWAY_PORT } = process.env;
   
     if (!GMAIL_USERNAME || !GMAIL_PASSWORD) {
       throw new Error("GMAIL_USERNAME and GMAIL_PASSWORD must be set in .env file");
@@ -31,7 +31,7 @@ export class PasswordResolver {
     user.resetTokenExpiration = resetTokenExpiration;
     await user.save();
 
-    const resetUrl = `http://localhost:7000/resetPassword?token=${resetToken}`; //TODO: mettre url de gateway
+    const resetUrl = `http://localhost:${GATEWAY_PORT}/resetPassword?token=${resetToken}`;
 
     const transporter = createTransport({
       service: "gmail",
