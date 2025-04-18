@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./TutorialOverlay.css";
 
 type Step = {
@@ -24,6 +25,8 @@ type Position = {
 export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [targetPos, setTargetPos] = useState<Position | null>(null);
+  const navigate = useNavigate();
+
 
   const step = steps[currentStep];
 
@@ -62,6 +65,7 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
       setTargetPos(null);
     } else {
       onClose();
+      navigate("/inscription")
     }
   };
 

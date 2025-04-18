@@ -25,7 +25,7 @@ export default function TutorialPage() {
 				id: "demo",
 				name: "Point de démonstration",
 				description: "Ceci est un exemple.",
-				coordinates: [150, 150],
+				coordinates: [0, 0],
 			} as unknown as InterestPoint;
 			setSelectedInterestPoint(fakePoint);
 			setIsOpen(true);
