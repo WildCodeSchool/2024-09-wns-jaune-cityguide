@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useInterestPointsStore } from "../store/interestPointsStore";
 
 export function Carousel() {
@@ -21,15 +21,24 @@ export function Carousel() {
 		);
 	};
 
+	useEffect(() => {
+		const nbOfPictures = selectedInterestPoint?.pictures?.length ?? 0;
+		if (currentIndex >= nbOfPictures) {
+			setCurrentIndex(0);
+		}
+	}, [currentIndex, selectedInterestPoint]);
+
 	return (
 		<div className="relative w-full sm:w-96 lg:w-110 h-36 lg:h-60 overflow-hidden rounded-xl">
-			{(selectedInterestPoint?.pictures?.length ?? 0) > 0 ? (
+			{(selectedInterestPoint?.pictures?.length ?? 0) > 0 &&
+			selectedInterestPoint?.pictures[currentIndex] ? (
 				<>
 					<img
 						src={selectedInterestPoint?.pictures[currentIndex].url}
 						alt={selectedInterestPoint?.name}
 						className="w-full h-full object-cover"
 					/>
+
 					{(selectedInterestPoint?.pictures?.length ?? 0) > 1 && (
 						<>
 							<button
