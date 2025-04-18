@@ -96,13 +96,13 @@ const ForgotPassword = () => {
         </form>
 
         {message && (
-          <div className="w-full text-center text-green-600 font-medium">
+          <div className="w-full text-center text-green-600 font-medium mt-6">
             {message.text}
           </div>
         )}
 
         {error && (
-          <div className="w-full text-center text-red-500 font-medium">
+          <div className="w-full text-center text-red-500 font-medium mt-6">
             {error.text}
           </div>
         )}

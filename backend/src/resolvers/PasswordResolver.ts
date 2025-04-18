@@ -31,7 +31,7 @@ export class PasswordResolver {
     user.resetTokenExpiration = resetTokenExpiration;
     await user.save();
 
-    const resetUrl = `http://localhost:7000/resetPassword?token=${resetToken}`;
+    const resetUrl = `http://localhost:7000/resetPassword?token=${resetToken}`; //TODO: mettre url de gateway
 
     const transporter = createTransport({
       service: "gmail",
