@@ -21,21 +21,21 @@ export default function Navbar() {
     }
   };
 
-  return (
-    <>
-      <nav className="nav-container primary-bg z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between h-auto sm:h-20">
-        <div className="desktop-nav hidden sm:flex items-center justify-between h-full w-full p-14">
-          {/* Logo */}
-          <div className="flex justify-center -mt-12 lg:mt-12">
-            <a href="/map" className="flex-shrink-0">
-              <img
-                className="rounded-full border-5 lg:w-28 lg:h-28"
-                style={{ borderColor: "#706EEB" }}
-                src={logo}
-                alt="City Guide"
-              />
-            </a>
-          </div>
+	return (
+		<>
+			<nav className="nav-container primary-bg z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between h-auto sm:h-20">
+				<div className="desktop-nav hidden sm:flex items-center justify-between h-full w-full p-14">
+					{/* Logo */}
+					<div className="flex justify-center -mt-12 lg:mt-12">
+						<a href="/" className="flex-shrink-0">
+							<img
+								className="rounded-full border-5 lg:w-28 lg:h-28"
+								style={{ borderColor: "#706EEB" }}
+								src={logo}
+								alt="City Guide"
+							/>
+						</a>
+					</div>
 
           {/* Version desktop */}
           <div className="hidden sm:flex items-center space-x-4">
