@@ -3,6 +3,7 @@ import { User } from "../entities/User";
 import * as argon from "argon2";
 import crypto from "crypto";
 import { createTransport } from "nodemailer";
+import { GraphQLError } from "graphql";
 
 
 @Resolver()
@@ -18,7 +19,9 @@ export class PasswordResolver {
 
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      throw new Error("User not found");
+      throw new GraphQLError("Si un compte est associé à cet e-mail, un lien de réinitialisation a été envoyé.", {
+        extensions: { code: "USER_NOT_FOUND" },
+      });
     };
 
     const resetToken = crypto.randomBytes(32).toString("hex");
@@ -54,7 +57,7 @@ export class PasswordResolver {
           </p>
           <p>Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail.</p>
           <p>Merci,</p>
-          <p>L'équipe Support</p>
+          <p>L'équipe City Guide</p>
         </div>
       `,
     };
@@ -78,7 +81,9 @@ export class PasswordResolver {
   ): Promise<string> {
     const user = await User.findOne({ where: { resetToken: token } });
     if (!user || !user.resetTokenExpiration || user.resetTokenExpiration < new Date()) {
-      throw new Error("Invalid or expired token");
+      throw new GraphQLError("Invalid or expired token", {
+        extensions: { code: "TOKEN_NOT_FOUND" },
+      });
     };
 
     const hashedPassword = await argon.hash(newPassword);

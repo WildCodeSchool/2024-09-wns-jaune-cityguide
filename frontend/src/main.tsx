@@ -10,6 +10,8 @@ import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.tsx";
 import Login from './pages/Login/Login.tsx';
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import MapPage from "./pages/Map/MapPage.tsx";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.tsx";
+import ResetPassword from "./pages/ResetPassword/ResetPassword.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -40,6 +42,14 @@ const router = createBrowserRouter([
 				path: "/login",
 				element: <Login />,
 			},
+			{
+				path: "/forgotPassword",
+				element: <ForgotPassword />
+			},
+			{
+				path: "/resetPassword",
+				element: <ResetPassword />
+			}
 		],
 	},
 ]);

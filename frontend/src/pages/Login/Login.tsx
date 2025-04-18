@@ -135,11 +135,11 @@ const Login = () => {
 							</button>
 						</div>
 
-						<div className="text-xs mb-1 ml-auto text-end">
-							<Link to={"#"} className="text-[#B0AFE4] hover:text-blue-800">
-								Mot de passe oublié ?
-							</Link>
-						</div>
+            <div className="text-xs mb-1 ml-auto text-end">
+              <Link to={"/forgotPassword"} className="text-[#B0AFE4] hover:text-blue-800">
+                Mot de passe oublié ?
+              </Link>
+            </div>
 
 						{message && (
 							<div
