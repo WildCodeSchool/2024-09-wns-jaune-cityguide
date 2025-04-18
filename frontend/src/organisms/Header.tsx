@@ -8,7 +8,7 @@ export default function Navbar() {
   const { user, clearUser } = useUserStore();
   const [logout] = useMutationMutation();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
 
   const handleLogout = async () => {
@@ -131,14 +131,14 @@ export default function Navbar() {
                   <div className="hidden sm:flex space-x-4">
                     <Link
                       to={"/login"}
-                      className="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
+                      className="connexion-button rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
                       onClick={() => setIsOpen(false)}
                     >
                       CONNEXION
                     </Link>
                     <Link
                       to={"/inscription"}
-                      className="rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
+                      className="inscription-button rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
                       onClick={() => setIsOpen(false)}
                     >
                         INSCRIPTION
@@ -281,7 +281,7 @@ export default function Navbar() {
                     <div className="py-1" role="none">
                       <Link
                         to={"/login"}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="connexion-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
                         tabIndex={-1}
                         id="menu-item-0"
@@ -292,7 +292,7 @@ export default function Navbar() {
 
                       <Link
                         to={"/inscription"}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="inscription-button-mobile  block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
                         tabIndex={-1}
                         id="menu-item-0"

@@ -4,7 +4,7 @@ import "./index.css";
 import { App } from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import HomePage from "./pages/Home/HomePage.tsx";
+import TutorialPage from "./pages/Tutorial/TutorialPage.tsx";
 import Inscription from "./pages/Inscription/Inscription.tsx";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.tsx";
 import Login from './pages/Login/Login.tsx';
@@ -21,8 +21,8 @@ const router = createBrowserRouter([
 				element: <LandingPage />,
 			},
 			{
-				path: "/homepage",
-				element: <HomePage />,
+				path: "/tutorial",
+				element: <TutorialPage />,
 			},
 			{
 				path: "/inscription",
