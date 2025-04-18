@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import resetPasswordPic from '../../assets/reset-password.png';
 import logo from '../../assets/logo.png';
 import { useState } from 'react';
@@ -12,14 +12,53 @@ const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const handleSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();
 
     const form = evt.target;
     const formData = new FormData(form as HTMLFormElement);
-    const formJson = Object.fromEntries(formData.entries()) as { password: string };
+    const formJson = Object.fromEntries(formData.entries()) as { password: string; confirmPassword: string };
 
+    if (formJson.password !== formJson.confirmPassword) {
+      setError({ type: 'error', text: 'Les mots de passe ne correspondent pas.' });
+      return;
+    }
+
+    try {
+      const token = searchParams.get('token');
+
+      if (!token) {
+        setError({ type: 'error', text: 'Token de réinitialisation manquant.' });
+        return;
+      };
+
+      const { data } = await resetPassword({
+        variables: { token, newPassword: formJson.password },
+      });
+
+      if (data?.resetPassword) {
+        setMessage({
+          type: "success",
+          text: "Mot de passe réinitialisé avec succès ! Redirection...",
+        });
+        setTimeout(() => {
+          navigate("/login");
+        }, 4000);
+      }
+    } catch (error: any) {
+      const code = error?.graphQLErrors?.[0]?.extensions?.code;
+
+      switch (code) {
+        case 'TOKEN_NOT_FOUND':
+          setError({ type: 'error', text: 'Token invalide ou expiré.' });
+          break;
+        default:
+          setError({ type: 'error', text: 'Une erreur est survenue. Veuillez réessayer.' });
+          break;
+      }
+    }
 
   };
 
@@ -60,9 +99,17 @@ const ResetPassword = () => {
             <input
               className="w-full outline-none text-gray-800 bg-transparent pl-2"
               name="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Nouveau mot de passe"
             />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-sm text-[#706EEB]"
+            >
+              {showPassword ? "Cacher" : "Afficher"}
+            </button>
           </div>
 
           <div className="border border-gray-300 rounded-[25px] px-3 py-2 flex items-center justify-between w-full">
@@ -70,9 +117,17 @@ const ResetPassword = () => {
             <input
               className="w-full outline-none text-gray-800 bg-transparent pl-2"
               name="confirmPassword"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirmez votre nouveau mot de passe"
             />
+
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="text-sm text-[#706EEB]"
+            >
+              {showConfirmPassword ? "Cacher" : "Afficher"}
+            </button>
           </div>
 
           <button
@@ -84,13 +139,35 @@ const ResetPassword = () => {
         </form>
 
         {message && (
-          <div className="w-full text-center text-green-600 font-medium">
+          <div className="w-full text-center text-green-600 font-medium mt-6">
+            {message.type === "success" && (
+              <svg
+                className="mr-2 size-5 animate-spin text-green-600"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 11-8 8h4z"
+                ></path>
+              </svg>
+            )}
             {message.text}
           </div>
         )}
 
         {error && (
-          <div className="w-full text-center text-red-500 font-medium">
+          <div className="w-full text-center text-red-500 font-medium mt-6">
             {error.text}
           </div>
         )}

@@ -13,6 +13,7 @@ services:
       TOKEN_SECRET_KEY: ${TOKEN_SECRET_KEY}
       GMAIL_USERNAME: ${GMAIL_USERNAME}
       GMAIL_PASSWORD: ${GMAIL_PASSWORD}
+      GATEWAY_PORT: ${GATEWAY_PORT}
 
   frontend:
     container_name: cityguide_frontend
