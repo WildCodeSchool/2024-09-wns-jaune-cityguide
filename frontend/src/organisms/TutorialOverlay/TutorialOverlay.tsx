@@ -5,7 +5,8 @@ type Step = {
   selector: string;
   title: string;
   description: string;
-  tooltipOffset?: number;
+  tooltipOffsetHeight?: number;
+  tooltipOffsetWidth?: number;
 };
 
 type TutorialOverlayProps = {
@@ -29,7 +30,7 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
   useEffect(() => {
     const tryFindElement = () => {
       const el = document.querySelector(step.selector) as HTMLElement;
-      const scrollContainer = document.querySelector(".home-container") as HTMLElement;
+      const scrollContainer = document.querySelector(".tutorial-container") as HTMLElement;
 
       if (el && scrollContainer) {
         // Scroll into view si besoin
@@ -69,7 +70,8 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
   // Position du tooltip : dessous si possible, sinon au-dessus
   const tooltipHeight = 140;
   const placeAbove = window.innerHeight - (targetPos.top - window.scrollY) < tooltipHeight;
-  const tooltipOffset = step.tooltipOffset ?? 0;
+  const tooltipOffsetHeight = step.tooltipOffsetHeight ?? 0;
+  const tooltipOffsetWidth = step.tooltipOffsetWidth ?? 0;
 
   return (
     <>
@@ -89,9 +91,9 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
         className="tooltip-box"
         style={{
           top: placeAbove
-          ? targetPos.top - tooltipHeight - 10 + tooltipOffset
-          : targetPos.top + targetPos.height + 10 + tooltipOffset,
-          left: targetPos.left,
+          ? targetPos.top - tooltipHeight - 10 + tooltipOffsetHeight
+          : targetPos.top + targetPos.height + 10 + tooltipOffsetHeight,
+          left: targetPos.left + tooltipOffsetWidth,
         }}
       >
         <h3 className="font-bold mb-2">{step.title}</h3>
