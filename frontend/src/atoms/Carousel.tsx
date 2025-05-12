@@ -38,7 +38,6 @@ export function Carousel() {
 						alt={selectedInterestPoint?.name}
 						className="w-full h-full object-cover"
 					/>
-
 					{(selectedInterestPoint?.pictures?.length ?? 0) > 1 && (
 						<>
 							<button
