@@ -4,10 +4,14 @@ import "./index.css";
 import { App } from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import HomePage from "./pages/Home/HomePage.tsx";
+import TutorialPage from "./pages/Tutorial/TutorialPage.tsx";
 import Inscription from "./pages/Inscription/Inscription.tsx";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.tsx";
 import Login from './pages/Login/Login.tsx';
+import LandingPage from "./pages/LandingPage/LandingPage.tsx";
+import MapPage from "./pages/Map/MapPage.tsx";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.tsx";
+import ResetPassword from "./pages/ResetPassword/ResetPassword.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -16,20 +20,36 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "/",
-				element: <HomePage />,
+				element: <LandingPage />,
+			},
+			{
+				path: "/tutorial",
+				element: <TutorialPage />,
 			},
 			{
 				path: "/inscription",
 				element: <Inscription />,
 			},
 			{
+				path: "/map",
+				element: <MapPage />,
+			},
+			{
 				path: "/dashboard",
 				element: <AdminDashboard userRole={"superAdmin"} />, // Une fois le role mis dans le contexte il faudra passer la props à ce composant
 			},
-      {
-        path: "/login",
-        element: <Login />,
-      },
+			{
+				path: "/login",
+				element: <Login />,
+			},
+			{
+				path: "/forgotPassword",
+				element: <ForgotPassword />
+			},
+			{
+				path: "/resetPassword",
+				element: <ResetPassword />
+			}
 		],
 	},
 ]);
@@ -37,6 +57,7 @@ const router = createBrowserRouter([
 export const client = new ApolloClient({
 	uri: `http://localhost:${import.meta.env.VITE_GATEWAY_PORT}/api`,
 	cache: new InMemoryCache(),
+	credentials: "include",
 });
 
 createRoot(document.getElementById("root")!).render(

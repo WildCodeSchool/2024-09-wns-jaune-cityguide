@@ -18,6 +18,12 @@ export const LOGIN = gql`
   }
 `;
 
+export const LOGOUT = gql`
+  mutation Mutation {
+  logoutUser
+}
+`;
+
 
 export const FORGOT_PASSWORD = gql`
   mutation ForgotPassword($email: String!) {
@@ -135,10 +141,5 @@ query GetInterestPointsByCity($cityId: String!) {
 
 export const REGISTER_USER = gql`
   mutation RegisterUser($data: NewUserInput!) {
-    registerUser(data: $data) {
-      firstname
-      lastname
-      email
-      hashedPassword
-    }
+    registerUser(data: $data)
 }`

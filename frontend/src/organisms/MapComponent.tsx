@@ -77,7 +77,7 @@ export default function MapComponent({
 	}, [selectedCity, interestPointsByCity]);
 
 	return (
-		<div className="w-full h-[800px] z-0">
+		<div className="w-full h-screen z-0">
 			<MapContainer
 				center={mapCenter}
 				zoom={13}
@@ -99,10 +99,17 @@ export default function MapComponent({
 						}}
 					>
 						<Popup>
-							<div className="text-center gap-0.5">
-								<h2 className="font-bold text-lg">{point.name}</h2>
-								<p className="text-sm text-gray-600">{point.category.name}</p>
-								<p className="text-md text-gray-600">{point.address}</p>
+							<div className="p-2 space-y-1 text-sm">
+								<div className="font-bold text-gray-800 text-base">
+									{point.name}
+								</div>
+								<hr />
+								<div className="text-gray-500 text-xs">
+									{point.category.name}
+								</div>
+								<div className="text-gray-700 text-sm">
+									📍&nbsp;{point.address}
+								</div>
 							</div>
 						</Popup>
 					</Marker>

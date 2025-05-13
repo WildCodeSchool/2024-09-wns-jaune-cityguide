@@ -140,7 +140,7 @@
 		"city": "Toulouse"
 	},
 	{
-		"name": "Jardin des Plantes",
+		"name": "Jardin des plantes de Toulouse",
 		"description": "Un magnifique jardin botanique en plein cœur de la ville.",
 		"address": "Allée Jules Guesde, 31400 Toulouse",
 		"latitude": 43.5961,
@@ -200,7 +200,7 @@
 		"city": "Marseille"
 	},
 	{
-		"name": "Jardin Public de Bordeaux",
+		"name": "Jardin public de Bordeaux",
 		"description": "Un magnifique parc urbain parfait pour se détendre.",
 		"address": "Cours de Verdun, 33000 Bordeaux",
 		"latitude": 44.8497,
@@ -271,7 +271,7 @@
 		"city": "Montpellier"
 	},
 	{
-		"name": "Jardin des Plantes",
+		"name": "Jardin des Plantes de Montpellier",
 		"description": "Un des plus anciens jardins botaniques de France.",
 		"address": "Boulevard Henri IV, 34000 Montpellier",
 		"latitude": 43.614,
@@ -322,7 +322,7 @@
 		"city": "Brest"
 	},
 	{
-		"name": "Port de Commerce",
+		"name": "Port de commerce",
 		"description": "Zone animée avec bars, restaurants et vue sur les bateaux.",
 		"address": "Quai de la Douane, 29200 Brest",
 		"latitude": 48.3841,
@@ -371,5 +371,55 @@
 		"link_url": "https://www.musee-matisse-nice.org/",
 		"category": "Musées",
 		"city": "Nice"
+	},
+	{
+		"name": "La capitainerie de Bechir",
+		"description": "Capitainerie située sur le canal du Midi, offrant des services d’accueil pour les plaisanciers à Toulouse.",
+		"address": "7 Port Saint-Sauveur, 31400 Toulouse",
+		"latitude": 43.5991,
+		"longitude": 1.4575,
+		"link_url": "http://www.la-capitainerie.com/",
+		"category": "Lieux insolites",
+		"city": "Toulouse"
+	},
+	{
+		"name": "Cathédrale La Major",
+		"description": "Cathédrale emblématique de style romano-byzantin, située entre le Vieux-Port et le quartier de la Joliette.",
+		"address": "Place de la Major, 13002 Marseille",
+		"latitude": 43.2994,
+		"longitude": 5.3619,
+		"link_url": "https://www.marseille-tourisme.com/offres/cathedrale-la-major-marseille-2eme-fr-2805488/",
+		"category": "Patrimoine",
+		"city": "Marseille"
+	},
+	{
+		"name": "Le Panthéon",
+		"description": "Monument emblématique situé dans le Quartier Latin, abritant les tombes de nombreuses personnalités françaises.",
+		"address": "Place du Panthéon, 75005 Paris",
+		"latitude": 48.8462,
+		"longitude": 2.3458,
+		"link_url": "https://www.paris-pantheon.fr/",
+		"category": "Patrimoine",
+		"city": "Paris"
+	},
+	{
+		"name": "Tour Montparnasse",
+		"description": "Gratte-ciel parisien avec une vue panoramique sur toute la ville depuis sa terrasse.",
+		"address": "33 Avenue du Maine, 75015 Paris",
+		"latitude": 48.8422,
+		"longitude": 2.3215,
+		"link_url": "https://www.tourmontparnasse56.com/",
+		"category": "Lieux insolites",
+		"city": "Paris"
+	},
+	{
+		"name": "The Bombardier",
+		"description": "Pub anglais chaleureux situé en face du Panthéon, célèbre pour ses bières artisanales et son ambiance conviviale.",
+		"address": "2 Place du Panthéon, 75005 Paris",
+		"latitude": 48.8464,
+		"longitude": 2.3453,
+		"link_url": "https://www.thebombardier.fr/",
+		"category": "Bars et Cafés",
+		"city": "Paris"
 	}
 ]
