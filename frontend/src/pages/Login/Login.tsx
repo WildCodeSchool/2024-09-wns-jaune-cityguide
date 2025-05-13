@@ -7,13 +7,17 @@ import {
 	type UserInput,
 } from "../../libs/graphql/generated/graphql-types";
 import { useUserStore } from "../../store/userStore";
+import { useCitiesStore } from "../../store/citiesStore";
+import { useInterestPointsStore } from "../../store/interestPointsStore";
 import background_form from "../../assets/background_form.png";
 
 const Login = () => {
 	const [login] = useLoginUserMutation();
+	const { setSelectedCity } = useCitiesStore();
+	const { fetchInterestPointsByCity } = useInterestPointsStore();
 	const navigate = useNavigate();
 	const [message, setMessage] = useState<{ type: string; text: string } | null>(
-		null
+		null,
 	);
 	const setUser = useUserStore((state) => state.setUser);
 
@@ -46,12 +50,15 @@ const Login = () => {
 					role: parsed.role,
 				});
 
+				setSelectedCity(parsed.city);
+				fetchInterestPointsByCity(parsed.city.id.toString());
+
 				setMessage({
 					type: "success",
 					text: "Connexion réussie ! Redirection...",
 				});
 				setTimeout(() => {
-					navigate("/");
+					navigate("/map");
 				}, 2000);
 			}
 		} catch (error: any) {
@@ -142,14 +149,18 @@ const Login = () => {
 						</div>
 
 						<div className="text-xs mb-1 ml-auto text-end">
-							<Link to={"/forgotPassword"} className="text-[#B0AFE4] hover:text-blue-800">
+							<Link
+								to={"/forgotPassword"}
+								className="text-[#B0AFE4] hover:text-blue-800"
+							>
 								Mot de passe oublié ?
 							</Link>
 						</div>
 
 						<button
-							className={`w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] ${message ? "mt-0" : "mt-5"
-								}`}
+							className={`w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] ${
+								message ? "mt-0" : "mt-5"
+							}`}
 							type="submit"
 							style={{ marginBottom: message ? "0" : "20px" }}
 						>
@@ -158,8 +169,9 @@ const Login = () => {
 
 						{message && (
 							<div
-								className={`mt-1 text-sm text-center flex items-center justify-center gap-2 ${message.type === "error" ? "text-red-500" : "text-green-600"
-									}`}
+								className={`mt-1 text-sm text-center flex items-center justify-center gap-2 ${
+									message.type === "error" ? "text-red-500" : "text-green-600"
+								}`}
 							>
 								{message.type === "success" && (
 									<svg
