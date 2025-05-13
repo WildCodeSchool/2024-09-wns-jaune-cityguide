@@ -237,7 +237,7 @@ function Inscription() {
 												? setShowPassword(!showPassword)
 												: setShowConfirmPassword(!showConfirmPassword)
 										}
-										className="text-sm text-gray-500 ml-2"
+										className="text-sm text-gray-500 ml-2 cursor-pointer"
 									>
 										{field === "password"
 											? showPassword

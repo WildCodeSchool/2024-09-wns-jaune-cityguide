@@ -129,23 +129,31 @@ const Login = () => {
 							<button
 								type="button"
 								onClick={() => setShowPassword(!showPassword)}
-								className="text-sm text-gray-500 ml-2"
+								className="text-sm text-gray-500 ml-2 cursor-pointer"
 							>
 								{showPassword ? "Cacher" : "Afficher"}
 							</button>
 						</div>
 
-            <div className="text-xs mb-1 ml-auto text-end">
-              <Link to={"/forgotPassword"} className="text-[#B0AFE4] hover:text-blue-800">
-                Mot de passe oublié ?
-              </Link>
-            </div>
+						<div className="text-xs mb-1 ml-auto text-end">
+							<Link to={"/forgotPassword"} className="text-[#B0AFE4] hover:text-blue-800">
+								Mot de passe oublié ?
+							</Link>
+						</div>
+
+						<button
+							className={`w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] ${message ? "mt-0" : "mt-5"
+								}`}
+							type="submit"
+							style={{marginBottom: message ? "0" : "20px"}}
+						>
+							Me connecter
+						</button>
 
 						{message && (
 							<div
-								className={`mt-1 text-sm text-center flex items-center justify-center gap-2 ${
-									message.type === "error" ? "text-red-500" : "text-green-600"
-								}`}
+								className={`mt-1 text-sm text-center flex items-center justify-center gap-2 ${message.type === "error" ? "text-red-500" : "text-green-600"
+									}`}
 							>
 								{message.type === "success" && (
 									<svg
@@ -172,15 +180,6 @@ const Login = () => {
 								{message.text}
 							</div>
 						)}
-
-						<button
-							className={`w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] ${
-								message ? "mt-0" : "mt-5"
-							}`}
-							type="submit"
-						>
-							Me connecter
-						</button>
 					</form>
 				</div>
 			</div>
