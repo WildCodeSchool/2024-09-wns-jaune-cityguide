@@ -129,7 +129,7 @@ export default function EditInterestPointModal({ interestPoint, onClose }: EditI
               />
             </div>
             {/* Adresse + URL lien */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="w-full sm:w-2/3 mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
                 <input
