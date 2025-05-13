@@ -2,16 +2,28 @@ import "./LandingPage.css";
 import { useNavigate } from "react-router-dom";
 import Explorez from "../../assets/explorez.png";
 import Fonctionnement from "../../assets/fonctionnement.png";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_STATS = gql`
+  query GetStats {
+    getUserCount
+    getCityCount
+    getPlaceCount
+  }
+`;
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { data, loading, error } = useQuery(GET_STATS);
 
   return (
     <div className="landing-page flex flex-col grow overflow-scroll">
       <div className="container mx-auto px-6 py-20">
         <div className="flex flex-col lg:flex-row items-center gap-5 w-full">
           <div className="flex-1 text-center lg:text-left lg:w-1/2">
-            <h1 className="text-6xl font-bold text-[#706eeb] lg:text-7xl">CityGuide !</h1>
+            <h1 className="text-6xl font-bold text-[#706eeb] lg:text-7xl">
+              CityGuide !
+            </h1>
             <p className="text-2xl font-bold text-gray-800 lg:text-3xl ml-1">
               Explorez, partagez, découvrez.
             </p>
@@ -44,28 +56,28 @@ export default function LandingPage() {
         <div className="banner mt-20 flex justify-center w-full">
           <div className="w-full flex justify-center items-center">
             <div className="container flex flex-col mx-4 sm:mx-6 md:mx-0">
-              <div className="primary-bg rounded-xl w-full h-auto py-6 flex flex-row justify-between divide-x divide-solid divide-gray-400 bg-blue-100 shadow-md flex-wrap sm:flex-nowrap">
+              <div className="bg-[#B0AFE4] rounded-xl w-full h-auto py-6 flex flex-row justify-between divide-x divide-solid divide-[#706eeb] shadow-md flex-wrap sm:flex-nowrap">
                 <div className="relative flex-1 flex flex-col gap-1 px-2 sm:px-4 text-center">
-                  <p className="text-white text-xl sm:text-3xl lg:text-4xl font-bold">
-                    127
+                  <p className="text-gray-800 text-xl sm:text-3xl lg:text-4xl font-bold">
+                    {loading ? "..." : error ? "Erreur" : data?.getUserCount}
                   </p>
-                  <p className="text-white text-xs sm:text-base font-semibold">
+                  <p className="text-gray-800 text-xs sm:text-base font-semibold">
                     Utilisateurs
                   </p>
                 </div>
                 <div className="relative flex-1 flex flex-col gap-1 px-2 sm:px-4 text-center">
-                  <p className="text-white text-xl sm:text-3xl lg:text-4xl font-bold">
-                    12
+                  <p className="text-gray-800 text-xl sm:text-3xl lg:text-4xl font-bold">
+                    {loading ? "..." : error ? "Erreur" : data?.getCityCount}
                   </p>
-                  <p className="text-white text-xs sm:text-base font-semibold">
+                  <p className="text-gray-800 text-xs sm:text-base font-semibold">
                     Villes
                   </p>
                 </div>
                 <div className="relative flex-1 flex flex-col gap-1 px-2 sm:px-4 text-center">
-                  <p className="text-white text-xl sm:text-3xl lg:text-4xl font-bold">
-                    87
+                  <p className="text-gray-800 text-xl sm:text-3xl lg:text-4xl font-bold">
+                    {loading ? "..." : error ? "Erreur" : data?.getPlaceCount}
                   </p>
-                  <p className="text-white text-xs sm:text-base font-semibold">
+                  <p className="text-gray-800 text-xs sm:text-base font-semibold">
                     Lieux
                   </p>
                 </div>
