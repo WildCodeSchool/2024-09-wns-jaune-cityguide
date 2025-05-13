@@ -24,6 +24,7 @@ const ForgotPassword = () => {
 
       if (data?.forgotPassword) {
         setMessage({ type: "success", text: "Un email de réinitialisation a été envoyé." });
+        setError(null); // Clear any previous error message
       }
     } catch (error: any) {
       const code = error?.graphQLErrors?.[0]?.extensions?.code;
@@ -34,6 +35,7 @@ const ForgotPassword = () => {
             type: "error",
             text: "Le compte avec cet email n'existe pas.",
           });
+          setMessage(null); // Clear any previous success message
           break;
 
         default:

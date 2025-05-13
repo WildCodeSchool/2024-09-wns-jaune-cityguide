@@ -200,68 +200,68 @@ function Inscription() {
           </div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-5 flex flex-col items-center"
-        >
-          {fields.map((field) => (
-            <div key={field} className="w-full">
-              <div className="border border-gray-300 rounded-[25px] px-2 py-2 flex items-center justify-between w-full">
-                <input
-                  type={
-                    field === "password"
-                      ? showPassword
-                        ? "text"
-                        : "password"
-                      : field === "confirmPassword"
-                      ? showConfirmPassword
-                        ? "text"
-                        : "password"
-                      : "text"
-                  }
-                  name={field}
-                  placeholder={
-                    field === "password"
-                      ? "Mot de passe"
-                      : field === "confirmPassword"
-                      ? "Confirmer mot de passe"
-                      : field === "firstname"
-                      ? "Prénom"
-                      : field === "lastname"
-                      ? "Nom"
-                      : field.charAt(0).toUpperCase() + field.slice(1)
-                  }
-                  value={formData[field]}
-                  onChange={handleChange}
-                  className="w-full outline-none text-gray-800 bg-transparent"
-                />
-                {(field === "password" || field === "confirmPassword") && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      field === "password"
-                        ? setShowPassword(!showPassword)
-                        : setShowConfirmPassword(!showConfirmPassword)
-                    }
-                    className="text-sm text-gray-500 ml-2"
-                  >
-                    {field === "password"
-                      ? showPassword
-                        ? "Cacher"
-                        : "Afficher"
-                      : showConfirmPassword
-                      ? "Cacher"
-                      : "Afficher"}
-                  </button>
-                )}
-              </div>
-              {errors[field] && (
-                <p className="text-red-500 text-xs mt-1 ml-2">
-                  {errors[field]}
-                </p>
-              )}
-            </div>
-          ))}
+				<form
+					onSubmit={handleSubmit}
+					className="space-y-5 flex flex-col items-center"
+				>
+					{fields.map((field) => (
+						<div key={field} className="w-full">
+							<div className="border border-gray-300 rounded-[25px] px-2 py-2 flex items-center justify-between w-full">
+								<input
+									type={
+										field === "password"
+											? showPassword
+												? "text"
+												: "password"
+											: field === "confirmPassword"
+												? showConfirmPassword
+													? "text"
+													: "password"
+												: "text"
+									}
+									name={field}
+									placeholder={
+										field === "password"
+											? "Mot de passe"
+											: field === "confirmPassword"
+												? "Confirmer mot de passe"
+												: field === "firstname"
+													? "Prénom"
+													: field === "lastname"
+														? "Nom"
+														: field.charAt(0).toUpperCase() + field.slice(1)
+									}
+									value={formData[field]}
+									onChange={handleChange}
+									className="w-full outline-none text-gray-800 bg-transparent"
+								/>
+								{(field === "password" || field === "confirmPassword") && (
+									<button
+										type="button"
+										onClick={() =>
+											field === "password"
+												? setShowPassword(!showPassword)
+												: setShowConfirmPassword(!showConfirmPassword)
+										}
+										className="text-sm text-gray-500 ml-2 cursor-pointer"
+									>
+										{field === "password"
+											? showPassword
+												? "Cacher"
+												: "Afficher"
+											: showConfirmPassword
+												? "Cacher"
+												: "Afficher"}
+									</button>
+								)}
+							</div>
+							{errors[field] && (
+								<p className="text-red-500 text-xs mt-1 ml-2">
+									{errors[field]}
+								</p>
+							)}
+						</div>
+					))}
 
           <div className="w-full">
             <div className="border border-gray-300 rounded-[25px] px-3 py-2">

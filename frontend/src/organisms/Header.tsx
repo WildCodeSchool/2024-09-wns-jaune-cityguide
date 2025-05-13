@@ -9,12 +9,24 @@ export default function Navbar() {
   const [logout] = useMutationMutation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
   const handleLogout = async () => {
     try {
       await logout();
       clearUser();
-      navigate("/");
+      setPopupMessage([
+        "Déconnexion réussie ! 👋",
+        "Vous allez être redirigé(e) vers la page d'accueil.",
+      ]);
+
+      setShowPopup(true);
+
+      setTimeout(() => {
+        setShowPopup(false);
+        navigate("/");
+      }, 3000);
     } catch (error) {
       console.log("Error logging out:", error);
     }
@@ -300,6 +312,35 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+
+      {showPopup && (
+        <div className="fixed top-20 right-3 max-w-[350px] w-auto mt-5 bg-white border-3 border-[#706eeb] px-6 py-4 rounded-xl shadow-lg flex items-center justify-start space-x-3 transition-all ease-in-out duration-300 transform opacity-100 scale-100">
+          <div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+          <div className="text-sm text-[#706eeb] font-medium">
+            {popupMessage.map((line, index) => (
+              <p key={index} className="mb-2">
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }
