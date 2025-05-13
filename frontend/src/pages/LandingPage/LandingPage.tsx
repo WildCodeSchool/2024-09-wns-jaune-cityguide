@@ -2,15 +2,10 @@ import "./LandingPage.css";
 import { useNavigate } from "react-router-dom";
 import Explorez from "../../assets/explorez.png";
 import Fonctionnement from "../../assets/fonctionnement.png";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import {GET_STATS} from "../../libs/graphql/operations"
 
-const GET_STATS = gql`
-  query GetStats {
-    getUserCount
-    getCityCount
-    getPlaceCount
-  }
-`;
+
 
 export default function LandingPage() {
   const navigate = useNavigate();
