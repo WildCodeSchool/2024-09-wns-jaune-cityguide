@@ -7,12 +7,13 @@ import {
 	type UserInput,
 } from "../../libs/graphql/generated/graphql-types";
 import { useUserStore } from "../../store/userStore";
+import background_form from "../../assets/background_form.png";
 
 const Login = () => {
 	const [login] = useLoginUserMutation();
 	const navigate = useNavigate();
 	const [message, setMessage] = useState<{ type: string; text: string } | null>(
-		null,
+		null
 	);
 	const setUser = useUserStore((state) => state.setUser);
 
@@ -79,24 +80,29 @@ const Login = () => {
 
 	return (
 		<>
-			<div className="flex items-center justify-center min-h-[80vh] secondary-bg">
-				<div className="bg-white p-6 rounded-2xl shadow-lg w-80 lg:w-[60vh] h-140">
-					<div className="flex justify-center -mt-12 lg:-mt-16">
-						<Link to={"/"}>
-							<img
-								className="w-16 h-16 rounded-full border-4 border-white lg:w-22 lg:h-22"
-								src={logo}
-								alt="City Guide"
-							/>
-						</Link>
-					</div>
+			<div
+				className="flex flex-col items-center justify-center min-h-[80vh] bg-[#B0AFE4]"
+				style={{
+					backgroundImage: `url(${background_form})`,
+				}}
+			>
+				<div className="flex justify-center z-2 mb-[-2rem]">
+					<Link to={"/"}>
+						<img
+							className="w-16 h-16 rounded-full border-4 border-white lg:w-22 lg:h-22"
+							src={logo}
+							alt="City Guide"
+						/>
+					</Link>
+				</div>
+				<div className="bg-white p-6 rounded-2xl shadow-lg w-80 lg:w-[60vh] max-h-[75vh] overflow-y-auto z-1">
 					<h2 className="text-center text-2xl font-semibold text-[#706EEB] mt-1.5 mb-6">
 						Connexion à votre compte
 					</h2>
 
 					<div className="flex flex-col justify-center items-center mb-8">
 						<img
-							className="w-32 h-32 rounded-full lg:w-44 lg:h-44"
+							className="w-30 h-30 rounded-full lg:w-42 lg:h-42"
 							src={connexion}
 							alt="City Guide connexion"
 						/>
@@ -129,23 +135,31 @@ const Login = () => {
 							<button
 								type="button"
 								onClick={() => setShowPassword(!showPassword)}
-								className="text-sm text-gray-500 ml-2"
+								className="text-sm text-gray-500 ml-2 cursor-pointer"
 							>
 								{showPassword ? "Cacher" : "Afficher"}
 							</button>
 						</div>
 
-            <div className="text-xs mb-1 ml-auto text-end">
-              <Link to={"/forgotPassword"} className="text-[#B0AFE4] hover:text-blue-800">
-                Mot de passe oublié ?
-              </Link>
-            </div>
+						<div className="text-xs mb-1 ml-auto text-end">
+							<Link to={"/forgotPassword"} className="text-[#B0AFE4] hover:text-blue-800">
+								Mot de passe oublié ?
+							</Link>
+						</div>
+
+						<button
+							className={`w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] ${message ? "mt-0" : "mt-5"
+								}`}
+							type="submit"
+							style={{ marginBottom: message ? "0" : "20px" }}
+						>
+							Me connecter
+						</button>
 
 						{message && (
 							<div
-								className={`mt-1 text-sm text-center flex items-center justify-center gap-2 ${
-									message.type === "error" ? "text-red-500" : "text-green-600"
-								}`}
+								className={`mt-1 text-sm text-center flex items-center justify-center gap-2 ${message.type === "error" ? "text-red-500" : "text-green-600"
+									}`}
 							>
 								{message.type === "success" && (
 									<svg
@@ -172,15 +186,6 @@ const Login = () => {
 								{message.text}
 							</div>
 						)}
-
-						<button
-							className={`w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] ${
-								message ? "mt-0" : "mt-5"
-							}`}
-							type="submit"
-						>
-							Me connecter
-						</button>
 					</form>
 				</div>
 			</div>
