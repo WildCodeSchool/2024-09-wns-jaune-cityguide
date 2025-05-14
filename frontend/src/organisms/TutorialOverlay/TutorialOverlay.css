@@ -17,7 +17,7 @@
   }
 
   .tooltip-box {
-    max-width: 300px;
+    max-width: 315px;
     width: calc(100vw - 2rem);
     position: absolute;
     background: white;
