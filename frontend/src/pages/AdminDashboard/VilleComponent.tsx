@@ -100,21 +100,21 @@ export default function VilleComponent() {
         <div className="flex flex-row mb-8 gap-8 w-full">
           {/* Colonne gauche : Barre de recherche */}
           <div className="w-1/2 flex flex-col items-center justify-center">
-            <div className="text-[#706eeb] text-xl px-4 py-2 mb-4">
+            <div className="text-gray-800 text-xl px-4 py-2 mb-4">
               Rechercher une ville :
             </div>
             <div className="bg-[#706eeb] rounded-full w-1/2 max-w-md flex items-center justify-center p-1">
               <div className="relative w-full">
                 <input
                   type="text"
-                  className="rounded-full p-3 w-full bg-white text-gray-800 text-xl placeholder-[#706eeb] border-2 border-white "
+                  className="rounded-full p-3 w-full bg-white text-gray-800 text-lg placeholder-gray-800 border-1 border-white "
                   placeholder="Nom de la ville"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 {searchQuery && (
                   <button
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800 font-bold text-xl"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800 font-bold text-lg"
                     onClick={() => setSearchQuery("")}
                   >
                     X
@@ -126,9 +126,11 @@ export default function VilleComponent() {
 
           {/* Colonne droite : Statistiques */}
           <div className="w-1/2 flex items-center justify-center">
-            <div className="border-2 border-[#706eeb] text-[#706eeb] rounded-xl px-8 py-6 text-center w-60">
-              <div className="text-xl mb-2">Nombre total de villes : </div>
-              <div className="text-6xl font-bold">{totalCity}</div>
+            <div className="border-4 border-[#706eeb] text-[#706eeb] rounded-xl px-8 py-6 text-center w-70">
+              <div className="text-xl mb-2 text-gray-800 ">
+                Nombre total de villes :
+              </div>
+              <div className="text-3xl font-bold">{totalCity}</div>
             </div>
           </div>
         </div>
@@ -136,8 +138,8 @@ export default function VilleComponent() {
 
       {/* Bouton Ajouter */}
       <div className="flex w-1/2 justify-start p-6 ">
-        <button className="bg-[#706eeb] text-white rounded-full p-3 m-6 text-lg flex items-center w-1/3 hover:cursor-pointer">
-          + Ajouter d'une ville
+        <button className="bg-[#706eeb] text-white rounded-full px-4 py-2 text-lg flex items-center w-80 hover:cursor-pointer hover:text-gray-800">
+          Ajouter d'une ville
         </button>
       </div>
 
@@ -146,12 +148,11 @@ export default function VilleComponent() {
         {cities.map((city) => (
           <div
             key={city.id}
-            className="w-40 h-36 border border-[#706eeb] rounded-2xl flex items-center justify-center cursor-pointer bg-white
+            className="w-38 h-32 border border-[#706eeb] rounded-2xl flex items-center justify-center cursor-pointer bg-white
                     transform hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out"
             onClick={() => setSelectedCity(city)}
           >
             <div className="text-center p-2">
-              <div className="w-12 h-12 rounded-full bg-gray-200 mx-auto mb-2"></div>
               <div className="text-lg font-medium text-gray-800">
                 {city.name}
               </div>
@@ -160,44 +161,50 @@ export default function VilleComponent() {
         ))}
       </div>
 
-      {/* Section détaillée de l'utilisateur sélectionné */}
-      <div className="bg-indigo-100 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <div className="bg-white rounded-full px-4 py-2 shadow-sm">
+      {/* Section détaillée de la ville sélectionnée */}
+      <div className="bg-[#b0afe4] p-6">
+        <div className="flex items-center mb-4">
+          <div className="bg-white w-80 rounded-full px-4 py-2 text-lg">
             Ville sélectionnée : {selectedCity.name}
           </div>
-          <button className="bg-black text-white rounded-full px-6 py-2">
-            Sauvegarder
-          </button>
         </div>
 
-        <div className="bg-white rounded-lg p-6 shadow-sm">
-          <div className="flex">
-            {/* Informations ville */}
-            <div className="flex-1 border-r border-gray-200 pr-4">
-              <div className="mb-4">
-                <div className="text-sm mb-1">Nom de l'utilisateur :</div>
-                <input
-                  type="text"
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                  value={selectedCity.name}
-                  readOnly
-                />
-              </div>
-
-              <div className="mb-4">
-                <div className="text-sm mb-1">Ajouter un admin de ville :</div>
-                <input
-                  type="email"
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                  value={""}
-                  readOnly
-                />
-              </div>
+        {/* Informations ville */}
+        <div className="flex flex-row bg-white rounded-lg mx-60 my-12 p-12">
+          <div className="flex flex-col w-1/3 gap-8">
+            <div className=" w-full">
+              <div className="text-lg mb-1">Nom de la ville :</div>
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded px-3 py-2"
+                value={selectedCity.name}
+                readOnly
+              />
             </div>
+
+            <div className=" w-full">
+              <div className="text-lg mb-1">Ajouter un admin de ville :</div>
+              <input
+                type="email"
+                className="w-full border border-gray-300 rounded px-3 py-2"
+                value={""}
+                readOnly
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-row w-2/3 justify-center items-center gap-8 p-3 ">
+            <button className="bg-[#706eeb] text-white rounded-full px-4 py-2 text-lg flex justify-center items-center w-45 h-12 hover:cursor-pointer hover:text-gray-800">
+              Sauvegarder
+            </button>
+
+            <button className="bg-[#b0afe4] text-white rounded-full px-4 py-2 text-lg flex justify-center items-center w-45 h-12 hover:cursor-pointer hover:text-gray-800">
+              Supprimer
+            </button>
           </div>
         </div>
       </div>
+      <div className="h-10 bg-white"></div>
     </div>
   );
 }
