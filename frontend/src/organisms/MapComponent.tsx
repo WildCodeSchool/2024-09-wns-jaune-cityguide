@@ -51,8 +51,7 @@ export default function MapComponent({
 			if (selectedInterestPoint) {
 				map.flyTo(
 					[selectedInterestPoint.latitude, selectedInterestPoint.longitude],
-					//map.getZoom(),
-					10,
+					map.getZoom(),
 					{
 						duration: 2,
 						animate: true,
