@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// import VilleComponent from './VilleComponent';  // Composant bidon en attendant le vrai composant Ville
+import VilleComponent from './VilleComponent';
 // import CategorieComponent from './CategorieComponent';  // Composant bidon en attendant le vrai composant Catégorie
 // import UtilisateurComponent from './UtilisateurComponent';  // Composant bidon en attendant le vrai composant Utilisateur
 
@@ -53,11 +53,11 @@ export default function Dashboard({ userRole }: { userRole: string }) {
       </div>
 
       {/* Affichage conditionnel des composants */}
-      {/* <div className="mt-4">
+      <div className="mt-4">
         {activeComponent === 'ville' && <VilleComponent />}
-        {activeComponent === 'categorie' && <CategorieComponent />}
-        {activeComponent === 'utilisateur' && <UtilisateurComponent />}
-      </div> */}
+        {/* {activeComponent === 'categorie' && <CategorieComponent />}
+        {activeComponent === 'utilisateur' && <UtilisateurComponent />} */}
+      </div>
     </div>
   );
 }
