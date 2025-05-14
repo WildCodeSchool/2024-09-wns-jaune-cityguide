@@ -45,10 +45,11 @@ export default function MapComponent({
 	const { interestPointsByCity, setSelectedInterestPoint } =
 		useInterestPointsStore();
 
-	const [mapCenter, setMapCenter] = useState<[number, number]>([
-		48.8566,
-		2.3522, // Paris coordinates by default
-	]);
+	const [mapCenter, setMapCenter] = useState<[number, number]>(
+		selectedCity
+			? [selectedCity.latitude, selectedCity.longitude]
+			: [48.8566, 2.3522], // Paris coordinates by default
+	);
 
 	function FlyToCity({ coords }: { coords: [number, number] }) {
 		const map = useMap();

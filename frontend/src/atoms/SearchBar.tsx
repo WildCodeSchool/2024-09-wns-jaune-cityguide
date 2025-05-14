@@ -4,7 +4,7 @@ import { useInterestPointsStore } from "../store/interestPointsStore";
 import type { City } from "../@types/types";
 
 export default function SearchBar() {
-	const { cities, setSelectedCity } = useCitiesStore();
+	const { cities, selectedCity, setSelectedCity } = useCitiesStore();
 	const { fetchInterestPointsByCity } = useInterestPointsStore();
 
 	const [inputText, setInputText] = useState<string>("");
@@ -75,6 +75,12 @@ export default function SearchBar() {
 			});
 		}
 	}, [highlightedIndex]);
+
+	useEffect(() => {
+		if (selectedCity) {
+			setInputText(`${selectedCity.name} (${selectedCity.postalCode})`);
+		}
+	}, [selectedCity]);
 
 	return (
 		<div ref={containerRef} className="relative w-full sm:w-96">
