@@ -49,6 +49,11 @@ export class CityResolver {
     return city;
   }
 
+  @Query(() => Number)
+  async getCityCount(): Promise<number> {
+    return await City.count();
+  }
+
   @Mutation(() => City)
   async createCity(@Arg("data") data: CityInput) {
     let city = new City();
