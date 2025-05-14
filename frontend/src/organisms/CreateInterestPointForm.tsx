@@ -1,0 +1,202 @@
+import { FormEvent, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  useGetCitiesQuery,
+  useCreateInterestPointMutation,
+  useGetCategoriesQuery,
+  type InterestPointInput,
+} from "../libs/graphql/generated/graphql-types";
+
+type Props = {
+  isOpen: boolean;
+  onClose?: () => void;
+};
+
+export default function CreateInterestPointForm({
+  isOpen,
+  onClose,
+}: Props) {
+  const { loading, error, data } = useGetCategoriesQuery();
+  const [createInterestPoint, { data: createdData, loading: submitting, error: createError }] =
+    useCreateInterestPointMutation();
+  const { data: cityData, loading: citiesLoading, error: citiesError } = useGetCitiesQuery();
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (evt: FormEvent) => {
+    evt.preventDefault();
+    const form = evt.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const formJson = Object.fromEntries(formData.entries());
+
+    const formattedData = {
+      ...formJson,
+      latitude: parseFloat(formJson.latitude as string),
+      longitude: parseFloat(formJson.longitude as string),
+    };
+
+    createInterestPoint({
+      variables: {
+        data: formattedData as InterestPointInput,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (!createdData) return;
+    onClose?.();
+    navigate(`/map`); // a check
+  }, [createdData, navigate]);
+
+  if (error || createError) return <>Error!</>;
+  if (loading) return <>Loading...</>;
+  if (!data) return <>We couldn't find anything to display</>;
+
+  return (
+    <aside
+      className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-50 ${isOpen ? "translate-x-0" : "translate-x-full"
+        } rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
+    >
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex justify-between items-start">
+          <h2 className="text-xl font-semibold text-gray-800">Créer un point d’intérêt</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 hover:cursor-pointer"
+            aria-label="Fermer"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Photos</label>
+          <input
+            name="pictures"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
+            placeholder="URL de l'image"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+            <input
+              name="name"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
+              required
+              placeholder="Ex: Tour Eiffel"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+            <select
+              name="category"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
+              required
+            >
+              {data.getCategories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <textarea
+            name="description"
+            rows={3}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
+            placeholder="Brève description du lieu"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+          <input
+            name="address"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
+            required
+            placeholder="Adresse complète"
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
+            <input
+              name="latitude"
+              type="number"
+              step="any"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
+              required
+              placeholder="Ex: 48.8584"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
+            <input
+              name="longitude"
+              type="number"
+              step="any"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
+              required
+              placeholder="Ex: 2.2945"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Ville</label>
+            <select
+              name="city"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
+              required
+            >
+              {cityData?.getCities.map((city) => (
+                <option key={city.id} value={city.id}>
+                  {city.name} ({city.postalCode})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Lien (site officiel)</label>
+            <input
+              name="link_url"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
+              placeholder="https://..."
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center pt-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-100 hover:cursor-pointer"
+          >
+            Annuler
+          </button>
+
+          <button
+            type="submit"
+            className="bg-indigo-600 text-white px-6 py-2 rounded-md text-sm hover:bg-indigo-700 hover:cursor-pointer"
+            disabled={submitting}
+          >
+            {submitting ? "Création en cours..." : "Créer"}
+          </button>
+        </div>
+      </form>
+    </aside>
+  )
+}
