@@ -1,8 +1,51 @@
 import { describe, it, expect, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import {
+	act,
+	fireEvent,
+	render,
+	screen,
+	waitFor,
+} from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { BrowserRouter } from "react-router-dom";
-import Inscription from "./Inscription";
+
+vi.mock("../../store/citiesStore.ts", () => ({
+	useCitiesStore: () => ({
+		cities: [{ id: "1", name: "Paris" }],
+		fetchCities: vi.fn(),
+	}),
+}));
+
+vi.mock("../../store/userStore", () => ({
+	useUserStore: () => ({
+		setUser: vi.fn(),
+	}),
+}));
+
+const mockNavigate = vi.fn();
+vi.mock("react-router-dom", async () => {
+	const actual = await import("react-router-dom");
+	return {
+		...actual,
+		useNavigate: () => mockNavigate,
+	};
+});
+
+const mockValidRegister = vi.fn().mockResolvedValue({
+	data: {
+		registerUser: JSON.stringify({
+			id: "1",
+			firstname: "Alice",
+			email: "alice.dupont@email.com",
+			role: "user",
+		}),
+	},
+});
+vi.mock("../../libs/graphql/generated/graphql-types", () => ({
+	useRegisterUserMutation: () => [
+		mockValidRegister,
+		{ loading: false, error: null },
+	],
+}));
 
 // Useful code snippet to render a component with react-router-dom: https://stackoverflow.com/questions/76754014/reactjs-how-to-unit-test-login-form-in-vitest
 // See also: https://www.webpilot.ai/writeDetail/808ff24c-fa86-43ae-9d2d-d6cd7f40e765?lang=en-US
@@ -15,16 +58,8 @@ const renderRegistrationPage = () => {
 	);
 };
 
-vi.mock("../../store/citiesStore.ts", () => ({
-	useCitiesStore: () => ({
-		cities: [{ id: "1", name: "Paris" }],
-		fetchCities: vi.fn(),
-	}),
-}));
-
-vi.mock("../../libs/graphql/generated/graphql-types.ts", () => ({
-	useRegisterUserMutation: () => [vi.fn().mockResolvedValue({ data: null })],
-}));
+import { BrowserRouter } from "react-router-dom";
+import Inscription from "./Inscription";
 
 describe("Display 'registration form' page", () => {
 	it("renders the registration form and the fields", () => {
@@ -96,3 +131,64 @@ describe("Display errors if the input format is invalid", () => {
 		).toBeInTheDocument();
 	});
 });
+
+describe("Submit valid form without triggering any server error", () => {
+	// Workaround for the issue with useNavigate not being called: https://github.com/testing-library/react-testing-library/issues/1198
+	beforeEach(() => {
+		mockNavigate.mockClear();
+		renderRegistrationPage();
+		vi.useFakeTimers({ shouldAdvanceTime: true });
+	});
+
+	afterEach(() => {
+		vi.runOnlyPendingTimers();
+		vi.useRealTimers();
+	});
+
+	it("should call the registration mutation when the form is valid", async () => {
+		fillValidForm();
+		const submitButton = screen.getByRole("button", { name: "M'inscrire" });
+
+		fireEvent.click(submitButton);
+
+		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
+	});
+	it("should navigate to the map page after successful registration", async () => {
+		fillValidForm();
+		const submitButton = screen.getByRole("button", { name: "M'inscrire" });
+
+		fireEvent.click(submitButton);
+		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
+		await act(() => vi.runAllTimers());
+		await waitFor(() => {
+			expect(mockNavigate).toHaveBeenCalledWith("/map");
+		});
+	});
+});
+
+function fillValidForm() {
+	const firstnameInput = screen.getByPlaceholderText("Prénom");
+	const lastnameInput = screen.getByPlaceholderText("Nom");
+	const emailInput = screen.getByPlaceholderText("Email");
+	const passwordInput = screen.getByPlaceholderText("Mot de passe");
+	const confirmPasswordInput = screen.getByPlaceholderText(
+		"Confirmer mot de passe",
+	);
+
+	fireEvent.change(firstnameInput, {
+		target: { value: "Alice" },
+	});
+	fireEvent.change(lastnameInput, {
+		target: { value: "Dupont" },
+	});
+	fireEvent.change(emailInput, {
+		target: { value: "alice.dupont@email.com" },
+	});
+	fireEvent.change(passwordInput, {
+		target: { value: "password123" },
+	});
+	fireEvent.change(confirmPasswordInput, {
+		target: { value: "password123" },
+	});
+	fireEvent.change(screen.getByRole("combobox"), { target: { value: "1" } });
+}
