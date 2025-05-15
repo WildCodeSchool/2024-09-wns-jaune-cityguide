@@ -3,6 +3,7 @@ import resetPasswordPic from '../../assets/reset-password.png';
 import logo from '../../assets/logo.png';
 import { useState } from 'react';
 import { useResetPasswordMutation } from '../../libs/graphql/generated/graphql-types';
+import './ResetPassword.css'
 
 const ResetPassword = () => {
 
@@ -23,6 +24,7 @@ const ResetPassword = () => {
 
     if (formJson.password !== formJson.confirmPassword) {
       setError({ type: 'error', text: 'Les mots de passe ne correspondent pas.' });
+      setMessage(null);
       return;
     }
 
@@ -43,6 +45,7 @@ const ResetPassword = () => {
           type: "success",
           text: "Mot de passe réinitialisé avec succès ! Redirection...",
         });
+        setError(null);
         setTimeout(() => {
           navigate("/login");
         }, 4000);
@@ -53,9 +56,11 @@ const ResetPassword = () => {
       switch (code) {
         case 'TOKEN_NOT_FOUND':
           setError({ type: 'error', text: 'Token invalide ou expiré.' });
+          setMessage(null);
           break;
         default:
           setError({ type: 'error', text: 'Une erreur est survenue. Veuillez réessayer.' });
+          setMessage(null);
           break;
       }
     }
@@ -106,7 +111,7 @@ const ResetPassword = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="text-sm text-[#706EEB]"
+              className="text-sm text-[#706EEB] cursor-pointer"
             >
               {showPassword ? "Cacher" : "Afficher"}
             </button>
@@ -124,7 +129,7 @@ const ResetPassword = () => {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="text-sm text-[#706EEB]"
+              className="text-sm text-[#706EEB] cursor-pointer"
             >
               {showConfirmPassword ? "Cacher" : "Afficher"}
             </button>
@@ -139,7 +144,7 @@ const ResetPassword = () => {
         </form>
 
         {message && (
-          <div className="w-full text-center text-green-600 font-medium mt-6">
+          <div className="w-full text-center text-green-600 font-medium mt-6 success-message">
             {message.type === "success" && (
               <svg
                 className="mr-2 size-5 animate-spin text-green-600"

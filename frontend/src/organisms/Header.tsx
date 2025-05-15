@@ -2,46 +2,61 @@ import { useState } from "react";
 import logo from "../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
+import { useMenuStore } from '../store/menuStore';
 import { useMutationMutation } from "../libs/graphql/generated/graphql-types";
 
 export default function Navbar() {
   const { user, clearUser } = useUserStore();
   const [logout] = useMutationMutation();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(true);
-
+  const isOpen = useMenuStore((state) => state.isOpen);
+  const setIsOpen = useMenuStore((state) => state.setIsOpen);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
   const handleLogout = async () => {
     try {
       await logout();
       clearUser();
-      navigate("/");
+      setPopupMessage([
+        "Déconnexion réussie ! 👋",
+        "Vous allez être redirigé(e) vers la page d'accueil.",
+      ]);
+
+      setShowPopup(true);
+
+      setTimeout(() => {
+        setShowPopup(false);
+        navigate("/");
+      }, 3000);
     } catch (error) {
       console.log("Error logging out:", error);
     }
   };
 
-	return (
-		<>
-			<nav className="nav-container primary-bg z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between h-auto sm:h-20">
-				<div className="desktop-nav hidden sm:flex items-center justify-between h-full w-full p-14">
-					{/* Logo */}
-					<div className="flex justify-center -mt-12 lg:mt-12">
-						<a href="/" className="flex-shrink-0">
-							<img
-								className="rounded-full border-5 lg:w-28 lg:h-28"
-								style={{ borderColor: "#706EEB" }}
-								src={logo}
-								alt="City Guide"
-							/>
-						</a>
-					</div>
+  return (
+    <>
+      <nav className="nav-container primary-bg z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between h-auto sm:h-20">
+        <div className="desktop-nav hidden sm:flex items-center justify-between h-full w-full p-14">
+          {/* Logo */}
+          <div className="flex justify-center -mt-12 lg:mt-12">
+            <a href="/" className="flex-shrink-0">
+              <img
+                className="rounded-full border-5 lg:w-28 lg:h-28"
+                style={{ borderColor: "#706EEB" }}
+                src={logo}
+                alt="City Guide"
+              />
+            </a>
+          </div>
 
           {/* Version desktop */}
           <div className="hidden sm:flex items-center space-x-4">
             {user ? (
               <>
-                <span className="text-white text-base font-bold">Bonjour, {user.firstname}</span>
+                <span className="text-white text-base font-bold">
+                  Bonjour, {user.firstname}
+                </span>
 
                 <div className="relative inline-block text-left">
                   {/* Bouton d'ouverture */}
@@ -74,10 +89,11 @@ export default function Navbar() {
 
                   {/* Dropdown */}
                   <div
-                    className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${isOpen
-                      ? "scale-100 opacity-100"
-                      : "scale-95 opacity-0 pointer-events-none"
-                      }`}
+                    className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
+                      isOpen
+                        ? "scale-100 opacity-100"
+                        : "scale-95 opacity-0 pointer-events-none"
+                    }`}
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="menu-button"
@@ -120,7 +136,6 @@ export default function Navbar() {
                       >
                         Déconnexion
                       </button>
-
                     </div>
                   </div>
                 </div>
@@ -131,17 +146,17 @@ export default function Navbar() {
                   <div className="hidden sm:flex space-x-4">
                     <Link
                       to={"/login"}
-                      className="connexion-button rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
+                      className="tuto-connexion-button rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
                       onClick={() => setIsOpen(false)}
                     >
                       CONNEXION
                     </Link>
                     <Link
                       to={"/inscription"}
-                      className="inscription-button rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
+                      className="tuto-inscription-button rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
                       onClick={() => setIsOpen(false)}
                     >
-                        INSCRIPTION
+                      INSCRIPTION
                     </Link>
                   </div>
                 </div>
@@ -151,26 +166,36 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-        <div className="w-full h-14 sm:hidden px-1 py-2">
-          <div className="flex items-center justify-end gap-4">
-            {user ? (
-              <>
-                <span className="text-white text-base font-bold">Bonjour, {user.firstname}</span>
 
-                <div className="relative inline-block text-left">
-                  {/* Bouton d'ouverture */}
-                  <div>
+        <div className="w-full h-15 sm:hidden relative px-4">
+          <div className="flex items-center justify-between h-full">
+            <a href="/" className="absolute -bottom-6 left-4 z-10">
+              <img
+                className="rounded-full border-4 w-16 h-16"
+                style={{ borderColor: "#706EEB" }}
+                src={logo}
+                alt="City Guide"
+              />
+            </a>
+
+            <div className="flex items-center justify-end ml-auto gap-4">
+              {user ? (
+                <>
+                  <span className="text-white text-base font-bold">
+                    Bonjour, {user.firstname}
+                  </span>
+                  {/* Dropdown utilisateur */}
+                  <div className="relative inline-block text-left">
                     <button
                       type="button"
                       onClick={() => setIsOpen(!isOpen)}
-                      className="inline-flex w-full justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+                      className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
                       aria-expanded={isOpen}
                       aria-haspopup="true"
                     >
                       <span className="material-symbols-outlined">
                         account_circle
                       </span>
-
                       <svg
                         className="-mr-1 size-5 text-gray-400"
                         viewBox="0 0 20 20"
@@ -184,70 +209,57 @@ export default function Navbar() {
                         />
                       </svg>
                     </button>
-                  </div>
 
-                  {/* Dropdown */}
-                  <div
-                    className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${isOpen
-                      ? "scale-100 opacity-100"
-                      : "scale-95 opacity-0 pointer-events-none"
+                    {/* Dropdown */}
+                    <div
+                      className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
+                        isOpen
+                          ? "scale-100 opacity-100"
+                          : "scale-95 opacity-0 pointer-events-none"
                       }`}
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="menu-button"
-                    tabIndex={-1}
-                  >
-                    <div className="py-1" role="none">
-                      <Link
-                        to={"#"}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        tabIndex={-1}
-                        id="menu-item-0"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Mon profil
-                      </Link>
-
-                      {user.role === "SUPER_ADMIN" && (
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="menu-button"
+                      tabIndex={-1}
+                    >
+                      <div className="py-1" role="none">
                         <Link
-                          to={"#"}
+                          to="#"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          role="menuitem"
-                          tabIndex={-1}
-                          id="menu-item-2"
                           onClick={() => setIsOpen(false)}
                         >
-                          Dashboard
+                          Mon profil
                         </Link>
-                      )}
-
-                      <button
-                        onClick={() => {
-                          handleLogout();
-                          setIsOpen(false);
-                        }}
-                        className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        tabIndex={-1}
-                        id="menu-item-3"
-                      >
-                        Déconnexion
-                      </button>
-
+                        {user.role === "SUPER_ADMIN" && (
+                          <Link
+                            to="#"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            Dashboard
+                          </Link>
+                        )}
+                        <button
+                          onClick={() => {
+                            handleLogout();
+                            setIsOpen(false);
+                          }}
+                          className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Déconnexion
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="relative inline-block text-left">
-                  {/* Bouton d'ouverture */}
-                  <div>
+                </>
+              ) : (
+                <>
+                  {/* Dropdown connexion/inscription */}
+                  <div className="relative inline-block text-left">
                     <button
                       type="button"
                       onClick={() => setIsOpen(!isOpen)}
-                      className="inline-flex w-full justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+                      className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
                       aria-expanded={isOpen}
                       aria-haspopup="true"
                     >
@@ -265,50 +277,72 @@ export default function Navbar() {
                         />
                       </svg>
                     </button>
-                  </div>
 
-                  {/* Dropdown */}
-                  <div
-                    className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${isOpen
-                      ? "scale-100 opacity-100"
-                      : "scale-95 opacity-0 pointer-events-none"
+                    {/* Dropdown */}
+                    <div
+                      className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
+                        isOpen
+                          ? "scale-100 opacity-100"
+                          : "scale-95 opacity-0 pointer-events-none"
                       }`}
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="menu-button"
-                    tabIndex={-1}
-                  >
-                    <div className="py-1" role="none">
-                      <Link
-                        to={"/login"}
-                        className="connexion-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        tabIndex={-1}
-                        id="menu-item-0"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        CONNEXION
-                      </Link>
-
-                      <Link
-                        to={"/inscription"}
-                        className="inscription-button-mobile  block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        tabIndex={-1}
-                        id="menu-item-0"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        INSCRIPTION
-                      </Link>
-
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="menu-button"
+                      tabIndex={-1}
+                    >
+                      <div className="py-1" role="none">
+                        <Link
+                          to="/login"
+                          className="tuto-connexion-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          CONNEXION
+                        </Link>
+                        <Link
+                          to="/inscription"
+                          className="tuto-inscription-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          INSCRIPTION
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       </nav>
+
+      {showPopup && (
+        <div className="fixed top-20 right-3 max-w-[350px] w-auto mt-5 bg-white border-3 border-[#706eeb] px-6 py-4 rounded-xl shadow-lg flex items-center justify-start space-x-3 transition-all ease-in-out duration-300 transform opacity-100 scale-100">
+          <div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+          <div className="text-sm text-[#706eeb] font-medium">
+            {popupMessage.map((line, index) => (
+              <p key={index} className="mb-2">
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -7,9 +7,14 @@ import {
 	type UserInput,
 } from "../../libs/graphql/generated/graphql-types";
 import { useUserStore } from "../../store/userStore";
+import { useCitiesStore } from "../../store/citiesStore";
+import { useInterestPointsStore } from "../../store/interestPointsStore";
+import background_form from "../../assets/background_form.png";
 
 const Login = () => {
 	const [login] = useLoginUserMutation();
+	const { setSelectedCity } = useCitiesStore();
+	const { fetchInterestPointsByCity } = useInterestPointsStore();
 	const navigate = useNavigate();
 	const [message, setMessage] = useState<{ type: string; text: string } | null>(
 		null,
@@ -45,12 +50,15 @@ const Login = () => {
 					role: parsed.role,
 				});
 
+				setSelectedCity(parsed.city);
+				fetchInterestPointsByCity(parsed.city.id.toString());
+
 				setMessage({
 					type: "success",
 					text: "Connexion réussie ! Redirection...",
 				});
 				setTimeout(() => {
-					navigate("/");
+					navigate("/map");
 				}, 2000);
 			}
 		} catch (error: any) {
@@ -79,24 +87,29 @@ const Login = () => {
 
 	return (
 		<>
-			<div className="flex items-center justify-center min-h-[80vh] secondary-bg">
-				<div className="bg-white p-6 rounded-2xl shadow-lg w-80 lg:w-[60vh] h-140">
-					<div className="flex justify-center -mt-12 lg:-mt-16">
-						<Link to={"/"}>
-							<img
-								className="w-16 h-16 rounded-full border-4 border-white lg:w-22 lg:h-22"
-								src={logo}
-								alt="City Guide"
-							/>
-						</Link>
-					</div>
+			<div
+				className="flex flex-col items-center justify-center min-h-[80vh] bg-[#B0AFE4]"
+				style={{
+					backgroundImage: `url(${background_form})`,
+				}}
+			>
+				<div className="flex justify-center z-2 mb-[-2rem]">
+					<Link to={"/"}>
+						<img
+							className="w-16 h-16 rounded-full border-4 border-white lg:w-22 lg:h-22"
+							src={logo}
+							alt="City Guide"
+						/>
+					</Link>
+				</div>
+				<div className="bg-white p-6 rounded-2xl shadow-lg w-80 lg:w-[60vh] max-h-[75vh] overflow-y-auto z-1">
 					<h2 className="text-center text-2xl font-semibold text-[#706EEB] mt-1.5 mb-6">
 						Connexion à votre compte
 					</h2>
 
 					<div className="flex flex-col justify-center items-center mb-8">
 						<img
-							className="w-32 h-32 rounded-full lg:w-44 lg:h-44"
+							className="w-30 h-30 rounded-full lg:w-42 lg:h-42"
 							src={connexion}
 							alt="City Guide connexion"
 						/>
@@ -129,17 +142,30 @@ const Login = () => {
 							<button
 								type="button"
 								onClick={() => setShowPassword(!showPassword)}
-								className="text-sm text-gray-500 ml-2"
+								className="text-sm text-gray-500 ml-2 cursor-pointer"
 							>
 								{showPassword ? "Cacher" : "Afficher"}
 							</button>
 						</div>
 
-            <div className="text-xs mb-1 ml-auto text-end">
-              <Link to={"/forgotPassword"} className="text-[#B0AFE4] hover:text-blue-800">
-                Mot de passe oublié ?
-              </Link>
-            </div>
+						<div className="text-xs mb-1 ml-auto text-end">
+							<Link
+								to={"/forgotPassword"}
+								className="text-[#B0AFE4] hover:text-blue-800"
+							>
+								Mot de passe oublié ?
+							</Link>
+						</div>
+
+						<button
+							className={`w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] ${
+								message ? "mt-0" : "mt-5"
+							}`}
+							type="submit"
+							style={{ marginBottom: message ? "0" : "20px" }}
+						>
+							Me connecter
+						</button>
 
 						{message && (
 							<div
@@ -161,26 +187,18 @@ const Login = () => {
 											r="10"
 											stroke="currentColor"
 											strokeWidth="4"
-										></circle>
+										/>
 										<path
 											className="opacity-75"
 											fill="currentColor"
 											d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 11-8 8h4z"
-										></path>
+										/>
+										<title>Connexion réussie</title>
 									</svg>
 								)}
 								{message.text}
 							</div>
 						)}
-
-						<button
-							className={`w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] ${
-								message ? "mt-0" : "mt-5"
-							}`}
-							type="submit"
-						>
-							Me connecter
-						</button>
 					</form>
 				</div>
 			</div>
