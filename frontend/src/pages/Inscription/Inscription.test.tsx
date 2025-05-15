@@ -26,7 +26,7 @@ vi.mock("../../libs/graphql/generated/graphql-types.ts", () => ({
 	useRegisterUserMutation: () => [vi.fn().mockResolvedValue({ data: null })],
 }));
 
-describe("Test 'registration form' page", () => {
+describe("Display 'registration form' page", () => {
 	it("renders the registration form and the fields", () => {
 		renderRegistrationPage();
 
