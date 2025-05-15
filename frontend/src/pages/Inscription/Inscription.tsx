@@ -294,6 +294,9 @@ function Inscription() {
           >
             M'inscrire
           </button>
+          <Link to={"/map"} style={{ color: '#b0afe4'}}>
+            Continuer en tant qu'invité
+          </Link>
         </form>
       </div>
     </div>
