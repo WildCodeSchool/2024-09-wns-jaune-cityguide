@@ -1,5 +1,4 @@
 import { describe, it, expect, vi } from "vitest";
-<<<<<<< HEAD
 import {
 	act,
 	fireEvent,
@@ -48,12 +47,6 @@ vi.mock("../../libs/graphql/generated/graphql-types", () => ({
 		{ loading: false, error: mockError },
 	],
 }));
-=======
-import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { BrowserRouter } from "react-router-dom";
-import Inscription from "./Inscription";
->>>>>>> cbc09db (write test to check rendering of the registration form page)
 
 // Useful code snippet to render a component with react-router-dom: https://stackoverflow.com/questions/76754014/reactjs-how-to-unit-test-login-form-in-vitest
 // See also: https://www.webpilot.ai/writeDetail/808ff24c-fa86-43ae-9d2d-d6cd7f40e765?lang=en-US
@@ -66,25 +59,10 @@ const renderRegistrationPage = () => {
 	);
 };
 
-<<<<<<< HEAD
 import { BrowserRouter } from "react-router-dom";
 import Inscription from "./Inscription";
 
 describe("Display 'registration form' page", () => {
-=======
-vi.mock("../../store/citiesStore.ts", () => ({
-	useCitiesStore: () => ({
-		cities: [{ id: "1", name: "Paris" }],
-		fetchCities: vi.fn(),
-	}),
-}));
-
-vi.mock("../../libs/graphql/generated/graphql-types.ts", () => ({
-	useRegisterUserMutation: () => [vi.fn().mockResolvedValue({ data: null })],
-}));
-
-describe("Test 'registration form' page", () => {
->>>>>>> cbc09db (write test to check rendering of the registration form page)
 	it("renders the registration form and the fields", () => {
 		renderRegistrationPage();
 
@@ -98,7 +76,6 @@ describe("Test 'registration form' page", () => {
 		expect(screen.getByText("Sélectionnez votre ville")).toBeInTheDocument();
 	});
 });
-<<<<<<< HEAD
 
 describe("Display errors if the input field is empty", () => {
 	beforeEach(() => {
@@ -256,5 +233,3 @@ function fillValidForm() {
 	});
 	fireEvent.change(screen.getByRole("combobox"), { target: { value: "1" } });
 }
-=======
->>>>>>> cbc09db (write test to check rendering of the registration form page)
