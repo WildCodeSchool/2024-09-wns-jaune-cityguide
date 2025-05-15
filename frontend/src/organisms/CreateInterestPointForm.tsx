@@ -1,4 +1,4 @@
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useGetCitiesQuery,
@@ -20,10 +20,12 @@ export default function CreateInterestPointForm({
   const [createInterestPoint, { data: createdData, loading: submitting, error: createError }] =
     useCreateInterestPointMutation();
   const { data: cityData, loading: citiesLoading, error: citiesError } = useGetCitiesQuery();
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (evt: FormEvent) => {
+  const handleSubmit = async (evt: FormEvent) => {
     evt.preventDefault();
     const form = evt.target as HTMLFormElement;
     const formData = new FormData(form);
@@ -34,29 +36,74 @@ export default function CreateInterestPointForm({
       latitude: parseFloat(formJson.latitude as string),
       longitude: parseFloat(formJson.longitude as string),
     };
+    try {
+      const result = await createInterestPoint({
+        variables: {
+          data: formattedData as InterestPointInput,
+        },
+      });
 
-    createInterestPoint({
-      variables: {
-        data: formattedData as InterestPointInput,
-      },
-    });
+      if (result?.data?.createInterestPoint) {
+        console.log("point créé1")
+      }
+    } catch (err) {
+      console.error("Erreur lors de la création :", err);
+    }
   };
 
   useEffect(() => {
     if (!createdData) return;
-    onClose?.();
-    navigate(`/map`); // a check
-  }, [createdData, navigate]);
+
+    setPopupMessage(["Félicitations, point d'intérêt créé avec succès ! 🎉"]);
+    setShowPopup(true);
+
+    const timer = setTimeout(() => {
+      setShowPopup(false);
+      onClose?.();
+      navigate("/map");
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [createdData]);
 
   if (error || createError) return <>Error!</>;
   if (loading) return <>Loading...</>;
   if (!data) return <>We couldn't find anything to display</>;
 
   return (
+
     <aside
       className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-50 ${isOpen ? "translate-x-0" : "translate-x-full"
         } rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
     >
+      {showPopup && (
+        <div className="fixed bottom-4 right-4 bg-white border border-[#706eeb] px-6 py-3 rounded-xl shadow-xl z-[1000]">
+          <div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+          <div className="text-sm text-[#706eeb] font-medium">
+            {popupMessage.map((line, index) => (
+              <p key={index} className="mb-2">
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="flex justify-between items-start">
           <h2 className="text-xl font-semibold text-gray-800">Créer un point d’intérêt</h2>

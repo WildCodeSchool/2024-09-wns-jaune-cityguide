@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   type InterestPoint,
@@ -15,14 +15,17 @@ type EditInterestPointFormProps = {
 export default function EditInterestPointForm({ interestPoint, onClose }: EditInterestPointFormProps) {
   const { loading, error, data } = useGetCategoriesQuery();
   const navigate = useNavigate();
-  const [replaceInterestPoint] = useReplaceInterestPointByIdMutation();
+  const [replaceInterestPoint, { data: editedData, loading: submitting, error: editError }] =
+    useReplaceInterestPointByIdMutation();
 
   const [showAddImageInput, setShowAddImageInput] = useState(false);
   const [newImageUrl, setNewImageUrl] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
   if (!interestPoint) return null;
 
-  const handleSubmit = (evt: FormEvent) => {
+  const handleSubmit = async (evt: FormEvent) => {
     evt.preventDefault();
     const form = evt.target as HTMLFormElement;
     const formData = new FormData(form);
@@ -35,24 +38,73 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
       city: String(interestPoint.city.id),
       category: String(formJson.category),
     };
+    
+    try {
+      const result = await replaceInterestPoint({
+        variables: {
+          data: formattedData as InterestPointInput,
+          interestPointId: interestPoint!.id,
+        },
+      });
 
-    replaceInterestPoint({
-      variables: {
-        data: formattedData as InterestPointInput,
-        interestPointId: interestPoint.id,
-      },
-    });
-    onClose();
-    navigate("/map");
+      if (result?.data?.replaceInterestPointById) {
+        console.log("point modifié");
+      }
+    } catch (err) {
+      console.error("Erreur lors de la modification :", err);
+    }
   };
 
+   useEffect(() => {
+    if (!editedData) return;
 
-  if (error) return <>Error!</>;
+    setPopupMessage(["Modifications enregistrées avec succès ! 🎉"]);
+    setShowPopup(true);
+
+    const timer = setTimeout(() => {
+      setShowPopup(false);
+      onClose?.();
+      navigate("/map");
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [editedData]);
+
+   if (!interestPoint) return null;
+  if (error || editError) return <>Error!</>;
   if (loading) return <>Loading...</>;
   if (!data) return <>We couldn't find anything to display</>;
 
   return (
     <>
+     {showPopup && (
+        <div className="fixed bottom-4 right-4 bg-white border border-[#706eeb] px-6 py-3 rounded-xl shadow-xl z-[1000]">
+          <div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+          <div className="text-sm text-[#706eeb] font-medium">
+            {popupMessage.map((line, index) => (
+              <p key={index} className="mb-2">
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="sheet-header w-full flex items-center justify-center space-x-4 py-4 text-gray-600">
 
@@ -159,7 +211,7 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
             type="submit"
             className="flex justify-center items-center w-full text-sm px-4 py-2 rounded-md primary-bg text-white hover:bg-purple-700 transition hover:cursor-pointer hover:text-gray-100"
           >
-            Valider
+               {submitting ? "Modification..." : "Valider"}
           </button>
 
 

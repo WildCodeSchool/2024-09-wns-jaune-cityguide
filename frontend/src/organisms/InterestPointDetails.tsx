@@ -4,6 +4,7 @@ import type { InterestPoint } from "../@types/types";
 import { useInterestPointsStore } from "../store/interestPointsStore";
 import { Carousel } from "../atoms/Carousel";
 import EditInterestPointForm from "../organisms/EditInterestPointForm"
+import DeleteConfirmationModal from "../organisms/DeleteConfirmationModal";
 import { useDeleteInterestPointByIdMutation } from "../libs/graphql/generated/graphql-types";
 
 type InterestPointSheetProps = {
@@ -15,11 +16,15 @@ type InterestPointSheetProps = {
 export default function InterestPointDetails({
 	isOpen,
 	onClose,
+	interestPoint
 }: InterestPointSheetProps) {
 	const { selectedInterestPoint } = useInterestPointsStore();
 	const [isEditing, setIsEditing] = useState<boolean>(false);
+	const [showConfirm, setShowConfirm] = useState(false);
+	const [showDeletedPopup, setShowDeletedPopup] = useState(false);
+	const [deletePoint, { data: deletedData }] = useDeleteInterestPointByIdMutation();
 	const navigate = useNavigate();
-	const [deleteInterestPoint] = useDeleteInterestPointByIdMutation();
+	// const [deleteInterestPoint] = useDeleteInterestPointByIdMutation();
 
 	// Handling click outside of the sheet: https://dev.to/rashed_iqbal/how-to-handle-outside-clicks-in-react-with-typescript-4lmc
 	const sheetRef = useRef<HTMLDivElement>(null);
@@ -41,13 +46,25 @@ export default function InterestPointDetails({
 	}, [isOpen, onClose]);
 
 	const handleDelete = async () => {
-		if (!selectedInterestPoint) return;
-		await deleteInterestPoint({
-			variables: { interestPointId: selectedInterestPoint.id.toString() },
-		});
-		onClose();
-		navigate("/map");
+		try {
+			await deletePoint({ variables: { interestPointId: interestPoint.id } });
+		} catch (error) {
+			console.error("Erreur suppression :", error);
+		}
 	};
+
+	useEffect(() => {
+		if (deletedData?.deleteInterestPointById) {
+			setShowConfirm(false);
+			setShowDeletedPopup(true);
+			setTimeout(() => {
+				setShowDeletedPopup(false);
+				onClose?.();
+				navigate("/map");
+			}, 3000);
+		}
+	}, [deletedData]);
+
 
 	return (
 		<>
@@ -94,12 +111,10 @@ export default function InterestPointDetails({
 								</button>
 								<button
 									type="button"
-									onClick={handleDelete}
+									onClick={() => setShowConfirm(true)}
 									className="cursor-pointer text-red-600 flex items-center gap-1 text-sm"
 								>
-									<span className="material-symbols-outlined text-xs">
-										delete
-									</span>
+									<span className="material-symbols-outlined text-xs">delete</span>
 									Supprimer
 								</button>
 							</div>
@@ -165,6 +180,17 @@ export default function InterestPointDetails({
 					</>
 				)}
 			</aside>
+			{showConfirm && (
+				<DeleteConfirmationModal
+					onConfirm={handleDelete}
+					onCancel={() => setShowConfirm(false)}
+				/>
+			)}
+			{showDeletedPopup && (
+				<div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-[9999]">
+					Point d’intérêt supprimé avec succès.
+				</div>
+			)}
 		</>
 	);
 }
