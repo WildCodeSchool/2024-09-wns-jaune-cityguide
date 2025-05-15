@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { BrowserRouter } from "react-router-dom";
 import Inscription from "./Inscription";
@@ -38,5 +38,30 @@ describe("Display 'registration form' page", () => {
 			screen.getByPlaceholderText("Confirmer mot de passe"),
 		).toBeInTheDocument();
 		expect(screen.getByText("Sélectionnez votre ville")).toBeInTheDocument();
+	});
+});
+
+describe("Display errors if the input field is empty", () => {
+	beforeEach(() => {
+		renderRegistrationPage();
+		fireEvent.click(screen.getByRole("button", { name: "M'inscrire" }));
+	});
+	it("displays an error message when the field 'Prénom' is empty", () => {
+		expect(screen.getByText("Le prénom est requis.")).toBeInTheDocument();
+	});
+	it("displays an error message when the field 'Nom' is empty", () => {
+		expect(screen.getByText("Le nom est requis.")).toBeInTheDocument();
+	});
+	it("displays an error message when the field 'Email' is empty", () => {
+		expect(screen.getByText("L’email est requis.")).toBeInTheDocument();
+	});
+	it("displays an error message when the field 'Mot de passe' is empty", () => {
+		expect(screen.getByText("Le mot de passe est requis.")).toBeInTheDocument();
+	});
+	it("displays an error message when the field 'Confirmer mot de passe' is empty", () => {
+		expect(screen.getByText("Confirmez le mot de passe.")).toBeInTheDocument();
+	});
+	it("displays an error message when the field 'Ville' is empty", () => {
+		expect(screen.getByText("La ville est requise.")).toBeInTheDocument();
 	});
 });
