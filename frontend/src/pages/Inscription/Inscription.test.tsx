@@ -164,6 +164,9 @@ describe("Submit valid form without triggering any server error", () => {
 			expect(mockNavigate).toHaveBeenCalledWith("/map");
 		});
 	});
+	//it("should display a success message after successful registration", async () => {});
+	//it("should set the user's city as the selected city after successful registration", async () => {});
+	//it("should load interest points related to the selected city after successful registration", async () => {});
 });
 
 function fillValidForm() {
