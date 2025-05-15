@@ -2,13 +2,15 @@ import { useState } from "react";
 import logo from "../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
+import { useMenuStore } from '../store/menuStore';
 import { useMutationMutation } from "../libs/graphql/generated/graphql-types";
 
 export default function Navbar() {
   const { user, clearUser } = useUserStore();
   const [logout] = useMutationMutation();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(true);
+  const isOpen = useMenuStore((state) => state.isOpen);
+  const setIsOpen = useMenuStore((state) => state.setIsOpen);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
@@ -144,14 +146,14 @@ export default function Navbar() {
                   <div className="hidden sm:flex space-x-4">
                     <Link
                       to={"/login"}
-                      className="connexion-button rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
+                      className="tuto-connexion-button rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
                       onClick={() => setIsOpen(false)}
                     >
                       CONNEXION
                     </Link>
                     <Link
                       to={"/inscription"}
-                      className="inscription-button rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
+                      className="tuto-inscription-button rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
                       onClick={() => setIsOpen(false)}
                     >
                       INSCRIPTION
@@ -291,14 +293,14 @@ export default function Navbar() {
                       <div className="py-1" role="none">
                         <Link
                           to="/login"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="tuto-connexion-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           onClick={() => setIsOpen(false)}
                         >
                           CONNEXION
                         </Link>
                         <Link
                           to="/inscription"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="tuto-inscription-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           onClick={() => setIsOpen(false)}
                         >
                           INSCRIPTION

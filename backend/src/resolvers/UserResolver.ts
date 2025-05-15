@@ -1,11 +1,19 @@
-import { Arg, Authorized, Ctx, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Field,
+  InputType,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
 import { User, UserRole } from "../entities/User";
-import { Response } from "express";
+import type { Response } from "express";
 import * as argon from "argon2";
 import * as jwt from "jsonwebtoken";
 import { GraphQLError } from "graphql";
 import { City } from "../entities/City";
-
 
 @InputType()
 export class NewUserInput {
@@ -24,7 +32,6 @@ export class NewUserInput {
   @Field()
   cityId!: string;
 }
-
 
 @InputType()
 export class UserInput {
@@ -47,8 +54,6 @@ export class UpdateUserInput {
   email?: string;
 }
 
-
-
 @Resolver(User)
 export class UserResolver {
   @Query(() => [User])
@@ -57,7 +62,7 @@ export class UserResolver {
     const users = await User.find();
     return users;
   }
-
+  
   @Query(() => User)
   /* @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN) */
   async getUserById(@Arg("userId") id: string) {
@@ -68,11 +73,16 @@ export class UserResolver {
     return user;
   }
 
+  @Query(() => Number)
+  async getUserCount(): Promise<number> {
+    return await User.count();
+  }
+
   @Mutation(() => String)
   async registerUser(
     @Arg("data") data: NewUserInput,
-    @Ctx() { res }: { res: Response }) {
-
+    @Ctx() { res }: { res: Response }
+  ) {
     if (!process.env.TOKEN_SECRET_KEY) {
       throw new Error("Missing env variable");
     }
@@ -104,21 +114,20 @@ export class UserResolver {
       role: user.role,
     };
 
-    const token = jwt.sign(
-      tokenContent,
-      process.env.TOKEN_SECRET_KEY,
-      { expiresIn: "7h" },
-    );
+    const token = jwt.sign(tokenContent, process.env.TOKEN_SECRET_KEY, {
+      expiresIn: "7h",
+    });
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict"
+      sameSite: "strict",
     });
 
     const profile = {
       mail: user.email,
       firstname: user.firstname,
+      city: user.city,
     };
     return JSON.stringify(profile);
   }
@@ -126,25 +135,31 @@ export class UserResolver {
   @Mutation(() => String)
   async loginUser(
     @Arg("data") data: UserInput,
-    @Ctx() { res }: { res: Response }) {
-
+    @Ctx() { res }: { res: Response }
+  ) {
     if (!process.env.TOKEN_SECRET_KEY) {
       throw new Error("Missing env variable");
     }
 
-    const user = await User.findOneBy({ email: data.email });
+    const user = await User.findOne({
+      where: { email: data.email },
+      relations: ["city"],
+    });
     if (!user) {
       throw new GraphQLError("Le compte avec cet email n'existe pas.", {
         extensions: { code: "USER_NOT_FOUND" },
       });
-    };
+    }
 
-    const validPassword = await argon.verify(user.hashedPassword, data.password);
+    const validPassword = await argon.verify(
+      user.hashedPassword,
+      data.password
+    );
     if (!validPassword) {
       throw new GraphQLError("Email ou mot de passe invalide.", {
         extensions: { code: "INVALID_PASSWORD" },
       });
-    };
+    }
 
     const tokenContent = {
       userId: user.id,
@@ -154,17 +169,20 @@ export class UserResolver {
       role: user.role,
     };
 
-    const token = jwt.sign(tokenContent, process.env.TOKEN_SECRET_KEY, { expiresIn: "7h" });
+    const token = jwt.sign(tokenContent, process.env.TOKEN_SECRET_KEY, {
+      expiresIn: "7h",
+    });
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict"
+      sameSite: "strict",
     });
 
     const profile = {
       mail: user.email,
       firstname: user.firstname,
+      city: user.city,
     };
     return JSON.stringify(profile);
   }
@@ -174,28 +192,26 @@ export class UserResolver {
     res.clearCookie("token", {
       httpOnly: true,
       secure: true,
-      sameSite: "strict"
+      sameSite: "strict",
     });
     return "Déconnexion réussie !";
   }
-
 
   @Mutation(() => User)
   /* @Authorized(UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN, UserRole.SUPER_USER, UserRole.USER) */
   async updateUser(
     @Arg("userId") id: string,
-    @Arg("data") data: UpdateUserInput) {
+    @Arg("data") data: UpdateUserInput
+  ) {
     let user = await User.findOneByOrFail({ id });
     user = Object.assign(user, data);
     user.save();
     return user;
   }
 
-
   @Mutation(() => User)
   /* @Authorized(UserRole.SUPER_ADMIN, UserRole.SUPER_USER, UserRole.USER) */
-  async deleteUser(
-    @Arg("userId") id: string) {
+  async deleteUser(@Arg("userId") id: string) {
     const user = await User.findOneByOrFail({ id });
 
     // Stocker une copie de l'utilisateur avant suppression

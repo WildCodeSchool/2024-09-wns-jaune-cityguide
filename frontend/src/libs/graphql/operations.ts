@@ -100,8 +100,15 @@ query GetInterestPointsByCity($cityId: String!) {
 export const REGISTER_USER = gql`
   mutation RegisterUser($data: NewUserInput!) {
     registerUser(data: $data)
-}`
+}`;
 
+export const GET_STATS = gql`
+  query GetStats {
+    getUserCount
+    getCityCount
+    getPlaceCount
+  }
+`;
 
 export const GET_CATEGORIES = gql`
 query GetCategories {

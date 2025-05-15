@@ -8,6 +8,8 @@ type Step = {
   description: string;
   tooltipOffsetHeight?: number;
   tooltipOffsetWidth?: number;
+  leftAdjustment?: number;
+  action?: () => void;
 };
 
 type TutorialOverlayProps = {
@@ -27,7 +29,6 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
   const [targetPos, setTargetPos] = useState<Position | null>(null);
   const navigate = useNavigate();
 
-
   const step = steps[currentStep];
 
   useEffect(() => {
@@ -36,10 +37,8 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
       const scrollContainer = document.querySelector(".tutorial-container") as HTMLElement;
 
       if (el && scrollContainer) {
-        // Scroll into view si besoin
         el.scrollIntoView({ behavior: "smooth", block: "center" });
 
-        // Laisse le temps à l'élément de se positionner
         setTimeout(() => {
           const rect = el.getBoundingClientRect();
           const containerRect = scrollContainer.getBoundingClientRect();
@@ -60,22 +59,27 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
   }, [step]);
 
   const handleNext = () => {
+    const current = steps[currentStep];
+    if (current.action) {
+      current.action();
+    }
+
     if (currentStep + 1 < steps.length) {
       setCurrentStep(currentStep + 1);
       setTargetPos(null);
     } else {
       onClose();
-      navigate("/inscription")
+      navigate("/inscription");
     }
   };
 
   if (!targetPos) return <div className="tutorial-overlay" />;
 
-  // Position du tooltip : dessous si possible, sinon au-dessus
   const tooltipHeight = 140;
   const placeAbove = window.innerHeight - (targetPos.top - window.scrollY) < tooltipHeight;
   const tooltipOffsetHeight = step.tooltipOffsetHeight ?? 0;
   const tooltipOffsetWidth = step.tooltipOffsetWidth ?? 0;
+  const leftAdjustment = step.leftAdjustment ?? 0;
 
   return (
     <>
@@ -85,7 +89,7 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
         className="highlight-box"
         style={{
           top: `${targetPos.top}px`,
-          left: `${targetPos.left}px`,
+          left: `${targetPos.left - leftAdjustment}px`,
           width: `${targetPos.width}px`,
           height: `${targetPos.height}px`,
         }}
@@ -95,17 +99,18 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
         className="tooltip-box"
         style={{
           top: placeAbove
-          ? targetPos.top - tooltipHeight - 10 + tooltipOffsetHeight
-          : targetPos.top + targetPos.height + 10 + tooltipOffsetHeight,
+            ? targetPos.top - tooltipHeight - 10 + tooltipOffsetHeight
+            : targetPos.top + targetPos.height + 10 + tooltipOffsetHeight,
           left: targetPos.left + tooltipOffsetWidth,
         }}
       >
         <h3 className="font-bold mb-2">{step.title}</h3>
         <p className="mb-2">{step.description}</p>
-        <button className="font-bold text-blue-800" onClick={handleNext}>
+        <button className="font-bold custom-purple" onClick={handleNext}>
           Suivant
         </button>
       </div>
     </>
   );
 }
+
