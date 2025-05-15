@@ -65,3 +65,34 @@ describe("Display errors if the input field is empty", () => {
 		expect(screen.getByText("La ville est requise.")).toBeInTheDocument();
 	});
 });
+
+describe("Display errors if the input format is invalid", () => {
+	beforeEach(() => {
+		renderRegistrationPage();
+	});
+	it("displays an error message when the email format is invalid", () => {
+		const emailInput = screen.getByPlaceholderText("Email");
+		const invalidEmail = "invalidEmail";
+		fireEvent.change(emailInput, { target: { value: invalidEmail } });
+		fireEvent.click(screen.getByRole("button", { name: "M'inscrire" }));
+		expect(screen.getByText("Format d’email invalide.")).toBeInTheDocument();
+	});
+	it("displays an error message when the password and the confirmation password do not match", () => {
+		const passwordInput = screen.getByPlaceholderText("Mot de passe");
+		const confirmPasswordInput = screen.getByPlaceholderText(
+			"Confirmer mot de passe",
+		);
+
+		const password = "MyPassword123";
+		const confirmPassword = "MyPassword1234";
+
+		fireEvent.change(passwordInput, { target: { value: password } });
+		fireEvent.change(confirmPasswordInput, {
+			target: { value: confirmPassword },
+		});
+		fireEvent.click(screen.getByRole("button", { name: "M'inscrire" }));
+		expect(
+			screen.getByText("Les mots de passe ne correspondent pas."),
+		).toBeInTheDocument();
+	});
+});
