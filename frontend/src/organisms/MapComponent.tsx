@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
-import L, { point, map } from "leaflet";
+import L from "leaflet";
 
 import { useCitiesStore } from "../store/citiesStore";
 import { useInterestPointsStore } from "../store/interestPointsStore";
