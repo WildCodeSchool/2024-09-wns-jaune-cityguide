@@ -101,3 +101,52 @@ export const REGISTER_USER = gql`
   mutation RegisterUser($data: NewUserInput!) {
     registerUser(data: $data)
 }`
+
+
+export const GET_CATEGORIES = gql`
+query GetCategories {
+  getCategories {
+    id
+    name
+    description
+    color
+  }
+}`;
+
+
+export const GET_CATEGORY_BY_ID = gql`
+query GetCategoryById($categoryId: String!) {
+  getCategoryById(categoryId: $categoryId) {
+    id
+    name
+    description
+    color
+  }
+}`;
+
+
+export const CREATE_CATEGORY = gql`
+mutation CreateCategory($data: CategoryInput!) {
+  createCategory(data: $data) {
+    name
+    description
+    color
+  }
+}`;
+
+
+export const REPLACE_CATEGORY_BY_ID = gql`
+mutation ReplaceCategoryById($data: UpdateCategoryInput!, $categoryId: String!) {
+  replaceCategoryById(data: $data, categoryId: $categoryId) {
+    id
+    name
+    description
+    color
+  }
+}`;
+
+
+export const DELETE_CATEGORY = gql`
+mutation DeleteCategoryById($categoryId: String!) {
+  deleteCategoryById(categoryId: $categoryId)
+}`;
