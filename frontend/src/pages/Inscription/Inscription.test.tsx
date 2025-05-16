@@ -165,7 +165,20 @@ describe("Submit valid form without triggering any server error", () => {
 			expect(mockNavigate).toHaveBeenCalledWith("/map");
 		});
 	});
-	//it("should display a success message after successful registration", async () => {});
+
+	it("should display a success message after successful registration", async () => {
+		fillValidForm();
+		const submitButton = screen.getByRole("button", { name: "M'inscrire" });
+
+		fireEvent.click(submitButton);
+		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
+
+		expect(
+			screen.getByText(
+				"Félicitations, votre compte a été créé avec succès ! 🎉",
+			),
+		).toBeInTheDocument();
+	});
 	//it("should set the user's city as the selected city after successful registration", async () => {});
 	//it("should load interest points related to the selected city after successful registration", async () => {});
 });
