@@ -37,17 +37,20 @@ export default function MapPage() {
 
 	return (
 		<div className="map-page-container relative flex flex-col h-full w-full overflow-hidden">
-			<div className="search-bar-container absolute z-10 w-1/2 top-5 left-1/2 -translate-x-1/2 flex items-center justify-center sm:w-1/2 sm:max-w-md">
-				<SearchBar />
-				<button
-					onClick={() => {
-						setCreateModalOpen(true);
-					}}
-					className="primary-bg text-white p-2 rounded-md text-sm hover:bg-indigo-700 hover:cursor-pointer"
-				>
-					+ Créer
-				</button>
-			</div>
+			<div className="search-bar-container absolute z-10 top-5 left-1/2 -translate-x-1/2 w-11/12 max-w-md flex items-center justify-between gap-2 sm:w-1/2 sm:justify-center sm:gap-0">
+  <div className="flex-grow">
+    <SearchBar />
+  </div>
+ <button
+  onClick={() => setCreateModalOpen(true)}
+  className="cursor-pointer primary-bg text-white px-4 py-2 h-10 rounded-md text-sm font-medium border border-gray-300 shadow-xl hover:bg-indigo-700 transition-all sm:ml-4 w-auto whitespace-nowrap"
+>
+  + Créer
+</button>
+
+
+</div>
+
 
 			<div className="map-container flex grow items-center">
 				<MapComponent onSelectPoint={handleSelectPoint} />
