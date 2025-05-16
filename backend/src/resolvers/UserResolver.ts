@@ -59,7 +59,9 @@ export class UserResolver {
   @Query(() => [User])
   /* @Authorized(UserRole.SUPER_ADMIN) */
   async getUsers() {
-    const users = await User.find();
+    const users = await User.find({
+      relations: ["city"],
+    });
     return users;
   }
   
