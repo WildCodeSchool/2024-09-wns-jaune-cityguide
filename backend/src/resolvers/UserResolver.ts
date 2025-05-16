@@ -52,6 +52,9 @@ export class UpdateUserInput {
 
   @Field({ nullable: true })
   email?: string;
+
+  @Field(() => UserRole, { nullable: true })
+  role?: UserRole;
 }
 
 @Resolver(User)
@@ -62,7 +65,7 @@ export class UserResolver {
     const users = await User.find();
     return users;
   }
-  
+
   @Query(() => User)
   /* @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN) */
   async getUserById(@Arg("userId") id: string) {
