@@ -9,7 +9,7 @@ import {
   Resolver,
 } from "type-graphql";
 import { User, UserRole } from "../entities/User";
-import { Response } from "express";
+import type { Response } from "express";
 import * as argon from "argon2";
 import * as jwt from "jsonwebtoken";
 import { GraphQLError } from "graphql";
@@ -52,6 +52,9 @@ export class UpdateUserInput {
 
   @Field({ nullable: true })
   email?: string;
+
+  @Field(() => UserRole, { nullable: true })
+  role?: UserRole;
 }
 
 @Resolver(User)
@@ -64,7 +67,7 @@ export class UserResolver {
     });
     return users;
   }
-  
+
   @Query(() => User)
   /* @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN) */
   async getUserById(@Arg("userId") id: string) {
@@ -129,6 +132,7 @@ export class UserResolver {
     const profile = {
       mail: user.email,
       firstname: user.firstname,
+      city: user.city,
     };
     return JSON.stringify(profile);
   }
@@ -142,7 +146,10 @@ export class UserResolver {
       throw new Error("Missing env variable");
     }
 
-    const user = await User.findOneBy({ email: data.email });
+    const user = await User.findOne({
+      where: { email: data.email },
+      relations: ["city"],
+    });
     if (!user) {
       throw new GraphQLError("Le compte avec cet email n'existe pas.", {
         extensions: { code: "USER_NOT_FOUND" },
@@ -180,6 +187,7 @@ export class UserResolver {
     const profile = {
       mail: user.email,
       firstname: user.firstname,
+      city: user.city,
     };
     return JSON.stringify(profile);
   }

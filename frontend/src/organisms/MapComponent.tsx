@@ -40,15 +40,38 @@ export default function MapComponent({
 		});
 	}
 
+	// Useful code snippet (updated to use flyTo): https://stackoverflow.com/questions/65322670/change-center-position-of-react-leaflet-map
+	// About the flyTo() vs setView() methods: https://rstudio.github.io/leaflet/reference/map-methods.html
+
+	function FlyToInterestPoint() {
+		const map = useMap();
+		const { selectedInterestPoint } = useInterestPointsStore();
+
+		useEffect(() => {
+			if (selectedInterestPoint) {
+				map.flyTo(
+					[selectedInterestPoint.latitude, selectedInterestPoint.longitude],
+					map.getZoom(),
+					{
+						duration: 2,
+						animate: true,
+					},
+				);
+			}
+		}, [selectedInterestPoint, map]);
+
+		return null;
+	}
 	const [interestPoints, setInterestPoints] = useState<InterestPoint[]>([]);
 	const { selectedCity } = useCitiesStore();
 	const { interestPointsByCity, setSelectedInterestPoint } =
 		useInterestPointsStore();
 
-	const [mapCenter, setMapCenter] = useState<[number, number]>([
-		48.8566,
-		2.3522, // Paris coordinates by default
-	]);
+	const [mapCenter, setMapCenter] = useState<[number, number]>(
+		selectedCity
+			? [selectedCity.latitude, selectedCity.longitude]
+			: [48.8566, 2.3522], // Paris coordinates by default
+	);
 
 	function FlyToCity({ coords }: { coords: [number, number] }) {
 		const map = useMap();
@@ -86,6 +109,7 @@ export default function MapComponent({
 			>
 				<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 				<FlyToCity coords={mapCenter} />
+				<FlyToInterestPoint />
 				{interestPoints.map((point) => (
 					<Marker
 						key={point.id}

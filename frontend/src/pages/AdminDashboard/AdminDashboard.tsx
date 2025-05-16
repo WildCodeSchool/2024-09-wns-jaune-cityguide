@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState } from "react";
+import UserManager from "../Admin/UserManager";
 import VilleComponent from './VilleComponent';
 // import CategorieComponent from './CategorieComponent';  // Composant bidon en attendant le vrai composant Catégorie
 // import UtilisateurComponent from './UtilisateurComponent';  // Composant bidon en attendant le vrai composant Utilisateur
@@ -21,9 +22,9 @@ export default function Dashboard({ userRole }: { userRole: string }) {
       <div className="w-full">
         <div className="flex justify-between w-full">
           {/* Onglet Ville : visible pour tous les admins, mais seulement accessible pour adminVille et superAdmin */}
-          {(userRole === 'superAdmin' || userRole === 'adminVille') && (
+          {(userRole === "superAdmin" || userRole === "adminVille") && (
             <button
-              onClick={() => handleClick('ville')}
+              onClick={() => handleClick("ville")}
               className="text-black hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
             >
               Ville
@@ -31,9 +32,9 @@ export default function Dashboard({ userRole }: { userRole: string }) {
           )}
 
           {/* Onglet Catégorie : visible uniquement pour superAdmin */}
-          {userRole === 'superAdmin' && (
+          {userRole === "superAdmin" && (
             <button
-              onClick={() => handleClick('categorie')}
+              onClick={() => handleClick("categorie")}
               className="text-black hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
             >
               Catégorie
@@ -41,9 +42,9 @@ export default function Dashboard({ userRole }: { userRole: string }) {
           )}
 
           {/* Onglet Utilisateur : visible uniquement pour superAdmin */}
-          {(userRole === 'superAdmin' || userRole === 'adminVille') && (
+          {(userRole === "superAdmin" || userRole === "adminVille") && (
             <button
-              onClick={() => handleClick('utilisateur')}
+              onClick={() => handleClick("utilisateur")}
               className="text-black hover:text-gray-700 last:border-none px-3 py-2 text-sm font-medium"
             >
               Utilisateur
@@ -52,11 +53,15 @@ export default function Dashboard({ userRole }: { userRole: string }) {
         </div>
       </div>
 
-      {/* Affichage conditionnel des composants */}
-      <div className="mt-4">
-        {activeComponent === 'ville' && <VilleComponent />}
-        {/* {activeComponent === 'categorie' && <CategorieComponent />}
-        {activeComponent === 'utilisateur' && <UtilisateurComponent />} */}
+      <div className="mt-6">
+      {activeComponent === 'ville' && <VilleComponent />}
+
+        {activeComponent === "categorie" && (
+          <div>Composant Catégorie à venir</div>
+          // ou <CategorieComponent />
+        )}
+
+        {activeComponent === "utilisateur" && <UserManager />}
       </div>
     </div>
   );
