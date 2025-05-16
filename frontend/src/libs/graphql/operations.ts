@@ -37,6 +37,40 @@ export const RESET_PASSWORD = gql`
     resetPassword(newPassword: $newPassword, token: $token)
   }
 `;
+export const CREATE_INTERESTPOINT = gql`
+  mutation CreateInterestPoint($data: InterestPointInput!) {
+    createInterestPoint(data: $data) {
+      id
+    }
+}`;
+
+export const REPLACE_INTERESTPOINT = gql`
+  mutation ReplaceInterestPointById($data: InterestPointInput!, $interestPointId: String!) {
+    replaceInterestPointById(data: $data, interestPointId: $interestPointId) {
+      id
+      name
+      description
+      address
+      link_url
+      category {
+        id
+        name
+        color
+      }
+      pictures {
+        id
+        url
+        name
+      }
+    }
+}`;
+
+export const DELETE_INTERESTPOINT = gql`
+  mutation DeleteInterestPointById($interestPointId: String!) {
+    deleteInterestPointById(interestPointId: $interestPointId)
+}`;
+
+
 export const GET_INTEREST_POINTS = gql`
 query GetInterestPoints {
   getInterestPoints {
