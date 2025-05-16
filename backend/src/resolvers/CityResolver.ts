@@ -20,7 +20,7 @@ export class CityInput {
   postalCode!: string;
 
   @Field()
-  lattitude!: number;
+  latitude!: number;
 
   @Field()
   longitude!: number;
@@ -33,7 +33,11 @@ export class CityInput {
 export class CityResolver {
   @Query(() => [City])
   async getCities() {
-    const cities = await City.find();
+    const cities = await City.find({
+      relations: {
+        users: true,
+      },
+    });
     return cities;
   }
 
@@ -41,7 +45,7 @@ export class CityResolver {
   async getCityById(@Arg("adId") id: string) {
     const city = await City.findOneOrFail({
       where: { id },
-      relations: ["interestPoints"],
+      relations: ["interestPoints", "users"],
     });
     if (!city) {
       throw new Error("City not found");
