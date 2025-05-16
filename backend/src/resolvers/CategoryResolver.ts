@@ -1,6 +1,5 @@
 import { Arg, Field, InputType, Query, Resolver, Mutation, ID } from "type-graphql";
 import { Category } from "../entities/Category";
-import type { InterestPoint } from "../entities/InterestPoint";
 
 @InputType()
 class CategoryInput {
@@ -12,9 +11,18 @@ class CategoryInput {
 
   @Field()
   color!: string;
+}
 
-  @Field(() => [ID])
-  interestPoints?: InterestPoint[];
+@InputType()
+class UpdateCategoryInput {
+  @Field({ nullable: true })
+  name?: string;
+
+  @Field({ nullable: true })
+  description?: string;
+
+  @Field({ nullable: true })
+  color?: string;
 }
 
 @Resolver(Category)
@@ -42,7 +50,7 @@ export class CategoryResolver {
   @Mutation(() => Category)
   async replaceCategoryById(
     @Arg("categoryId") id: string,
-    @Arg("data") data: CategoryInput
+    @Arg("data") data: UpdateCategoryInput
   ) {
     const category = await Category.findOneByOrFail({ id });
     Object.assign(category, {
