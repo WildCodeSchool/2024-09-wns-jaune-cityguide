@@ -316,7 +316,7 @@ export default function Navbar() {
       </nav>
 
       {showPopup && (
-        <div className="fixed top-20 right-3 max-w-[350px] w-auto mt-5 bg-white border-3 border-[#706eeb] px-6 py-4 rounded-xl shadow-lg flex items-center justify-start space-x-3 transition-all ease-in-out duration-300 transform opacity-100 scale-100">
+        <div className="fixed top-20 right-3 max-w-[350px] w-auto z-1000 mt-5 bg-white border-3 border-[#706eeb] px-6 py-4 rounded-xl shadow-lg flex items-center justify-start space-x-3 transition-all ease-in-out duration-300 transform opacity-100 scale-100">
           <div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
