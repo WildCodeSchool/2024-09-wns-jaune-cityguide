@@ -26,6 +26,10 @@ const start = async () => {
 		.then(() => console.log("Database connected"))
 		.catch((err) => console.error("Error connecting to the database", err));
 
+	await seedDatabase()
+    .then(() => console.log("Database seeded"))
+    .catch((err) => console.error("Error seeding the database", err));
+
 	const schema = await buildSchema({
 		resolvers: [
 			CityResolver,
@@ -37,6 +41,7 @@ const start = async () => {
 		],
 		//authChecker: authChecker,
 	});
+	
 
 	const apiServer = new ApolloServer({ schema, introspection: true });
 
