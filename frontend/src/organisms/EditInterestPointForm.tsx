@@ -78,7 +78,7 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
   return (
     <>
      {showPopup && (
-        <div className="fixed bottom-4 right-4 bg-white border border-[#706eeb] px-6 py-3 rounded-xl shadow-xl z-[1000]">
+        <div className="fixed bottom-4 right-4 bg-white border border-[#706eeb] px-6 py-3 rounded-xl shadow-xl z-[900]">
           <div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -105,6 +105,8 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
           </div>
         </div>
       )}
+      <div className="max-h-screen overflow-y-auto sm:overflow-visible sm:max-h-none px-4 pb-6">
+
       <form onSubmit={handleSubmit}>
         <div className="sheet-header w-full flex items-center justify-center space-x-4 py-4 text-gray-600">
 
@@ -225,6 +227,7 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
           </button>
         </div>
       </form>
+      </div>
     </>
   );
 }

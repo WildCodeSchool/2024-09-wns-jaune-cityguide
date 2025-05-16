@@ -73,11 +73,11 @@ export default function CreateInterestPointForm({
   return (
 
     <aside
-      className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-50 ${isOpen ? "translate-x-0" : "translate-x-full"
+      className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-[900] ${isOpen ? "translate-x-0" : "translate-x-full"
         } rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
     >
       {showPopup && (
-        <div className="fixed bottom-4 right-4 bg-white border border-[#706eeb] px-6 py-3 rounded-xl shadow-xl z-[1000]">
+        <div className="fixed bottom-4 right-4 bg-white border border-[#706eeb] px-6 py-3 rounded-xl shadow-xl z-[900]">
           <div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"

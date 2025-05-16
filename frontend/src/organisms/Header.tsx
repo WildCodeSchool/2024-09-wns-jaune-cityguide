@@ -39,10 +39,10 @@ export default function Navbar() {
       <nav className="nav-container primary-bg z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between h-auto sm:h-20">
         <div className="desktop-nav hidden sm:flex items-center justify-between h-full w-full p-14">
           {/* Logo */}
-          <div className="flex justify-center -mt-12 lg:mt-12">
+          <div className="flex justify-center -mt-12 lg:mt-12 z-[901]">
             <a href="/" className="flex-shrink-0">
               <img
-                className="rounded-full border-5 lg:w-28 lg:h-28"
+                className="rounded-full border-5 lg:w-28 lg:h-28 z-[901]"
                 style={{ borderColor: "#706EEB" }}
                 src={logo}
                 alt="City Guide"
@@ -169,9 +169,9 @@ export default function Navbar() {
 
         <div className="w-full h-15 sm:hidden relative px-4">
           <div className="flex items-center justify-between h-full">
-            <a href="/" className="absolute -bottom-6 left-4 z-10">
+            <a href="/" className="absolute -bottom-6 left-4 z-[901]">
               <img
-                className="rounded-full border-4 w-16 h-16"
+                className="rounded-full border-4 w-16 h-16 z-[901]"
                 style={{ borderColor: "#706EEB" }}
                 src={logo}
                 alt="City Guide"

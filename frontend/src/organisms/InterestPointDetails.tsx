@@ -69,7 +69,7 @@ export default function InterestPointDetails({
 	return (
 		<>
 			<aside
-				className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-50 ${isOpen ? "translate-x-0" : "translate-x-full"
+				className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-[900] ${isOpen ? "translate-x-0" : "translate-x-full"
 					} rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
 			>
 				{isEditing ? (
@@ -187,7 +187,7 @@ export default function InterestPointDetails({
 				/>
 			)}
 			{showDeletedPopup && (
-				<div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-[9999]">
+				<div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-[999]">
 					Point d’intérêt supprimé avec succès.
 				</div>
 			)}

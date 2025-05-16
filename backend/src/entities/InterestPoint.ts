@@ -53,7 +53,7 @@ export class InterestPoint extends BaseEntity {
 	@ManyToOne(
 		() => City,
 		(city) => city.interestPoints,
-		{ onDelete: "CASCADE", onUpdate: "CASCADE"},
+		{ onDelete: "CASCADE", onUpdate: "CASCADE" },
 	)
 	city!: City;
 

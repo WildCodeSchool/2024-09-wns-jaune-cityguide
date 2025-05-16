@@ -99,11 +99,14 @@ export default function MapComponent({
 		}
 	}, [selectedCity, interestPointsByCity]);
 
+	const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+
 	return (
 		<div className="w-full h-screen z-0">
 			<MapContainer
 				center={mapCenter}
 				zoom={13}
+				zoomControl={!isMobile}
 				className="w-full h-full"
 				id="map"
 			>
