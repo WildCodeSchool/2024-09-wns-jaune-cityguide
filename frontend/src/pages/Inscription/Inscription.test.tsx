@@ -179,8 +179,6 @@ describe("Submit valid form without triggering any server error", () => {
 			),
 		).toBeInTheDocument();
 	});
-	//it("should set the user's city as the selected city after successful registration", async () => {});
-	//it("should load interest points related to the selected city after successful registration", async () => {});
 });
 
 describe("Submit valid form but trigger server errors", () => {
