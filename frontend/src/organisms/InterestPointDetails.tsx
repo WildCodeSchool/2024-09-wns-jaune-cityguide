@@ -24,7 +24,6 @@ export default function InterestPointDetails({
 	const [showDeletedPopup, setShowDeletedPopup] = useState(false);
 	const [deletePoint, { data: deletedData }] = useDeleteInterestPointByIdMutation();
 	const navigate = useNavigate();
-	// const [deleteInterestPoint] = useDeleteInterestPointByIdMutation();
 
 	// Handling click outside of the sheet: https://dev.to/rashed_iqbal/how-to-handle-outside-clicks-in-react-with-typescript-4lmc
 	const sheetRef = useRef<HTMLDivElement>(null);
@@ -104,9 +103,7 @@ export default function InterestPointDetails({
 									onClick={() => setIsEditing(true)}
 									className="cursor-pointer text-gray-600 hover:text-gray-800 flex items-center gap-1 text-sm"
 								><span className="material-symbols-outlined text-xs">
-										edit
-									</span>
-
+										edit</span>
 									Modifier
 								</button>
 								<button

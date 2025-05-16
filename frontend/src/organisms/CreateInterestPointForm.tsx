@@ -19,7 +19,7 @@ export default function CreateInterestPointForm({
   const { loading, error, data } = useGetCategoriesQuery();
   const [createInterestPoint, { data: createdData, loading: submitting, error: createError }] =
     useCreateInterestPointMutation();
-  const { data: cityData, loading: citiesLoading, error: citiesError } = useGetCitiesQuery();
+  const { data: cityData} = useGetCitiesQuery();
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
