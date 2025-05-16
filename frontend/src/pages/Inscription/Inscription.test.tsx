@@ -30,6 +30,7 @@ vi.mock("react-router-dom", async () => {
 	};
 });
 
+let mockError: Error | null = null;
 const mockValidRegister = vi.fn().mockResolvedValue({
 	data: {
 		registerUser: JSON.stringify({
@@ -43,7 +44,7 @@ const mockValidRegister = vi.fn().mockResolvedValue({
 vi.mock("../../libs/graphql/generated/graphql-types", () => ({
 	useRegisterUserMutation: () => [
 		mockValidRegister,
-		{ loading: false, error: null },
+		{ loading: false, error: mockError },
 	],
 }));
 
@@ -167,6 +168,32 @@ describe("Submit valid form without triggering any server error", () => {
 	//it("should display a success message after successful registration", async () => {});
 	//it("should set the user's city as the selected city after successful registration", async () => {});
 	//it("should load interest points related to the selected city after successful registration", async () => {});
+});
+
+describe("Submit valid form but trigger server errors", () => {
+	beforeEach(() => {
+		mockValidRegister.mockClear();
+		renderRegistrationPage();
+	});
+
+	it("should display an error message when the email is already used", async () => {
+		mockValidRegister.mockRejectedValueOnce(
+			new Error("Cet email est déjà utilisé."),
+		);
+		mockError = new Error("Cet email est déjà utilisé.");
+
+		fillValidForm();
+		const submitButton = screen.getByRole("button", { name: "M'inscrire" });
+
+		await fireEvent.click(submitButton);
+		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
+
+		await waitFor(() => {
+			expect(
+				screen.getByText("Cet email est déjà utilisé."),
+			).toBeInTheDocument();
+		});
+	});
 });
 
 function fillValidForm() {
