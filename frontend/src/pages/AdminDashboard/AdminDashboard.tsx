@@ -1,8 +1,7 @@
 import { useState } from "react";
 import UserManager from "../Admin/UserManager";
-import VilleComponent from './VilleComponent';
-// import CategorieComponent from './CategorieComponent';  // Composant bidon en attendant le vrai composant Catégorie
-// import UtilisateurComponent from './UtilisateurComponent';  // Composant bidon en attendant le vrai composant Utilisateur
+import VilleComponent from "./VilleComponent";
+import CategoryManager from "../CategoryManager/CategoryManager";
 
 // L'utilisateur sera passé en prop ou stocké dans un contexte (par exemple `role`)
 // Ici, on suppose que le rôle de l'utilisateur est "superAdmin", "adminVille", ou "user"
@@ -54,12 +53,9 @@ export default function Dashboard({ userRole }: { userRole: string }) {
       </div>
 
       <div className="mt-6">
-      {activeComponent === 'ville' && <VilleComponent />}
+        {activeComponent === "ville" && <VilleComponent />}
 
-        {activeComponent === "categorie" && (
-          <div>Composant Catégorie à venir</div>
-          // ou <CategorieComponent />
-        )}
+        {activeComponent === "categorie" && <CategoryManager />}
 
         {activeComponent === "utilisateur" && <UserManager />}
       </div>
