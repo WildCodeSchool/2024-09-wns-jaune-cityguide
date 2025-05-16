@@ -22,9 +22,7 @@ export default function Dashboard({ userRole }: { userRole: string }) {
         <div className="flex justify-between w-full">
           {/* Onglet Ville : visible pour tous les admins, mais seulement accessible pour adminVille et superAdmin */}
           {(userRole === "superAdmin" || userRole === "adminVille") && (
-          {(userRole === "superAdmin" || userRole === "adminVille") && (
             <button
-              onClick={() => handleClick("ville")}
               onClick={() => handleClick("ville")}
               className="text-black hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
             >
@@ -34,9 +32,7 @@ export default function Dashboard({ userRole }: { userRole: string }) {
 
           {/* Onglet Catégorie : visible uniquement pour superAdmin */}
           {userRole === "superAdmin" && (
-          {userRole === "superAdmin" && (
             <button
-              onClick={() => handleClick("categorie")}
               onClick={() => handleClick("categorie")}
               className="text-black hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
             >
@@ -46,9 +42,7 @@ export default function Dashboard({ userRole }: { userRole: string }) {
 
           {/* Onglet Utilisateur : visible uniquement pour superAdmin */}
           {(userRole === "superAdmin" || userRole === "adminVille") && (
-          {(userRole === "superAdmin" || userRole === "adminVille") && (
             <button
-              onClick={() => handleClick("utilisateur")}
               onClick={() => handleClick("utilisateur")}
               className="text-black hover:text-gray-700 last:border-none px-3 py-2 text-sm font-medium"
             >

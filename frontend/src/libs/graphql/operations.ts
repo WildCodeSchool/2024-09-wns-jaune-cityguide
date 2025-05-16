@@ -70,15 +70,7 @@ export const DELETE_INTERESTPOINT = gql`
     deleteInterestPointById(interestPointId: $interestPointId)
 }`;
 
-export const GET_CATEGORIES = gql`
-  query GetCategories {
-    getCategories {
-      id
-      name
-      color
-    }
-  }
-`;
+
 export const GET_INTEREST_POINTS = gql`
 query GetInterestPoints {
   getInterestPoints {

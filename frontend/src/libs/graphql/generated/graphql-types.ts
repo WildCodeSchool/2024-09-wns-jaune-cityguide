@@ -290,6 +290,7 @@ export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   firstname?: InputMaybe<Scalars['String']['input']>;
   lastname?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<UserRole>;
 };
 
 export type User = {
@@ -372,11 +373,6 @@ export type DeleteInterestPointByIdMutationVariables = Exact<{
 
 export type DeleteInterestPointByIdMutation = { __typename?: 'Mutation', deleteInterestPointById: boolean };
 
-export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, color: string }> };
-
 export type GetInterestPointsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -395,6 +391,11 @@ export type RegisterUserMutationVariables = Exact<{
 
 
 export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: string };
+
+export type GetStatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetStatsQuery = { __typename?: 'Query', getUserCount: number, getCityCount: number, getPlaceCount: number };
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -710,47 +711,6 @@ export function useDeleteInterestPointByIdMutation(baseOptions?: Apollo.Mutation
 export type DeleteInterestPointByIdMutationHookResult = ReturnType<typeof useDeleteInterestPointByIdMutation>;
 export type DeleteInterestPointByIdMutationResult = Apollo.MutationResult<DeleteInterestPointByIdMutation>;
 export type DeleteInterestPointByIdMutationOptions = Apollo.BaseMutationOptions<DeleteInterestPointByIdMutation, DeleteInterestPointByIdMutationVariables>;
-export const GetCategoriesDocument = gql`
-    query GetCategories {
-  getCategories {
-    id
-    name
-    color
-  }
-}
-    `;
-
-/**
- * __useGetCategoriesQuery__
- *
- * To run a query within a React component, call `useGetCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCategoriesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
-      }
-export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
-        }
-export function useGetCategoriesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
-        }
-export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
-export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
-export type GetCategoriesSuspenseQueryHookResult = ReturnType<typeof useGetCategoriesSuspenseQuery>;
-export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const GetInterestPointsDocument = gql`
     query GetInterestPoints {
   getInterestPoints {
@@ -907,6 +867,45 @@ export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions
 export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
 export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
+export const GetStatsDocument = gql`
+    query GetStats {
+  getUserCount
+  getCityCount
+  getPlaceCount
+}
+    `;
+
+/**
+ * __useGetStatsQuery__
+ *
+ * To run a query within a React component, call `useGetStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetStatsQuery(baseOptions?: Apollo.QueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
+      }
+export function useGetStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
+        }
+export function useGetStatsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
+        }
+export type GetStatsQueryHookResult = ReturnType<typeof useGetStatsQuery>;
+export type GetStatsLazyQueryHookResult = ReturnType<typeof useGetStatsLazyQuery>;
+export type GetStatsSuspenseQueryHookResult = ReturnType<typeof useGetStatsSuspenseQuery>;
+export type GetStatsQueryResult = Apollo.QueryResult<GetStatsQuery, GetStatsQueryVariables>;
 export const GetCategoriesDocument = gql`
     query GetCategories {
   getCategories {
@@ -1095,42 +1094,3 @@ export function useDeleteCategoryByIdMutation(baseOptions?: Apollo.MutationHookO
 export type DeleteCategoryByIdMutationHookResult = ReturnType<typeof useDeleteCategoryByIdMutation>;
 export type DeleteCategoryByIdMutationResult = Apollo.MutationResult<DeleteCategoryByIdMutation>;
 export type DeleteCategoryByIdMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryByIdMutation, DeleteCategoryByIdMutationVariables>;
-export const GetStatsDocument = gql`
-    query GetStats {
-  getUserCount
-  getCityCount
-  getPlaceCount
-}
-    `;
-
-/**
- * __useGetStatsQuery__
- *
- * To run a query within a React component, call `useGetStatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetStatsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetStatsQuery(baseOptions?: Apollo.QueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
-      }
-export function useGetStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
-        }
-export function useGetStatsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
-        }
-export type GetStatsQueryHookResult = ReturnType<typeof useGetStatsQuery>;
-export type GetStatsLazyQueryHookResult = ReturnType<typeof useGetStatsLazyQuery>;
-export type GetStatsSuspenseQueryHookResult = ReturnType<typeof useGetStatsSuspenseQuery>;
-export type GetStatsQueryResult = Apollo.QueryResult<GetStatsQuery, GetStatsQueryVariables>;
