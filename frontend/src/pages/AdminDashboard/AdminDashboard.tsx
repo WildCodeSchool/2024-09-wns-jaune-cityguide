@@ -1,8 +1,7 @@
 import { useState } from "react";
 import UserManager from "../Admin/UserManager";
-// import VilleComponent from './VilleComponent';  // Composant bidon en attendant le vrai composant Ville
-// import CategorieComponent from './CategorieComponent';  // Composant bidon en attendant le vrai composant Catégorie
-// import UtilisateurComponent from './UtilisateurComponent';  // Composant bidon en attendant le vrai composant Utilisateur
+import VilleComponent from "./VilleComponent";
+import CategoryManager from "../CategoryManager/CategoryManager";
 
 // L'utilisateur sera passé en prop ou stocké dans un contexte (par exemple `role`)
 // Ici, on suppose que le rôle de l'utilisateur est "superAdmin", "adminVille", ou "user"
@@ -23,7 +22,9 @@ export default function Dashboard({ userRole }: { userRole: string }) {
         <div className="flex justify-between w-full">
           {/* Onglet Ville : visible pour tous les admins, mais seulement accessible pour adminVille et superAdmin */}
           {(userRole === "superAdmin" || userRole === "adminVille") && (
+          {(userRole === "superAdmin" || userRole === "adminVille") && (
             <button
+              onClick={() => handleClick("ville")}
               onClick={() => handleClick("ville")}
               className="text-black hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
             >
@@ -33,7 +34,9 @@ export default function Dashboard({ userRole }: { userRole: string }) {
 
           {/* Onglet Catégorie : visible uniquement pour superAdmin */}
           {userRole === "superAdmin" && (
+          {userRole === "superAdmin" && (
             <button
+              onClick={() => handleClick("categorie")}
               onClick={() => handleClick("categorie")}
               className="text-black hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
             >
@@ -43,7 +46,9 @@ export default function Dashboard({ userRole }: { userRole: string }) {
 
           {/* Onglet Utilisateur : visible uniquement pour superAdmin */}
           {(userRole === "superAdmin" || userRole === "adminVille") && (
+          {(userRole === "superAdmin" || userRole === "adminVille") && (
             <button
+              onClick={() => handleClick("utilisateur")}
               onClick={() => handleClick("utilisateur")}
               className="text-black hover:text-gray-700 last:border-none px-3 py-2 text-sm font-medium"
             >
@@ -54,15 +59,9 @@ export default function Dashboard({ userRole }: { userRole: string }) {
       </div>
 
       <div className="mt-6">
-        {activeComponent === "ville" && (
-          <div>Composant Ville à venir</div>
-          // ou <VilleComponent />
-        )}
+        {activeComponent === "ville" && <VilleComponent />}
 
-        {activeComponent === "categorie" && (
-          <div>Composant Catégorie à venir</div>
-          // ou <CategorieComponent />
-        )}
+        {activeComponent === "categorie" && <CategoryManager />}
 
         {activeComponent === "utilisateur" && <UserManager />}
       </div>
