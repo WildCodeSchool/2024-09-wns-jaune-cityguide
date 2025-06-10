@@ -10,7 +10,7 @@ const Footer: FC = () => {
 	const isMapPage = location.pathname === "/map";
 	return (
 		<footer
-			className="bg-[rgb(112,110,235)]"
+			className="bg-[rgb(112,110,235)] mt-auto"
 			style={{ display: isMapPage ? "none" : "block" }}
 		>
 			<div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md py-9 px-4">
