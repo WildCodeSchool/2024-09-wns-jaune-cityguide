@@ -1,5 +1,4 @@
 import { FormEvent, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   type InterestPoint,
   type InterestPointInput,
@@ -14,7 +13,6 @@ type EditInterestPointFormProps = {
 
 export default function EditInterestPointForm({ interestPoint, onClose }: EditInterestPointFormProps) {
   const { loading, error, data } = useGetCategoriesQuery();
-  const navigate = useNavigate();
   const [replaceInterestPoint, { data: editedData, loading: submitting, error: editError }] =
     useReplaceInterestPointByIdMutation();
 
@@ -48,7 +46,7 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
       });
 
       if (result?.data?.replaceInterestPointById) {
-        console.log("point modifié");
+          console.log("Point modifié !");
       }
     } catch (err) {
       console.error("Erreur lors de la modification :", err);
@@ -64,8 +62,7 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
     const timer = setTimeout(() => {
       setShowPopup(false);
       onClose?.();
-      navigate("/map");
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [editedData]);
