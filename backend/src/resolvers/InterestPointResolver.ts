@@ -90,28 +90,38 @@ export class InterestPointResolver {
       where: { id: data.category },
     });
 
-    let interestPoint = new InterestPoint();
-    interestPoint = Object.assign(interestPoint, data);
-    interestPoint.city = city;
-    interestPoint.category = category;
-
-    await interestPoint.save();
-    return interestPoint;
-  }
-
-  @Mutation(() => Boolean)
-  async deleteInterestPointById(@Arg("interestPointId") id: string) {
-    return (await InterestPoint.delete({ id })).affected;
-  }
-
-  @Mutation(() => InterestPoint)
-  async replaceInterestPointById(
-    @Arg("interestPointId") id: string,
-    @Arg("data") data: InterestPointInput
-  ) {
-    let interestPoint = await InterestPoint.findOneByOrFail({ id });
-    interestPoint = Object.assign(interestPoint, data);
-    await interestPoint.save();
-    return interestPoint;
-  }
+		let interestPoint = new InterestPoint();
+		interestPoint = Object.assign(interestPoint, data);
+		interestPoint.city = city;
+		interestPoint.category = category;
+		
+		await interestPoint.save()
+		return interestPoint;
+	}
+	
+	@Mutation(() => Boolean)
+	async deleteInterestPointById( @Arg("interestPointId") id: string) {
+		return (await InterestPoint.delete({id})).affected
+	}
+	
+	@Mutation(() => InterestPoint)
+	async replaceInterestPointById( @Arg("interestPointId") id: string, @Arg("data") data: InterestPointInput ) {
+		let interestPoint = await InterestPoint.findOne({
+			where: {id: id},
+			relations: ["category", "pictures"]
+		})
+		if (!interestPoint) throw new Error("oupsi.")
+		console.log(interestPoint)
+		let newcategory: Category
+		if(interestPoint.category.id !== data.category) {
+			newcategory = await Category.findOneByOrFail({id: data.category})
+		} else newcategory = interestPoint.category
+		interestPoint = Object.assign(interestPoint, {
+			...data,
+			category: newcategory
+		})
+		await interestPoint.save()
+		console.log(interestPoint)
+		return interestPoint;
+	}
 }

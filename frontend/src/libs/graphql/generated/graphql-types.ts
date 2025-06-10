@@ -45,7 +45,7 @@ export type City = {
 
 export type CityInput = {
   interestPoints: Array<Scalars['ID']['input']>;
-  lattitude: Scalars['Float']['input'];
+  latitude: Scalars['Float']['input'];
   longitude: Scalars['Float']['input'];
   name: Scalars['String']['input'];
   postalCode: Scalars['String']['input'];
@@ -290,6 +290,7 @@ export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   firstname?: InputMaybe<Scalars['String']['input']>;
   lastname?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<UserRole>;
 };
 
 export type User = {
@@ -350,6 +351,28 @@ export type ResetPasswordMutationVariables = Exact<{
 
 export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: string };
 
+export type CreateInterestPointMutationVariables = Exact<{
+  data: InterestPointInput;
+}>;
+
+
+export type CreateInterestPointMutation = { __typename?: 'Mutation', createInterestPoint: { __typename?: 'InterestPoint', id: string } };
+
+export type ReplaceInterestPointByIdMutationVariables = Exact<{
+  data: InterestPointInput;
+  interestPointId: Scalars['String']['input'];
+}>;
+
+
+export type ReplaceInterestPointByIdMutation = { __typename?: 'Mutation', replaceInterestPointById: { __typename?: 'InterestPoint', id: string, name: string, description: string, address: string, link_url: string, category: { __typename?: 'Category', id: string, name: string, color: string }, pictures: Array<{ __typename?: 'Picture', id: string, url: string, name: string }> } };
+
+export type DeleteInterestPointByIdMutationVariables = Exact<{
+  interestPointId: Scalars['String']['input'];
+}>;
+
+
+export type DeleteInterestPointByIdMutation = { __typename?: 'Mutation', deleteInterestPointById: boolean };
+
 export type GetInterestPointsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -368,6 +391,11 @@ export type RegisterUserMutationVariables = Exact<{
 
 
 export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: string };
+
+export type GetStatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetStatsQuery = { __typename?: 'Query', getUserCount: number, getCityCount: number, getPlaceCount: number };
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -571,6 +599,118 @@ export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOption
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
 export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export const CreateInterestPointDocument = gql`
+    mutation CreateInterestPoint($data: InterestPointInput!) {
+  createInterestPoint(data: $data) {
+    id
+  }
+}
+    `;
+export type CreateInterestPointMutationFn = Apollo.MutationFunction<CreateInterestPointMutation, CreateInterestPointMutationVariables>;
+
+/**
+ * __useCreateInterestPointMutation__
+ *
+ * To run a mutation, you first call `useCreateInterestPointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateInterestPointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createInterestPointMutation, { data, loading, error }] = useCreateInterestPointMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateInterestPointMutation(baseOptions?: Apollo.MutationHookOptions<CreateInterestPointMutation, CreateInterestPointMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateInterestPointMutation, CreateInterestPointMutationVariables>(CreateInterestPointDocument, options);
+      }
+export type CreateInterestPointMutationHookResult = ReturnType<typeof useCreateInterestPointMutation>;
+export type CreateInterestPointMutationResult = Apollo.MutationResult<CreateInterestPointMutation>;
+export type CreateInterestPointMutationOptions = Apollo.BaseMutationOptions<CreateInterestPointMutation, CreateInterestPointMutationVariables>;
+export const ReplaceInterestPointByIdDocument = gql`
+    mutation ReplaceInterestPointById($data: InterestPointInput!, $interestPointId: String!) {
+  replaceInterestPointById(data: $data, interestPointId: $interestPointId) {
+    id
+    name
+    description
+    address
+    link_url
+    category {
+      id
+      name
+      color
+    }
+    pictures {
+      id
+      url
+      name
+    }
+  }
+}
+    `;
+export type ReplaceInterestPointByIdMutationFn = Apollo.MutationFunction<ReplaceInterestPointByIdMutation, ReplaceInterestPointByIdMutationVariables>;
+
+/**
+ * __useReplaceInterestPointByIdMutation__
+ *
+ * To run a mutation, you first call `useReplaceInterestPointByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReplaceInterestPointByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [replaceInterestPointByIdMutation, { data, loading, error }] = useReplaceInterestPointByIdMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      interestPointId: // value for 'interestPointId'
+ *   },
+ * });
+ */
+export function useReplaceInterestPointByIdMutation(baseOptions?: Apollo.MutationHookOptions<ReplaceInterestPointByIdMutation, ReplaceInterestPointByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReplaceInterestPointByIdMutation, ReplaceInterestPointByIdMutationVariables>(ReplaceInterestPointByIdDocument, options);
+      }
+export type ReplaceInterestPointByIdMutationHookResult = ReturnType<typeof useReplaceInterestPointByIdMutation>;
+export type ReplaceInterestPointByIdMutationResult = Apollo.MutationResult<ReplaceInterestPointByIdMutation>;
+export type ReplaceInterestPointByIdMutationOptions = Apollo.BaseMutationOptions<ReplaceInterestPointByIdMutation, ReplaceInterestPointByIdMutationVariables>;
+export const DeleteInterestPointByIdDocument = gql`
+    mutation DeleteInterestPointById($interestPointId: String!) {
+  deleteInterestPointById(interestPointId: $interestPointId)
+}
+    `;
+export type DeleteInterestPointByIdMutationFn = Apollo.MutationFunction<DeleteInterestPointByIdMutation, DeleteInterestPointByIdMutationVariables>;
+
+/**
+ * __useDeleteInterestPointByIdMutation__
+ *
+ * To run a mutation, you first call `useDeleteInterestPointByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteInterestPointByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteInterestPointByIdMutation, { data, loading, error }] = useDeleteInterestPointByIdMutation({
+ *   variables: {
+ *      interestPointId: // value for 'interestPointId'
+ *   },
+ * });
+ */
+export function useDeleteInterestPointByIdMutation(baseOptions?: Apollo.MutationHookOptions<DeleteInterestPointByIdMutation, DeleteInterestPointByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteInterestPointByIdMutation, DeleteInterestPointByIdMutationVariables>(DeleteInterestPointByIdDocument, options);
+      }
+export type DeleteInterestPointByIdMutationHookResult = ReturnType<typeof useDeleteInterestPointByIdMutation>;
+export type DeleteInterestPointByIdMutationResult = Apollo.MutationResult<DeleteInterestPointByIdMutation>;
+export type DeleteInterestPointByIdMutationOptions = Apollo.BaseMutationOptions<DeleteInterestPointByIdMutation, DeleteInterestPointByIdMutationVariables>;
 export const GetInterestPointsDocument = gql`
     query GetInterestPoints {
   getInterestPoints {
@@ -727,6 +867,45 @@ export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions
 export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
 export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
+export const GetStatsDocument = gql`
+    query GetStats {
+  getUserCount
+  getCityCount
+  getPlaceCount
+}
+    `;
+
+/**
+ * __useGetStatsQuery__
+ *
+ * To run a query within a React component, call `useGetStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetStatsQuery(baseOptions?: Apollo.QueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
+      }
+export function useGetStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
+        }
+export function useGetStatsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
+        }
+export type GetStatsQueryHookResult = ReturnType<typeof useGetStatsQuery>;
+export type GetStatsLazyQueryHookResult = ReturnType<typeof useGetStatsLazyQuery>;
+export type GetStatsSuspenseQueryHookResult = ReturnType<typeof useGetStatsSuspenseQuery>;
+export type GetStatsQueryResult = Apollo.QueryResult<GetStatsQuery, GetStatsQueryVariables>;
 export const GetCategoriesDocument = gql`
     query GetCategories {
   getCategories {
@@ -915,42 +1094,3 @@ export function useDeleteCategoryByIdMutation(baseOptions?: Apollo.MutationHookO
 export type DeleteCategoryByIdMutationHookResult = ReturnType<typeof useDeleteCategoryByIdMutation>;
 export type DeleteCategoryByIdMutationResult = Apollo.MutationResult<DeleteCategoryByIdMutation>;
 export type DeleteCategoryByIdMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryByIdMutation, DeleteCategoryByIdMutationVariables>;
-export const GetStatsDocument = gql`
-    query GetStats {
-  getUserCount
-  getCityCount
-  getPlaceCount
-}
-    `;
-
-/**
- * __useGetStatsQuery__
- *
- * To run a query within a React component, call `useGetStatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetStatsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetStatsQuery(baseOptions?: Apollo.QueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
-      }
-export function useGetStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
-        }
-export function useGetStatsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetStatsQuery, GetStatsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetStatsQuery, GetStatsQueryVariables>(GetStatsDocument, options);
-        }
-export type GetStatsQueryHookResult = ReturnType<typeof useGetStatsQuery>;
-export type GetStatsLazyQueryHookResult = ReturnType<typeof useGetStatsLazyQuery>;
-export type GetStatsSuspenseQueryHookResult = ReturnType<typeof useGetStatsSuspenseQuery>;
-export type GetStatsQueryResult = Apollo.QueryResult<GetStatsQuery, GetStatsQueryVariables>;

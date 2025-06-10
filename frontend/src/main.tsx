@@ -12,6 +12,7 @@ import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import MapPage from "./pages/Map/MapPage.tsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.tsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.tsx";
+import CategoryManager from "./pages/CategoryManager/CategoryManager.tsx";
 
 const router = createBrowserRouter([
 	{
