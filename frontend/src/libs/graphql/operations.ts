@@ -11,7 +11,6 @@ export const GET_CITIES = gql`
     }
 }`;
 
-
 export const LOGIN = gql`
   mutation LoginUser($data: UserInput!) {
     loginUser(data: $data)
@@ -24,13 +23,11 @@ export const LOGOUT = gql`
 }
 `;
 
-
 export const FORGOT_PASSWORD = gql`
   mutation ForgotPassword($email: String!) {
     forgotPassword(email: $email)
   }
 `;
-
 
 export const RESET_PASSWORD = gql`
   mutation resetPassword($newPassword: String!, $token: String!){
@@ -69,7 +66,6 @@ export const DELETE_INTERESTPOINT = gql`
   mutation DeleteInterestPointById($interestPointId: String!) {
     deleteInterestPointById(interestPointId: $interestPointId)
 }`;
-
 
 export const GET_INTEREST_POINTS = gql`
 query GetInterestPoints {
@@ -154,7 +150,6 @@ query GetCategories {
   }
 }`;
 
-
 export const GET_CATEGORY_BY_ID = gql`
 query GetCategoryById($categoryId: String!) {
   getCategoryById(categoryId: $categoryId) {
@@ -165,7 +160,6 @@ query GetCategoryById($categoryId: String!) {
   }
 }`;
 
-
 export const CREATE_CATEGORY = gql`
 mutation CreateCategory($data: CategoryInput!) {
   createCategory(data: $data) {
@@ -174,7 +168,6 @@ mutation CreateCategory($data: CategoryInput!) {
     color
   }
 }`;
-
 
 export const REPLACE_CATEGORY_BY_ID = gql`
 mutation ReplaceCategoryById($data: UpdateCategoryInput!, $categoryId: String!) {
@@ -186,8 +179,21 @@ mutation ReplaceCategoryById($data: UpdateCategoryInput!, $categoryId: String!) 
   }
 }`;
 
-
 export const DELETE_CATEGORY = gql`
 mutation DeleteCategoryById($categoryId: String!) {
   deleteCategoryById(categoryId: $categoryId)
+}`;
+
+export const GET_USERS = gql`
+query GetUsers {
+  getUsers {
+    id
+    firstname
+    lastname
+    role
+    city {
+      id
+      name
+    }
+  }
 }`;
