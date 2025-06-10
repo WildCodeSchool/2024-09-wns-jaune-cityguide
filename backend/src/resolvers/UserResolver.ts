@@ -132,8 +132,9 @@ export class UserResolver {
     const profile = {
       mail: user.email,
       firstname: user.firstname,
-      city: user.city,
+      city: city,
     };
+    console.log("profile", profile);
     return JSON.stringify(profile);
   }
 
