@@ -33,16 +33,15 @@ export default function CityManager() {
 
 	return (
 		<div className=" w-full flex flex-col min-h-full text-gray-800 h-full space-y-6 overflow-hidden">
-			<div className="flex mb-4 p-6">
-				<div className="w-1/2 flex flex-col items-center justify-center relative">
+			<div className="flex flex-col md:flex-row mb-4 p-4 gap-4 md:gap-0">
+				<div className="w-full md:w-1/2 flex flex-col items-center justify-center relative px-4">
 					<label
-						className="px-4 py-2 text-[#706EEB] font-medium"
+						className="px-4 py-2 text-[#706EEB] font-medium text-center"
 						htmlFor="city-search"
 					>
 						Rechercher une ville&nbsp;:
 					</label>
-
-					<div className="relative w-1/2">
+					<div className="relative w-full max-w-md">
 						<input
 							id="city-search"
 							type="text"
@@ -54,7 +53,7 @@ export default function CityManager() {
 						{searchQuery && (
 							<button
 								type="button"
-								className="absolute right-3 top-1/2 -translate-y-1/2 text-[#706eeb] font-bold text-lg ransition-transform duration-200 hover:scale-125"
+								className="absolute right-3 top-1/2 -translate-y-1/2 text-[#706eeb] font-bold text-lg transition-transform duration-200 hover:scale-125"
 								onClick={() => setSearchQuery("")}
 								aria-label="Effacer la recherche"
 							>
@@ -78,9 +77,9 @@ export default function CityManager() {
 						)}
 					</div>
 				</div>
-				<div className="w-1/2 flex items-center justify-center">
-					<div className="border-2 border-[#706eeb] text-[#706eeb] rounded-xl px-8 py-6 text-center">
-						<div className="text-base mb-2">Nombre de villes&nbsp;:</div>
+				<div className="w-full md:w-1/2 flex items-center justify-center">
+					<div className="border-2 border-[#706eeb] text-[#706eeb] rounded-xl px-4 py-3 md:px-6 md:py-4 text-center w-full max-w-xs mx-auto">
+						<div className="text-base mb-1">Nombre de villes&nbsp;:</div>
 						<div className="text-3xl font-bold">{cities.length}</div>
 					</div>
 				</div>
