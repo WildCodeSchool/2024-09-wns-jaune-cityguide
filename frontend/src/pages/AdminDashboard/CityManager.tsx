@@ -79,9 +79,17 @@ export default function CityManager() {
 					</div>
 				</div>
 				<div className="w-full md:w-1/2 flex items-center justify-center">
-					<div className="border-2 border-[#706eeb] text-[#706eeb] rounded-xl px-4 py-3 md:px-6 md:py-4 text-center w-full max-w-xs mx-auto">
-						<div className="text-base mb-1">Nombre de villes&nbsp;:</div>
-						<div className="text-3xl font-bold">{cities.length}</div>
+					<div className="w-full flex items-center justify-center md:hidden">
+						<div className="text-[#706eeb] rounded-lg px-3 py-2 text-center text-sm w-fit mx-auto">
+							<span className="font-medium">Nombre de villes&nbsp;:</span>{" "}
+							{cities.length}
+						</div>
+					</div>
+					<div className="w-full hidden md:flex items-center justify-center">
+						<div className="border-2 border-[#706eeb] text-[#706eeb] rounded-xl px-6 py-4 text-center w-full max-w-xs mx-auto">
+							<div className="text-base mb-1">Nombre de villes&nbsp;:</div>
+							<div className="text-3xl font-bold">{cities.length}</div>
+						</div>
 					</div>
 				</div>
 			</div>
