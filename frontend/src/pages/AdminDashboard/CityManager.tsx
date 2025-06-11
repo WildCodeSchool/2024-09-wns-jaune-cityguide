@@ -5,7 +5,7 @@ import { useCitiesStore } from "../../store/citiesStore";
 import { useUserStore } from "../../store/userStore";
 import { CityStatsCard } from "../../atoms/CityStatsCard";
 
-export default function VilleComponent() {
+export default function CityManager() {
 	const { cities, isLoading } = useCitiesStore();
 	const { users } = useUserStore() as { users: User[] };
 

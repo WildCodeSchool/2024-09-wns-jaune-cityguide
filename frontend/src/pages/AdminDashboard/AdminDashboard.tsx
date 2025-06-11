@@ -1,6 +1,6 @@
 import { useState } from "react";
 import UserManager from "../Admin/UserManager";
-import VilleComponent from "./VilleComponent";
+import CityManager from "./CityManager";
 import CategoryManager from "../CategoryManager/CategoryManager";
 
 type Props = {
@@ -61,7 +61,7 @@ export default function Dashboard({ userRole }: Props) {
 			</nav>
 
 			<main className="flex grow p-3 w-full">
-				{activeTab === "cities" && <VilleComponent />}
+				{activeTab === "cities" && <CityManager />}
 				{activeTab === "categories" && <CategoryManager />}
 				{activeTab === "users" && <UserManager />}
 				{!activeTab && (
