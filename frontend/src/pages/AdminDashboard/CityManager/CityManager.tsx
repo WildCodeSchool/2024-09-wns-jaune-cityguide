@@ -7,6 +7,7 @@ import { CityStatsCard } from "../../../atoms/CityStatsCard";
 import { UserRole } from "../../../libs/graphql/generated/graphql-types";
 
 import { Modal } from "../../../organisms/Modal";
+import { NewCityForm } from "./NewCityForm";
 
 export default function CityManager() {
 	const [modalContent, setModalContent] = useState<ReactNode>(null);
@@ -106,7 +107,7 @@ export default function CityManager() {
 					type="button"
 					className="bg-[#706EEB] text-white sm:px-2 sm:py-1 px-4 py-2 rounded-full shadow-md hover:bg-[#5a58d6] cursor-pointer transition"
 					onClick={() => {
-						openModalWithComponent(<div>Creation Form coming soon!</div>);
+						openModalWithComponent(<NewCityForm />);
 					}}
 				>
 					+ Ajouter une ville
