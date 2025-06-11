@@ -24,7 +24,7 @@ export default function Dashboard({ userRole }: { userRole: string }) {
           {(userRole === "superAdmin" || userRole === "adminVille") && (
             <button
               onClick={() => handleClick("ville")}
-              className="text-black hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
+              className="text-black cursor-pointer hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
             >
               Ville
             </button>
@@ -34,7 +34,7 @@ export default function Dashboard({ userRole }: { userRole: string }) {
           {userRole === "superAdmin" && (
             <button
               onClick={() => handleClick("categorie")}
-              className="text-black hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
+              className="text-black cursor-pointer hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
             >
               Catégorie
             </button>
@@ -44,9 +44,9 @@ export default function Dashboard({ userRole }: { userRole: string }) {
           {(userRole === "superAdmin" || userRole === "adminVille") && (
             <button
               onClick={() => handleClick("utilisateur")}
-              className="text-black hover:text-gray-700 last:border-none px-3 py-2 text-sm font-medium"
+              className="text-black cursor-pointer hover:text-gray-700 last:border-none px-3 py-2 text-sm font-medium"
             >
-              Utilisateur
+              Utilisateurs
             </button>
           )}
         </div>
