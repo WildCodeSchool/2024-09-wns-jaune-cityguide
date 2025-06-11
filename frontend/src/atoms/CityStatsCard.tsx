@@ -16,7 +16,7 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 	const totalUsers = cityUsers.length + cityAdmins.length;
 
 	return (
-		<div className="w-full max-w-xs sm:max-w-sm md:max-w-xs border border-[#706eeb] rounded-2xl bg-white shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 ease-in-out cursor-pointer">
+		<div className="w-full max-w-xs sm:max-w-sm md:max-w-xs border border-[#706eeb] rounded-2xl bg-white shadow-md cursor-pointer">
 			<div className="p-4 border-b border-[#706eeb] text-center">
 				<h2 className="text-lg md:text-xl font-semibold text-[#333]">
 					{city.name}
