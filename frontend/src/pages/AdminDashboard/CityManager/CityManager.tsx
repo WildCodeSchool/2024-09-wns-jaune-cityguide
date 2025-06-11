@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import type { City } from "../../@types/types";
-import type { User } from "../../store/userStore";
-import { useCitiesStore } from "../../store/citiesStore";
-import { useUserStore } from "../../store/userStore";
-import { CityStatsCard } from "../../atoms/CityStatsCard";
-import { UserRole } from "../../libs/graphql/generated/graphql-types";
+import type { City } from "../../../@types/types";
+import type { User } from "../../../store/userStore";
+import { useCitiesStore } from "../../../store/citiesStore";
+import { useUserStore } from "../../../store/userStore";
+import { CityStatsCard } from "../../../atoms/CityStatsCard";
+import { UserRole } from "../../../libs/graphql/generated/graphql-types";
 
 export default function CityManager() {
 	const { cities, isLoading } = useCitiesStore();
