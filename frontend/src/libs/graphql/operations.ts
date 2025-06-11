@@ -136,6 +136,44 @@ export const REGISTER_USER = gql`
     registerUser(data: $data)
 }`;
 
+export const GET_USERS = gql`
+  query GetUsers {
+    getUsers {
+      id
+      firstname
+      lastname
+      email
+      role
+    }
+}`;
+
+export const GET_USER_BY_ID = gql`
+  query GetUserById($userId: String!) {
+    getUserById(userId: $userId) {
+      id
+      firstname
+      lastname
+      email
+      role
+    }
+}`;
+
+
+export const UPDATE_USER = gql`
+  mutation UpdateUser($data: UpdateUserInput!, $userId: String!) {
+    updateUser(data: $data, userId: $userId) {
+      id
+    }
+}`;
+
+export const DELETE_USER = gql`
+  mutation DeleteUser($userId: String!) {
+    deleteUser(userId: $userId) {
+      id
+    }
+}`;
+
+
 export const GET_STATS = gql`
   query GetStats {
     getUserCount

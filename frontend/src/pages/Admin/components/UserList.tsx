@@ -1,16 +1,11 @@
+import { GetUsersQuery } from "../../../libs/graphql/generated/graphql-types";
 import UserCard from "./UserCard";
 
-type User = {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  role: string;
-};
+
 
 type Props = {
-  users: User[];
-  onSelect: (user: User) => void;
+  users: GetUsersQuery["getUsers"];
+  onSelect: (user: GetUsersQuery["getUsers"][0]) => void;
 };
 
 export default function UserList({ users, onSelect }: Props) {

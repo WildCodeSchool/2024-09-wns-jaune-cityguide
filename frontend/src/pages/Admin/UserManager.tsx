@@ -1,64 +1,50 @@
-import React, { useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { useState } from "react";
 import SearchBar from "./components/SearchBar";
 import UserStats from "./components/UserStats";
 import UserList from "./components/UserList";
 import UserEditForm from "./components/UserEditForm";
-
-type User = {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  role: string;
-};
-
-const GET_USERS = gql`
-  query {
-    getUsers {
-      id
-      firstname
-      lastname
-      email
-      role
-    }
-  }
-`;
+import { GetUserByIdQuery, GetUsersQuery, useGetUserByIdQuery, useGetUsersQuery } from "../../libs/graphql/generated/graphql-types";
 
 export default function UserManager() {
-  const { data, loading, error, refetch } = useQuery(GET_USERS);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const { data, loading, error, refetch } = useGetUsersQuery();
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [searchUser, setSearchUser] = useState("");
+
+  const { data: selectedUserData } = useGetUserByIdQuery({
+    variables: { userId: selectedUser || "" },
+    skip: !selectedUser, // Ne pas exécuter la requête si aucun utilisateur n'est sélectionné
+  });
 
   if (loading) return <p>Chargement des utilisateurs...</p>;
   if (error) return <p>Erreur : {error.message}</p>;
+  if (!data) return <p>Aucun utilisateur trouvé.</p>;
 
-  const users: User[] = data?.getUsers || [];
+  const users = data?.getUsers || [];
 
   const filteredUsers = users.filter((user) =>
     `${user.firstname} ${user.lastname}`
       .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+      .includes(searchUser.toLowerCase())
   );
 
-  const handleUserSelect = (user: User) => {
-    setSelectedUser(user);
+  const handleUserSelect = (user: GetUsersQuery["getUsers"][0]) => {
+    setSelectedUser(user.id);
   };
 
-  const handleUserUpdated = (updatedUser: User) => {
-    setSelectedUser(updatedUser);
-    refetch();
+  const handleUserUpdated = async (updatedUser: GetUserByIdQuery["getUserById"]) => {
+    setSelectedUser(updatedUser.id);
+    await refetch();
   };
 
-  const handleUserDeleted = (userId: string) => {
+  const handleUserDeleted = async () => {
     setSelectedUser(null);
-    refetch(); // recharge les users
+    await refetch();
   };
 
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
       <div className="flex justify-center">
-        <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
+        <SearchBar searchTerm={searchUser} onSearch={setSearchUser} />
       </div>
 
       <div className="flex justify-center">
@@ -69,9 +55,9 @@ export default function UserManager() {
         <UserList users={filteredUsers} onSelect={handleUserSelect} />
       </div>
 
-      {selectedUser && (
+      {selectedUser && selectedUserData?.getUserById && (
         <UserEditForm
-          user={selectedUser}
+          user={selectedUserData.getUserById}
           onUserUpdated={handleUserUpdated}
           onUserDeleted={handleUserDeleted}
         />

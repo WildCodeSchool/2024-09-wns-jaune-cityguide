@@ -1,41 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { gql, useMutation } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { useUpdateUserMutation, UserRole, GetUserByIdQuery, useDeleteUserMutation } from "../../../libs/graphql/generated/graphql-types";
 
-// --- GraphQL Mutations ---
-const UPDATE_USER = gql`
-  mutation UpdateUser($data: UpdateUserInput!, $userId: String!) {
-    updateUser(data: $data, userId: $userId) {
-      id
-      firstname
-      lastname
-      email
-      role
-    }
-  }
-`;
-
-const DELETE_USER = gql`
-  mutation DeleteUser($userId: String!) {
-    deleteUser(userId: $userId) {
-      id
-    }
-  }
-`;
 
 // --- Types ---
-type UserRole = "user" | "cityadmin" | "superuser";
-
-type User = {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  role: UserRole;
-};
-
 type Props = {
-  user: User;
-  onUserUpdated: (updatedUser: User) => void;
+  user: GetUserByIdQuery["getUserById"];
+  onUserUpdated: (updatedUser: GetUserByIdQuery["getUserById"]) => void;
   onUserDeleted: (userId: string) => void;
 };
 
@@ -49,8 +19,8 @@ export default function UserEditForm({
   const [lastname, setLastname] = useState(user.lastname);
   const [role, setRole] = useState<UserRole>(user.role);
 
-  const [updateUserMutation] = useMutation(UPDATE_USER);
-  const [deleteUserMutation] = useMutation(DELETE_USER);
+  const [updateUser] = useUpdateUserMutation();
+  const [deleteUser] = useDeleteUserMutation();
 
   useEffect(() => {
     setFirstname(user.firstname);
@@ -58,28 +28,21 @@ export default function UserEditForm({
     setRole(user.role);
   }, [user]);
 
-  const toGraphQLEnumRole = {
-    user: "USER",
-    cityadmin: "CITY_ADMIN",
-    superuser: "SUPER_USER",
-    superadmin: "SUPER_ADMIN",
-  } as const;
-
   const handleUpdate = async () => {
     try {
-      const { data } = await updateUserMutation({
+      const { data } = await updateUser({
         variables: {
           userId: user.id,
           data: {
             firstname,
             lastname,
-            role: toGraphQLEnumRole[role],
+            role,
           },
         },
       });
 
       if (data?.updateUser) {
-        onUserUpdated(data.updateUser);
+        onUserUpdated(data.updateUser as Props["user"]);
       }
     } catch (err) {
       console.error("Erreur lors de la mise à jour :", err);
@@ -90,7 +53,7 @@ export default function UserEditForm({
     if (!confirm("Es-tu sûr de vouloir supprimer cet utilisateur ?")) return;
 
     try {
-      await deleteUserMutation({
+      await deleteUser({
         variables: {
           userId: user.id,
         },
@@ -152,9 +115,9 @@ export default function UserEditForm({
             onChange={(e) => setRole(e.target.value as UserRole)}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           >
-            <option value="user">Utilisateur</option>
-            <option value="cityadmin">Admin de ville</option>
-            <option value="superuser">Super utilisateur</option>
+            <option value={UserRole.User}>Utilisateur</option>
+            <option value={UserRole.CityAdmin}>Admin de ville</option>
+            <option value={UserRole.SuperUser}>Super utilisateur</option>
           </select>
         </div>
       </div>
