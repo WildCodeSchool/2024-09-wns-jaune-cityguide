@@ -7,6 +7,7 @@ type Props = {
   user: GetUserByIdQuery["getUserById"];
   onUserUpdated: (updatedUser: GetUserByIdQuery["getUserById"]) => void;
   onUserDeleted: (userId: string) => void;
+  onCancel: () => void;
 };
 
 // --- Component ---
@@ -14,6 +15,7 @@ export default function UserEditForm({
   user,
   onUserUpdated,
   onUserDeleted,
+  onCancel,
 }: Props) {
   const [firstname, setFirstname] = useState(user.firstname);
   const [lastname, setLastname] = useState(user.lastname);
@@ -80,7 +82,7 @@ export default function UserEditForm({
             type="text"
             value={firstname}
             onChange={(e) => setFirstname(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+            className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           />
         </div>
 
@@ -90,7 +92,7 @@ export default function UserEditForm({
             type="text"
             value={lastname}
             onChange={(e) => setLastname(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+            className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           />
         </div>
 
@@ -102,7 +104,7 @@ export default function UserEditForm({
             type="text"
             value={user.email}
             readOnly
-            className="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 text-gray-500"
+            className="p-2 mt-1 block w-full rounded-md border-gray-300 bg-gray-100 text-gray-500"
           />
         </div>
 
@@ -113,7 +115,7 @@ export default function UserEditForm({
           <select
             value={role}
             onChange={(e) => setRole(e.target.value as UserRole)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+            className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           >
             <option value={UserRole.User}>Utilisateur</option>
             <option value={UserRole.CityAdmin}>Admin de ville</option>
@@ -128,6 +130,13 @@ export default function UserEditForm({
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
         >
           Sauvegarder
+        </button>
+
+        <button
+          onClick={onCancel}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded"
+        >
+          Annuler
         </button>
 
         <button
