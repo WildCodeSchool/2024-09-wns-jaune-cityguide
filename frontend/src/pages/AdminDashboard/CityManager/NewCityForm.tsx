@@ -25,7 +25,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 						id="name"
 						name="name"
 						type="text"
-						placeholder="Code postal"
+						placeholder="Nom de la ville"
 						disabled
 						className="border border-[#706eeb] bg-gray-100 rounded-sm w-full px-4 py-2 placeholder:text-sm"
 					/>
