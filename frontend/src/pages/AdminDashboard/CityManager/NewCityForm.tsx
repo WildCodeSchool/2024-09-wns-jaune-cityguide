@@ -6,13 +6,24 @@ export function NewCityForm() {
 			</div>
 			<div className="form-body flex flex-col space-y-4">
 				<div className="form-group flex flex-col space-y-2">
-					<label htmlFor="name">Nom de la ville</label>
+					<label htmlFor="search">Rechercher par nom ou code postal</label>
+					<input
+						id="search"
+						name="search"
+						type="text"
+						className="border border-[#706eeb] rounded-sm w-full px-4 py-2 placeholder:text-sm"
+						placeholder="Rechercher..."
+					/>
+				</div>
+				<div className="form-group flex flex-col space-y-2">
+					<label htmlFor="name">Ville</label>
 					<input
 						id="name"
 						name="name"
 						type="text"
-						className="border border-[#706eeb] rounded-sm w-full px-4 py-2 placeholder:text-sm"
-						placeholder="Rechercher une ville..."
+						placeholder="Code postal"
+						disabled
+						className="border border-[#706eeb] bg-gray-100 rounded-sm w-full px-4 py-2 placeholder:text-sm"
 					/>
 				</div>
 
@@ -24,7 +35,7 @@ export function NewCityForm() {
 						type="text"
 						placeholder="Code postal"
 						disabled
-						className="border border-[#706eeb] rounded-sm w-full px-4 py-2 placeholder:text-sm"
+						className="border border-[#706eeb] bg-gray-100 rounded-sm w-full px-4 py-2 placeholder:text-sm"
 					/>
 				</div>
 				<div className="coordinates flex gap-6">
@@ -36,7 +47,7 @@ export function NewCityForm() {
 							type="text"
 							disabled
 							placeholder="Latitude"
-							className="border border-[#706eeb] rounded-sm w-full px-4 py-2 placeholder:text-sm"
+							className="border border-[#706eeb] bg-gray-100 rounded-sm w-full px-4 py-2 placeholder:text-sm"
 						/>
 					</div>
 					<div className="form-group flex flex-col space-y-2 w-1/2">
@@ -47,7 +58,7 @@ export function NewCityForm() {
 							type="text"
 							disabled
 							placeholder="Longitude"
-							className="border border-[#706eeb] rounded-sm w-full px-4 py-2 placeholder:text-sm"
+							className="border border-[#706eeb] bg-gray-100 rounded-sm w-full px-4 py-2 placeholder:text-sm"
 						/>
 					</div>
 				</div>
