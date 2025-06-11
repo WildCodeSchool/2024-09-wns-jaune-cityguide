@@ -32,7 +32,7 @@ export default function CityManager() {
 	);
 
 	return (
-		<div className=" w-full flex flex-col min-h-full text-gray-800 h-full space-y-6 overflow-hidde">
+		<div className=" w-full flex flex-col min-h-full text-gray-800 h-full space-y-6 overflow-hidden">
 			<div className="flex mb-4 p-6">
 				<div className="w-1/2 flex flex-col items-center justify-center relative">
 					<label
@@ -46,7 +46,7 @@ export default function CityManager() {
 						<input
 							id="city-search"
 							type="text"
-							className="rounded-full p-3 w-full bg-white border-2 border-[#706eeb] text-lg placeholder-gray-400 focus:outline-none focus:border-[#706eeb] pr-12"
+							className="rounded-full p-3 w-full bg-white border-2 border-[#706eeb] placeholder:text-sm text-lg placeholder-gray-400 focus:outline-none focus:border-[#706eeb] pr-12"
 							placeholder="Nom de la ville..."
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
@@ -54,7 +54,7 @@ export default function CityManager() {
 						{searchQuery && (
 							<button
 								type="button"
-								className="absolute right-3 top-1/2 -translate-y-1/2 text-[#706eeb] font-bold text-lg"
+								className="absolute right-3 top-1/2 -translate-y-1/2 text-[#706eeb] font-bold text-lg ransition-transform duration-200 hover:scale-125"
 								onClick={() => setSearchQuery("")}
 								aria-label="Effacer la recherche"
 							>
