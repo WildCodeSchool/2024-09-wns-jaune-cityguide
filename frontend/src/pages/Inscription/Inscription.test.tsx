@@ -207,6 +207,32 @@ describe("Submit valid form but trigger server errors", () => {
 	});
 });
 
+describe("Submit valid form but trigger server errors", () => {
+	beforeEach(() => {
+		mockValidRegister.mockClear();
+		renderRegistrationPage();
+	});
+
+	it("should display an error message when the email is already used", async () => {
+		mockValidRegister.mockRejectedValueOnce(
+			new Error("Cet email est déjà utilisé."),
+		);
+		mockError = new Error("Cet email est déjà utilisé.");
+
+		fillValidForm();
+		const submitButton = screen.getByRole("button", { name: "M'inscrire" });
+
+		await fireEvent.click(submitButton);
+		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
+
+		await waitFor(() => {
+			expect(
+				screen.getByText("Cet email est déjà utilisé."),
+			).toBeInTheDocument();
+		});
+	});
+});
+
 function fillValidForm() {
 	const firstnameInput = screen.getByPlaceholderText("Prénom");
 	const lastnameInput = screen.getByPlaceholderText("Nom");
