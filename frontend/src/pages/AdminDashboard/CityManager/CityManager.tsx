@@ -12,6 +12,7 @@ import { NewCityForm } from "./NewCityForm";
 export default function CityManager() {
 	const [modalContent, setModalContent] = useState<ReactNode>(null);
 	const [formIsOpen, setFormIsOpen] = useState<boolean>(false);
+	const [sortBy, setSortBy] = useState<"name" | "postalCode">("name");
 
 	const { cities, isLoading } = useCitiesStore();
 	const { users } = useUserStore() as { users: User[] };
@@ -36,9 +37,19 @@ export default function CityManager() {
 			</div>
 		);
 	}
-	const filteredCities = cities.filter((city) =>
-		city.name?.toLowerCase().includes(searchQuery.toLowerCase()),
-	);
+	const filteredCities = cities
+		.filter((city) =>
+			city.name?.toLowerCase().includes(searchQuery.toLowerCase()),
+		)
+		.sort((a, b) => {
+			if (sortBy === "name") {
+				return (a.name ?? "").localeCompare(b.name ?? "");
+			}
+			if (sortBy === "postalCode") {
+				return (a.postalCode ?? "").localeCompare(b.postalCode ?? "");
+			}
+			return 0;
+		});
 
 	return (
 		<div className="w-full flex flex-col h-full overflow-auto text-gray-800 space-y-3 md:space-y-6 p-3">
@@ -102,7 +113,7 @@ export default function CityManager() {
 				</div>
 			</div>
 
-			<div className="flex justify-start w-full align-middle">
+			<div className="flex flex-wrap justify-between items-center w-full px-12 sm:px-6">
 				<button
 					type="button"
 					className="bg-[#706EEB] text-white sm:px-2 sm:py-1 px-4 py-2 rounded-full shadow-md hover:bg-[#5a58d6] cursor-pointer transition"
@@ -112,6 +123,27 @@ export default function CityManager() {
 				>
 					+ Ajouter une ville
 				</button>
+				<div className="mt-4 max-w-md space-y-2">
+					<label
+						htmlFor="sort-select"
+						className="block text-sm font-medium text-gray-600"
+					>
+						Trier par&nbsp;:
+					</label>
+					<select
+						id="sort-select"
+						value={sortBy}
+						onChange={(e) => setSortBy(e.target.value as "name" | "postalCode")}
+						className="w-full p-2 border-2 border-[#706eeb] rounded-lg bg-white text-gray-800 focus:outline-none"
+					>
+						<option className="text-sm" value="name">
+							Nom de la ville
+						</option>
+						<option className="text-sm" value="postalCode">
+							Code postal
+						</option>
+					</select>
+				</div>
 			</div>
 
 			<div className="w-full px-4 sm:px-6 py-3 grow ">
