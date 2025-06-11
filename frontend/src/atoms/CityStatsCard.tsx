@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { type ReactNode, useState } from "react";
 import type { User } from "../store/userStore";
 import { Modal } from "../organisms/Modal";
@@ -30,7 +31,17 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 	};
 
 	return (
-		<div className="relative w-full max-w-xs sm:max-w-sm md:max-w-xs border border-[#706eeb] rounded-2xl bg-white shadow-md cursor-pointer">
+		<motion.div
+			layout
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 0 }}
+			transition={{
+				layout: { duration: 0.3, ease: "easeInOut" },
+				opacity: { duration: 0.2 },
+			}}
+			className="relative w-full max-w-xs sm:max-w-sm md:max-w-xs border border-[#706eeb] rounded-2xl bg-white shadow-md cursor-pointer"
+		>
 			<button
 				type="button"
 				className="absolute top-2 right-2 p-1 rounded-full text-gray-500 hover:bg-gray-100 hover:cursor-pointer hover:scale-125 transition-transform duration-200"
@@ -135,6 +146,6 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 			<Modal isOpen={formIsOpen} onClose={closeModal}>
 				{modalContent}
 			</Modal>
-		</div>
+		</motion.div>
 	);
 }
