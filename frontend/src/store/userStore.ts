@@ -44,7 +44,6 @@ export const useUserStore = create<UserStore>()(
 								users: data.getUsers,
 								isLoading: false,
 							});
-							console.log("Users fetched successfully:", data.getUsers);
 						} else {
 							set({ isLoading: false });
 						}
