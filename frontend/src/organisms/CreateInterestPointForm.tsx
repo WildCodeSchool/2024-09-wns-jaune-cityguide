@@ -7,7 +7,7 @@ import {
   type InterestPointInput,
 } from "../libs/graphql/generated/graphql-types";
 
-type Props = {
+type NewInterestPointFormProps = {
   isOpen: boolean;
   onClose?: () => void;
 };
@@ -15,7 +15,7 @@ type Props = {
 export default function CreateInterestPointForm({
   isOpen,
   onClose,
-}: Props) {
+}: NewInterestPointFormProps) {
   const { loading, error, data } = useGetCategoriesQuery();
   const [createInterestPoint, { data: createdData, loading: submitting, error: createError }] =
     useCreateInterestPointMutation();

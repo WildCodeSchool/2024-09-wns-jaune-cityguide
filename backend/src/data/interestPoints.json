@@ -1,4 +1,14 @@
 [
+		{
+		"name": "La Pénicherie",
+		"description": "allez viens on est bien !",
+		"address": "7 Port Saint-Sauveur, 31400 Toulouse, France",
+		"latitude": 43.5959715,
+		"longitude": 1.4557352,
+		"link_url": "https://www.lapenicheriecestsuper.fr/",
+		"category": "Activités sportives",
+		"city": "Toulouse"
+	},
 	{
 		"name": "Tour Eiffel",
 		"description": "Monument emblématique de Paris offrant une vue panoramique.",
