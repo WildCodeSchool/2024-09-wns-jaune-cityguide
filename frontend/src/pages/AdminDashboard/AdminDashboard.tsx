@@ -33,8 +33,8 @@ export default function Dashboard({ userRole }: Props) {
 	);
 
 	return (
-		<div className="flex flex-col grow max-h-screen w-full bg-gray-50">
-			<header className="p-9 bg-white">
+		<div className="flex flex-col grow max-h-screen sm:h-full overflow-hidden w-full bg-gray-50">
+			<header className="p-6 sm:p-9 bg-white">
 				<h1 className="text-3xl font-bold text-gray-900">Administrateur</h1>
 			</header>
 
@@ -60,7 +60,7 @@ export default function Dashboard({ userRole }: Props) {
 				</ul>
 			</nav>
 
-			<main className="flex grow p-3 w-full">
+			<main className="flex grow p-3 w-full overflow-auto">
 				{activeTab === "cities" && <CityManager />}
 				{activeTab === "categories" && <CategoryManager />}
 				{activeTab === "users" && <UserManager />}

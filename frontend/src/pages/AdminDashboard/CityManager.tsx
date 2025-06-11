@@ -33,8 +33,8 @@ export default function CityManager() {
 	);
 
 	return (
-		<div className=" w-full flex flex-col min-h-full text-gray-800 h-full space-y-3 md:space-y-6 overflow-hidden">
-			<div className="flex flex-col md:flex-row mb-4 p-4 gap-4 md:gap-0">
+		<div className="w-full flex flex-col h-full overflow-auto text-gray-800 space-y-3 md:space-y-6 p-3">
+			<div className="flex flex-col md:flex-row p-4 md:gap-0">
 				<div className="w-full md:w-1/2 flex flex-col items-center justify-center relative px-4">
 					<label
 						className="px-4 py-2 text-[#706EEB] font-medium text-center"
@@ -94,10 +94,10 @@ export default function CityManager() {
 				</div>
 			</div>
 
-			<div className="flex justify-start md:p-3 w-full">
+			<div className="flex justify-start w-full align-middle">
 				<button
 					type="button"
-					className="bg-[#706EEB] text-white px-4 py-2 rounded-full shadow-md hover:bg-[#5a58d6] cursor-pointer transition"
+					className="bg-[#706EEB] text-white sm:px-2 sm:py-1 px-4 py-2 rounded-full shadow-md hover:bg-[#5a58d6] cursor-pointer transition"
 					onClick={() => {
 						setSelectedCity(null);
 						setMode("add");
@@ -107,7 +107,7 @@ export default function CityManager() {
 				</button>
 			</div>
 
-			<div className="flex overflow-y-scroll h-[500px]">
+			<div className="w-full px-4 sm:px-6 py-3 grow ">
 				{filteredCities.length === 0 ? (
 					<div className="w-full flex items-center justify-center p-12">
 						<p className="text-gray-700 text-lg text-center">
@@ -115,7 +115,7 @@ export default function CityManager() {
 						</p>
 					</div>
 				) : (
-					<div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 sm:px-6 py-6 w-full max-w-screen-xl mx-auto">
+					<div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2 py-4 sm:px-4 sm:py-6 w-full max-w-screen-xl mx-auto">
 						{filteredCities.map((city: City) => {
 							const cityUsers = users.filter(
 								(user) =>
