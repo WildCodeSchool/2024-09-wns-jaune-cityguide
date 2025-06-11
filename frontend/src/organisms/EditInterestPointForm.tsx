@@ -53,6 +53,8 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
     }
   };
 
+
+
   useEffect(() => {
     if (!editedData) return;
 
