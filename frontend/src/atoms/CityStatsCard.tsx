@@ -69,12 +69,24 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 				{showDetails && (
 					<div className="ml-1 mt-1 text-xs text-gray-600 space-y-1">
 						<div>
-							👑 <strong>{cityAdmins.length}</strong> administrateur
-							{cityAdmins.length > 1 ? "s" : ""}
+							👑 <strong>{cityAdmins.length}</strong>{" "}
+							<span className="hidden sm:inline">
+								{" "}
+								administrateur
+								{cityAdmins.length > 1 ? "s" : ""}
+							</span>
+							<span className="sm:hidden">
+								{" "}
+								admin
+								{cityAdmins.length > 1 ? "s" : ""}
+							</span>
 						</div>
 						<div>
 							👤 <strong>{cityUsers.length}</strong>{" "}
-							<span className="sm:hidden">utilisateur</span>
+							<span className="sm:hidden">
+								{" "}
+								utilisateur{cityUsers.length > 1 ? "s" : ""}
+							</span>
 							<span className="hidden sm:inline">
 								{" "}
 								utilisateur{cityUsers.length > 1 ? "s" : ""} standard
