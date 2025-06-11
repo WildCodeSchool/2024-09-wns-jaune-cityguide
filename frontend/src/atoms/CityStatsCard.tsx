@@ -16,7 +16,32 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 	const totalUsers = cityUsers.length + cityAdmins.length;
 
 	return (
-		<div className="w-full max-w-xs sm:max-w-sm md:max-w-xs border border-[#706eeb] rounded-2xl bg-white shadow-md cursor-pointer">
+		<div className="relative w-full max-w-xs sm:max-w-sm md:max-w-xs border border-[#706eeb] rounded-2xl bg-white shadow-md cursor-pointer">
+			<button
+				type="button"
+				className="absolute top-2 right-2 p-1 rounded-full text-gray-500 hover:bg-gray-100 hover:cursor-pointer hover:scale-125 transition-transform duration-200"
+				title="Afficher les informations détaillées"
+				onClick={() => {
+					console.log("Click!");
+				}}
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="20"
+					height="20"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				>
+					<title>Afficher les informations détaillées</title>
+					<circle cx="11" cy="11" r="8" />
+					<line x1="21" y1="21" x2="16.65" y2="16.65" />
+				</svg>
+			</button>
+
 			<div className="p-4 border-b border-[#706eeb] text-center">
 				<h2 className="text-lg md:text-xl font-semibold text-[#333]">
 					{city.name}
@@ -69,20 +94,18 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 				{showDetails && (
 					<div className="ml-1 mt-1 text-xs text-gray-600 space-y-1">
 						<div>
-							👑 <strong>{cityAdmins.length}</strong>{" "}
+							👑 <strong>{cityAdmins.length}</strong>
 							<span className="hidden sm:inline">
 								{" "}
-								administrateur
-								{cityAdmins.length > 1 ? "s" : ""}
+								administrateur{cityAdmins.length > 1 ? "s" : ""}
 							</span>
 							<span className="sm:hidden">
 								{" "}
-								admin
-								{cityAdmins.length > 1 ? "s" : ""}
+								admin{cityAdmins.length > 1 ? "s" : ""}
 							</span>
 						</div>
 						<div>
-							👤 <strong>{cityUsers.length}</strong>{" "}
+							👤 <strong>{cityUsers.length}</strong>
 							<span className="sm:hidden">
 								{" "}
 								utilisateur{cityUsers.length > 1 ? "s" : ""}
