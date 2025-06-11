@@ -41,38 +41,42 @@ export default function CityManager() {
 					>
 						Rechercher une ville&nbsp;:
 					</label>
-					<input
-						type="text"
-						className="rounded-xl p-3 w-1/2 bg-white border-2 border-[#706eeb] text-lg placeholder-gray-400 focus:outline-none focus:border-[#706eeb] pr-10"
-						placeholder="Nom de la ville..."
-						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.target.value)}
-					/>
-					{searchQuery && (
-						<button
-							type="button"
-							className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-800 font-bold text-lg"
-							onClick={() => setSearchQuery("")}
-							aria-label="Effacer la recherche"
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth="2"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								className="hover:cursor-pointer transition-colors duration-200"
+
+					<div className="relative w-1/2">
+						<input
+							id="city-search"
+							type="text"
+							className="rounded-full p-3 w-full bg-white border-2 border-[#706eeb] text-lg placeholder-gray-400 focus:outline-none focus:border-[#706eeb] pr-12"
+							placeholder="Nom de la ville..."
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+						/>
+						{searchQuery && (
+							<button
+								type="button"
+								className="absolute right-3 top-1/2 -translate-y-1/2 text-[#706eeb] font-bold text-lg"
+								onClick={() => setSearchQuery("")}
+								aria-label="Effacer la recherche"
 							>
-								<title>Annuler la recherche</title>
-								<path d="M18 6 6 18" />
-								<path d="m6 6 12 12" />
-							</svg>
-						</button>
-					)}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									className="hover:cursor-pointer transition-colors duration-200"
+								>
+									<title>Annuler la recherche</title>
+									<path d="M18 6 6 18" />
+									<path d="m6 6 12 12" />
+								</svg>
+							</button>
+						)}
+					</div>
 				</div>
 				<div className="w-1/2 flex items-center justify-center">
 					<div className="border-2 border-[#706eeb] text-[#706eeb] rounded-xl px-8 py-6 text-center">
