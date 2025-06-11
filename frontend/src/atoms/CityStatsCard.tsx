@@ -7,24 +7,38 @@ interface CityCardProps {
 		postalCode: string;
 	};
 	cityUsers: User[];
-	// showUsers: Record<string, boolean>;
-	// toggleUsersList: () => void;
-	// setSelectedCity: () => void;
 }
 
 export function CityStatsCard({ city, cityUsers }: CityCardProps) {
 	return (
-		<div className="w-64 border border-[#706eeb] rounded-2xl flex flex-col bg-white hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out hover:cursor-pointer">
-			<div className="text-center p-4 border-b border-[#706eeb]">
-				<div className="text-lg font-medium">{city.name}</div>
-				<div className="text-sm text-gray-600">{city.postalCode}</div>
+		<div className="w-full max-w-xs sm:max-w-sm md:max-w-xs border border-[#706eeb] rounded-2xl bg-white shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 ease-in-out cursor-pointer">
+			<div className="p-4 border-b border-[#706eeb] text-center">
+				<h2 className="text-lg md:text-xl font-semibold text-[#333]">
+					{city.name}
+				</h2>
+				<p className="text-sm text-gray-500">{city.postalCode}</p>
 			</div>
 
-			<div className="p-4">
-				<div className="flex justify-between items-center">
-					<span className="text-sm font-medium text-gray-700">
-						{cityUsers.length} utilisateur
-						{cityUsers.length > 1 ? "s" : ""}
+			<div className="p-4 flex items-center justify-between text-sm sm:text-base">
+				<div className="flex items-center gap-2 text-[#706eeb] font-medium">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						className=""
+					>
+						<title>Utilisateurs</title>
+						<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+						<circle cx="12" cy="7" r="4" />
+					</svg>
+					<span>
+						{cityUsers.length} utilisateur{cityUsers.length > 1 ? "s" : ""}
 					</span>
 				</div>
 			</div>
