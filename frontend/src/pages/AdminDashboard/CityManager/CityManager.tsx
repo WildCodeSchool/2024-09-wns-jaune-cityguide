@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type ReactNode, useState } from "react";
 import type { City } from "../../../@types/types";
 import type { User } from "../../../store/userStore";
 import { useCitiesStore } from "../../../store/citiesStore";
@@ -6,20 +6,27 @@ import { useUserStore } from "../../../store/userStore";
 import { CityStatsCard } from "../../../atoms/CityStatsCard";
 import { UserRole } from "../../../libs/graphql/generated/graphql-types";
 
+import { Modal } from "../../../organisms/Modal";
+
 export default function CityManager() {
+	const [modalContent, setModalContent] = useState<ReactNode>(null);
+	const [formIsOpen, setFormIsOpen] = useState<boolean>(false);
+
 	const { cities, isLoading } = useCitiesStore();
 	const { users } = useUserStore() as { users: User[] };
+	// const [selectedCity, setSelectedCity] = useState<City | null>(null);
 
-	const [selectedCity, setSelectedCity] = useState<City | null>(null);
+	const openModalWithComponent = (component: ReactNode) => {
+		setModalContent(component);
+		setFormIsOpen(true);
+	};
 
-	const [mode, setMode] = useState("view");
+	const closeModal = () => {
+		setModalContent(null);
+		setFormIsOpen(false);
+	};
+
 	const [searchQuery, setSearchQuery] = useState("");
-
-	useEffect(() => {
-		if (cities.length > 0 && mode === "view") {
-			setSelectedCity(cities[0]);
-		}
-	}, [cities, mode]);
 
 	if (isLoading) {
 		return (
@@ -99,8 +106,7 @@ export default function CityManager() {
 					type="button"
 					className="bg-[#706EEB] text-white sm:px-2 sm:py-1 px-4 py-2 rounded-full shadow-md hover:bg-[#5a58d6] cursor-pointer transition"
 					onClick={() => {
-						setSelectedCity(null);
-						setMode("add");
+						openModalWithComponent(<div>Creation Form coming soon!</div>);
 					}}
 				>
 					+ Ajouter une ville
@@ -139,6 +145,9 @@ export default function CityManager() {
 					</div>
 				)}
 			</div>
+			<Modal isOpen={formIsOpen} onClose={closeModal}>
+				{modalContent}
+			</Modal>
 		</div>
 	);
 }
