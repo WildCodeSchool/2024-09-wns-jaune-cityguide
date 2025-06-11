@@ -80,7 +80,7 @@ export default function CityManager() {
 				</div>
 				<div className="w-1/2 flex items-center justify-center">
 					<div className="border-2 border-[#706eeb] text-[#706eeb] rounded-xl px-8 py-6 text-center">
-						<div className="text-xl mb-2">Nombre total de villes :</div>
+						<div className="text-base mb-2">Nombre de villes&nbsp;:</div>
 						<div className="text-3xl font-bold">{cities.length}</div>
 					</div>
 				</div>
