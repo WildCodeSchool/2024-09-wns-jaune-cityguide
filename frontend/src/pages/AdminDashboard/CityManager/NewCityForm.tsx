@@ -1,4 +1,8 @@
-export function NewCityForm() {
+interface NewCityFormProps {
+	onCancel: () => void;
+}
+
+export function NewCityForm({ onCancel }: NewCityFormProps) {
 	return (
 		<form className="new-city-form flex flex-col w-full space-y-3">
 			<div className="form-header flex w-full items-center justify-center p-4">
@@ -72,6 +76,9 @@ export function NewCityForm() {
 				</button>
 				<button
 					type="button"
+					onClick={() => {
+						onCancel();
+					}}
 					className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-400 transition-colors"
 				>
 					Annuler

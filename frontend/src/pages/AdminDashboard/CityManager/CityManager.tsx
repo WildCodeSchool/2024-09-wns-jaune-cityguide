@@ -119,7 +119,7 @@ export default function CityManager() {
 					type="button"
 					className="bg-[#706EEB] text-white sm:px-2 sm:py-1 px-4 py-2 rounded-full shadow-md hover:bg-[#5a58d6] cursor-pointer transition"
 					onClick={() => {
-						openModalWithComponent(<NewCityForm />);
+						openModalWithComponent(<NewCityForm onCancel={closeModal} />);
 					}}
 				>
 					+ Ajouter une ville
