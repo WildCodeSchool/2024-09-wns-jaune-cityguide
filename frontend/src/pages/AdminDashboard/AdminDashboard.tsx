@@ -45,7 +45,7 @@ export default function Dashboard({ userRole }: Props) {
 							<button
 								type="button"
 								onClick={() => setActiveTab(tab.id)}
-								className={`w-full py-3 text-center text-lg font-medium 
+								className={`w-full cursor-pointer py-3 text-center text-lg font-medium 
                   ${
 										activeTab === tab.id
 											? "border-b-4 border-indigo-600 text-indigo-600"
