@@ -57,7 +57,7 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 							e.stopPropagation();
 							setShowDetails(!showDetails);
 						}}
-						className="px-3 py-1 text-xs bg-[#706eeb] text-white rounded-full hover:bg-[#5c5acf] transition-colors"
+						className="px-3 py-1 text-xs bg-[#706eeb] text-white rounded-full hover:bg-[#5c5acf] transition-colors hover: cursor-pointer"
 					>
 						<span className="block sm:hidden">{showDetails ? "−" : "＋"}</span>
 						<span className="hidden sm:block">
