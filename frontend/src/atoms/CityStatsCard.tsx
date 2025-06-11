@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import type { User } from "../store/userStore";
+import { Modal } from "../organisms/Modal";
 
 interface CityCardProps {
 	city: {
@@ -12,8 +13,21 @@ interface CityCardProps {
 }
 
 export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
-	const [showDetails, setShowDetails] = useState(false);
+	const [showDetails, setShowDetails] = useState<boolean>(false);
+	const [formIsOpen, setFormIsOpen] = useState<boolean>(false);
+	const [modalContent, setModalContent] = useState<ReactNode>(null);
+
 	const totalUsers = cityUsers.length + cityAdmins.length;
+
+	const openModalWithComponent = (component: ReactNode) => {
+		setModalContent(component);
+		setFormIsOpen(true);
+	};
+
+	const closeModal = () => {
+		setModalContent(null);
+		setFormIsOpen(false);
+	};
 
 	return (
 		<div className="relative w-full max-w-xs sm:max-w-sm md:max-w-xs border border-[#706eeb] rounded-2xl bg-white shadow-md cursor-pointer">
@@ -22,7 +36,7 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 				className="absolute top-2 right-2 p-1 rounded-full text-gray-500 hover:bg-gray-100 hover:cursor-pointer hover:scale-125 transition-transform duration-200"
 				title="Afficher les informations détaillées"
 				onClick={() => {
-					console.log("Click!");
+					openModalWithComponent(<div>Details form coming soon</div>);
 				}}
 			>
 				<svg
@@ -118,6 +132,9 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 					</div>
 				)}
 			</div>
+			<Modal isOpen={formIsOpen} onClose={closeModal}>
+				{modalContent}
+			</Modal>
 		</div>
 	);
 }
