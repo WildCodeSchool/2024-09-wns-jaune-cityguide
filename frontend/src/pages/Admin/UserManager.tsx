@@ -3,6 +3,7 @@ import SearchBar from "./components/SearchBar";
 import UserStats from "./components/UserStats";
 import UserList from "./components/UserList";
 import UserEditForm from "./components/UserEditForm";
+import { AnimatePresence, motion } from "framer-motion";
 import { GetUserByIdQuery, useGetUserByIdQuery, useGetUsersQuery } from "../../libs/graphql/generated/graphql-types";
 
 export default function UserManager() {
@@ -76,16 +77,24 @@ export default function UserManager() {
         />
       </div>
 
-      {selectedUser && selectedUserData?.getUserById && (
-        <div ref={formRef}>
-          <UserEditForm
-            user={selectedUserData.getUserById}
-            onUserUpdated={handleUserUpdated}
-            onUserDeleted={handleUserDeleted}
-            onCancel={handleCancel}
-          />
-        </div>
-      )}
+      <AnimatePresence>
+        {selectedUser && selectedUserData?.getUserById && (
+          <motion.div
+            ref={formRef}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}>
+              
+            <UserEditForm
+              user={selectedUserData.getUserById}
+              onUserUpdated={handleUserUpdated}
+              onUserDeleted={handleUserDeleted}
+              onCancel={handleCancel}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
