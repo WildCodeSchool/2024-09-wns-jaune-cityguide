@@ -4,6 +4,7 @@ import type { User } from "../../store/userStore";
 import { useCitiesStore } from "../../store/citiesStore";
 import { useUserStore } from "../../store/userStore";
 import { CityStatsCard } from "../../atoms/CityStatsCard";
+import { UserRole } from "../../libs/graphql/generated/graphql-types";
 
 export default function CityManager() {
 	const { cities, isLoading } = useCitiesStore();
@@ -32,7 +33,7 @@ export default function CityManager() {
 	);
 
 	return (
-		<div className=" w-full flex flex-col min-h-full text-gray-800 h-full space-y-6 overflow-hidden">
+		<div className=" w-full flex flex-col min-h-full text-gray-800 h-full space-y-3 md:space-y-6 overflow-hidden">
 			<div className="flex flex-col md:flex-row mb-4 p-4 gap-4 md:gap-0">
 				<div className="w-full md:w-1/2 flex flex-col items-center justify-center relative px-4">
 					<label
@@ -85,7 +86,7 @@ export default function CityManager() {
 				</div>
 			</div>
 
-			<div className="flex justify-start p-3 w-full">
+			<div className="flex justify-start md:p-3 w-full">
 				<button
 					type="button"
 					className="bg-[#706EEB] text-white px-4 py-2 rounded-full shadow-md hover:bg-[#5a58d6] cursor-pointer transition"
@@ -98,7 +99,7 @@ export default function CityManager() {
 				</button>
 			</div>
 
-			<div className="flex overflow-y-scroll">
+			<div className="flex overflow-y-scroll h-[500px]">
 				{filteredCities.length === 0 ? (
 					<div className="w-full flex items-center justify-center p-12">
 						<p className="text-gray-700 text-lg text-center">
@@ -110,12 +111,19 @@ export default function CityManager() {
 						{filteredCities.map((city: City) => {
 							const cityUsers = users.filter(
 								(user) =>
-									user.city.id === Number(city.id) && user.role !== "USER",
+									Number(user.city.id) === Number(city.id) &&
+									user.role === UserRole.User,
+							);
+							const cityAdmins = users.filter(
+								(user) =>
+									Number(user.city.id) === Number(city.id) &&
+									user.role === UserRole.CityAdmin,
 							);
 							return (
 								<CityStatsCard
 									key={city.name}
 									cityUsers={cityUsers}
+									cityAdmins={cityAdmins}
 									city={city}
 								/>
 							);
