@@ -1,6 +1,6 @@
 import { useState } from "react";
 import UserManager from "../Admin/UserManager";
-import CityManager from "./CityManager";
+import CityManager from "./CityManager/CityManager";
 import CategoryManager from "../CategoryManager/CategoryManager";
 
 type Props = {
