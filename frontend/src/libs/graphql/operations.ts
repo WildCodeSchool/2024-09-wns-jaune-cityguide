@@ -140,6 +140,10 @@ export const GET_USERS = gql`
       lastname
       email
       role
+      city {
+      id
+      name
+    }
     }
 }`;
 
@@ -154,7 +158,6 @@ export const GET_USER_BY_ID = gql`
     }
 }`;
 
-
 export const UPDATE_USER = gql`
   mutation UpdateUser($data: UpdateUserInput!, $userId: String!) {
     updateUser(data: $data, userId: $userId) {
@@ -168,7 +171,6 @@ export const DELETE_USER = gql`
       id
     }
 }`;
-
 
 export const GET_STATS = gql`
   query GetStats {
@@ -220,18 +222,4 @@ mutation ReplaceCategoryById($data: UpdateCategoryInput!, $categoryId: String!) 
 export const DELETE_CATEGORY = gql`
 mutation DeleteCategoryById($categoryId: String!) {
   deleteCategoryById(categoryId: $categoryId)
-}`;
-
-export const GET_USERS = gql`
-query GetUsers {
-  getUsers {
-    id
-    firstname
-    lastname
-    role
-    city {
-      id
-      name
-    }
-  }
 }`;
