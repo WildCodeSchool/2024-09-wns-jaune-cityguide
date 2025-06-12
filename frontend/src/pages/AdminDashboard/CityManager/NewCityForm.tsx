@@ -1,4 +1,7 @@
+import { useMutation } from "@apollo/client";
+import { ApolloError } from "@apollo/client";
 import { useEffect, useRef, useState } from "react";
+import { CREATE_CITY } from "../../../libs/graphql/operations";
 
 interface APIResult {
 	fulltext: string;
@@ -13,6 +16,7 @@ interface NewCityFormData {
 	postalCode: string;
 	latitude: number;
 	longitude: number;
+	interestPoints?: [];
 }
 
 interface NewCityFormProps {
@@ -20,6 +24,9 @@ interface NewCityFormProps {
 }
 
 export function NewCityForm({ onCancel }: NewCityFormProps) {
+	const [createCity, { loading }] = useMutation(CREATE_CITY);
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
 	const [userInput, setUserInput] = useState<string>("");
 	const [suggestions, setSuggestions] = useState<APIResult[]>([]);
 	const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
@@ -33,12 +40,45 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		postalCode: "",
 		latitude: 0,
 		longitude: 0,
+		interestPoints: [],
 	});
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		setErrorMessage(null);
 		if (!selectedCity) return;
-		console.log("Submitting city with data:", formData);
+		console.log("Submitting form with data:", formData);
+		try {
+			const { data } = await createCity({
+				variables: {
+					data: {
+						...formData,
+						interestPoints: formData.interestPoints ?? [],
+					},
+				},
+			});
+			console.log("City successfully created:", data.createCity);
+			// TODO: handle success with toast
+			onCancel();
+		} catch (error) {
+			if (error instanceof ApolloError) {
+				if (error.graphQLErrors?.length) {
+					const graphQLError = error.graphQLErrors[0];
+					console.error("GraphQL Error:", graphQLError);
+					if (graphQLError?.extensions?.code === "BAD_REQUEST") {
+						setErrorMessage(
+							"La ville sélectionnée existe déjà en base de données.",
+						);
+					} else {
+						setErrorMessage(
+							"Une erreur est survenue lors de la création de la ville.",
+						);
+					}
+				}
+			} else {
+				setErrorMessage("Une erreur inattendue est survenue.");
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -128,6 +168,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 	useEffect(() => {
 		if (userInput === "") {
 			setSelectedCity(null);
+			setErrorMessage(null);
 			setFormData({
 				name: "",
 				postalCode: "",
@@ -240,20 +281,46 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 						/>
 					</div>
 				</div>
+				{errorMessage && (
+					<p className="text-center text-sm text-red-600">{errorMessage}</p>
+				)}
 			</div>
 			<div className="form-footer flex justify-around items-center p-4">
 				<button
 					type="submit"
-					disabled={formData.postalCode === ""}
-					className={`px-6 py-2 rounded-md transition-colors
-			${
-				formData.postalCode === ""
-					? "bg-purple-200  text-gray-500"
-					: "bg-[#706eeb] text-white hover:bg-[#5c5acf]"
-			}
-		`}
+					disabled={formData.postalCode === "" || loading}
+					className={`px-6 py-2 rounded-md transition-colors flex items-center justify-center gap-2
+		${
+			formData.postalCode === "" || loading
+				? "bg-purple-200 text-gray-500 cursor-not-allowed"
+				: "bg-[#706eeb] text-white hover:bg-[#5c5acf]"
+		}
+	`}
 				>
-					Valider
+					{loading && (
+						<svg
+							className="animate-spin h-4 w-4 text-white"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<title>Sauvegarde en cours</title>
+							<circle
+								className="opacity-25"
+								cx="12"
+								cy="12"
+								r="10"
+								stroke="currentColor"
+								strokeWidth="4"
+							/>
+							<path
+								className="opacity-75"
+								fill="currentColor"
+								d="M4 12a8 8 0 018-8v8H4z"
+							/>
+						</svg>
+					)}
+					<span>{loading ? "En cours..." : "Valider"}</span>
 				</button>
 				<button
 					type="button"
