@@ -24,6 +24,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 	const [suggestions, setSuggestions] = useState<APIResult[]>([]);
 	const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
 	const [selectedCity, setSelectedCity] = useState<APIResult | null>(null);
+	const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
 
 	const isFromSelectionRef = useRef(false);
 
@@ -84,6 +85,35 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		setDropdownIsOpen(false);
 	};
 
+	const inputRef = useRef<HTMLInputElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const resultRefs = useRef<(HTMLLIElement | null)[]>([]);
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		const key = e.key;
+		if (!dropdownIsOpen || suggestions.length === 0) return;
+		if (key === "ArrowDown") {
+			e.preventDefault();
+			const nextIndex = (highlightedIndex + 1) % suggestions.length;
+			setHighlightedIndex(nextIndex);
+		}
+		if (key === "ArrowUp") {
+			e.preventDefault();
+			const nextIndex =
+				(highlightedIndex + suggestions.length - 1) % suggestions.length;
+			setHighlightedIndex(nextIndex);
+		}
+		if (key === "Enter") {
+			e.preventDefault();
+			if (highlightedIndex >= 0 && highlightedIndex < suggestions.length) {
+				handleSelect(suggestions[highlightedIndex]);
+			}
+		}
+		if (key === "Escape") {
+			setDropdownIsOpen(false);
+		}
+	};
+
 	useEffect(() => {
 		if (selectedCity) {
 			setFormData({
@@ -116,32 +146,42 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 				<h3 className="text-2xl font-medium">Ajouter une ville</h3>
 			</div>
 			<div className="form-body flex flex-col space-y-4">
-				<div className="form-group relative flex flex-col space-y-2">
+				<div
+					ref={containerRef}
+					className="form-group relative flex flex-col space-y-2"
+				>
 					<label htmlFor="search">Rechercher par nom</label>
 					<input
 						id="search"
 						name="search"
 						type="text"
+						ref={inputRef}
 						value={userInput}
 						className="border border-[#706eeb] rounded-sm w-full px-4 py-2 placeholder:text-sm"
 						placeholder="Rechercher..."
 						autoComplete="off"
 						onChange={(e) => setUserInput(e.target.value)}
+						onKeyDown={handleKeyDown}
 					/>
 					{dropdownIsOpen && suggestions.length > 0 && (
 						<ul className="absolute top-full left-0 right-0 bg-white border border-gray-300 z-10 max-h-60 overflow-auto">
-							{suggestions.map((city) => (
+							{suggestions.map((city, index) => (
 								<li
 									key={city.fulltext}
 									className="cursor-pointer px-4 py-2 hover:bg-[#f1f1f1]"
-									onClick={() => handleSelect(city)}
-									onKeyDown={(e) => {
-										if (e.key === "Enter" || e.key === " ") {
-											handleSelect(city);
-										}
+									ref={(element) => {
+										resultRefs.current[index] = element;
 									}}
 								>
-									<button type="button" onClick={() => handleSelect(city)}>
+									<button
+										type="button"
+										className={`w-full text-left px-4 py-2 cursor-pointer ${
+											highlightedIndex === index
+												? "bg-[#b0afe4]"
+												: "hover:bg-gray-100"
+										}`}
+										onClick={() => handleSelect(city)}
+									>
 										{city.fulltext}
 									</button>
 								</li>
