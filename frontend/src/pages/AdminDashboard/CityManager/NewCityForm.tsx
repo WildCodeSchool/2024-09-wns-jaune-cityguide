@@ -8,6 +8,13 @@ interface APIResult {
 	y: number;
 }
 
+interface NewCityFormData {
+	name: string;
+	postalCode: string;
+	latitude: number;
+	longitude: number;
+}
+
 interface NewCityFormProps {
 	onCancel: () => void;
 }
@@ -19,6 +26,19 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 	const [selectedCity, setSelectedCity] = useState<APIResult | null>(null);
 
 	const isFromSelectionRef = useRef(false);
+
+	const [formData, setFormData] = useState<NewCityFormData>({
+		name: "",
+		postalCode: "",
+		latitude: 0,
+		longitude: 0,
+	});
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (!selectedCity) return;
+		console.log("Submitting city with data:", formData);
+	};
 
 	useEffect(() => {
 		if (userInput.length < 3 || isFromSelectionRef.current) {
@@ -64,8 +84,22 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		setDropdownIsOpen(false);
 	};
 
+	useEffect(() => {
+		if (selectedCity) {
+			setFormData({
+				name: selectedCity.names[0],
+				postalCode: selectedCity.zipcode ?? "",
+				latitude: selectedCity.y,
+				longitude: selectedCity.x,
+			});
+		}
+	}, [selectedCity]);
+
 	return (
-		<form className="new-city-form flex flex-col w-full space-y-3">
+		<form
+			className="new-city-form flex flex-col w-full space-y-3"
+			onSubmit={handleSubmit}
+		>
 			<div className="form-header flex w-full items-center justify-center p-4">
 				<h3 className="text-2xl font-medium">Ajouter une ville</h3>
 			</div>
@@ -111,7 +145,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 						type="text"
 						placeholder="Nom de la ville"
 						disabled
-						value={selectedCity?.names[0] ?? ""}
+						value={formData.name}
 						className="border border-[#706eeb] bg-gray-100 rounded-sm w-full px-4 py-2 placeholder:text-sm"
 					/>
 				</div>
@@ -124,7 +158,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 						type="text"
 						placeholder="Code postal"
 						disabled
-						value={selectedCity?.zipcode ?? ""}
+						value={formData.postalCode.toString()}
 						className="border border-[#706eeb] bg-gray-100 rounded-sm w-full px-4 py-2 placeholder:text-sm"
 					/>
 				</div>
@@ -136,7 +170,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 							name="latitude"
 							type="text"
 							disabled
-							value={selectedCity?.y ?? ""}
+							value={formData.latitude}
 							placeholder="Latitude"
 							className="border border-[#706eeb] bg-gray-100 rounded-sm w-full px-4 py-2 placeholder:text-sm"
 						/>
@@ -149,7 +183,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 							type="text"
 							disabled
 							placeholder="Longitude"
-							value={selectedCity?.x ?? ""}
+							value={formData.longitude}
 							className="border border-[#706eeb] bg-gray-100 rounded-sm w-full px-4 py-2 placeholder:text-sm"
 						/>
 					</div>
