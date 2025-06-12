@@ -192,7 +192,14 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 			<div className="form-footer flex justify-around items-center p-4">
 				<button
 					type="submit"
-					className="bg-[#706eeb] text-white px-6 py-2 rounded-md hover:bg-[#5c5acf] transition-colors"
+					disabled={formData.postalCode === ""}
+					className={`px-6 py-2 rounded-md transition-colors
+			${
+				formData.postalCode === ""
+					? "bg-purple-200  text-gray-500"
+					: "bg-[#706eeb] text-white hover:bg-[#5c5acf]"
+			}
+		`}
 				>
 					Valider
 				</button>
