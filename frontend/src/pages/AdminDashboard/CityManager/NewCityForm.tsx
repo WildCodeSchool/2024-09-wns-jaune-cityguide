@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import { ApolloError } from "@apollo/client";
 import { useEffect, useRef, useState } from "react";
 import { CREATE_CITY } from "../../../libs/graphql/operations";
+import { useCitiesStore } from "../../../store/citiesStore";
 
 interface APIResult {
 	fulltext: string;
@@ -26,6 +27,7 @@ interface NewCityFormProps {
 export function NewCityForm({ onCancel }: NewCityFormProps) {
 	const [createCity, { loading }] = useMutation(CREATE_CITY);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+	const { fetchCities } = useCitiesStore();
 
 	const [userInput, setUserInput] = useState<string>("");
 	const [suggestions, setSuggestions] = useState<APIResult[]>([]);
@@ -57,6 +59,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 					},
 				},
 			});
+			fetchCities();
 			console.log("City successfully created:", data.createCity);
 			// TODO: handle success with toast
 			onCancel();
