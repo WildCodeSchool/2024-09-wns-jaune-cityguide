@@ -223,3 +223,11 @@ export const DELETE_CATEGORY = gql`
 mutation DeleteCategoryById($categoryId: String!) {
   deleteCategoryById(categoryId: $categoryId)
 }`;
+
+export const CREATE_CITY = gql`
+mutation CreateCity($data: CityInput!) {
+  createCity(data: $data) {
+     id,
+     name
+  }
+}`;
