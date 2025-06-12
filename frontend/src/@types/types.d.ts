@@ -11,6 +11,7 @@ export type City = {
 	postalCode: string;
 	latitude: number;
 	longitude: number;
+	users?: User[];
 };
 
 export type InterestPoint = {
@@ -36,19 +37,3 @@ export type Picture = {
 	description: string;
 	url: string;
 };
-
-export type User = {
-  id: string;
-  firstname: string;
-  lastname: string;
-  role?: string;
-};
-
-export type City = {
-  id?: string;
-  name: string;
-  postalCode: string;
-  latitude: number | string;
-  longitude: number | string;
-  users?: User[];
-}

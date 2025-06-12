@@ -29,7 +29,6 @@ export const useCitiesStore = create<CitiesState>((set) => ({
 					cities: data.getCities,
 					isLoading: false,
 				});
-				console.log("Cities fetched successfully:", data.getCities);
 			} else {
 				set({ isLoading: false });
 			}

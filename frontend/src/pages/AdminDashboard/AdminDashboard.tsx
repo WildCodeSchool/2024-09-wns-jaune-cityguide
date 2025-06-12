@@ -1,64 +1,76 @@
 import { useState } from "react";
 import UserManager from "../Admin/UserManager";
-import VilleComponent from "./VilleComponent";
+import CityManager from "./CityManager/CityManager";
 import CategoryManager from "../CategoryManager/CategoryManager";
+
+type Props = {
+	userRole: string;
+};
 
 // L'utilisateur sera passé en prop ou stocké dans un contexte (par exemple `role`)
 // Ici, on suppose que le rôle de l'utilisateur est "superAdmin", "adminVille", ou "user"
-// Si l'utilisateur est "user" il verra une page blanche
-export default function Dashboard({ userRole }: { userRole: string }) {
-  // État pour suivre le bouton cliqué et afficher le bon élément en conséquence
-  const [activeComponent, setActiveComponent] = useState<string | null>(null);
+// // Si l'utilisateur est "user" il verra une page blanche
+const tabs = [
+	{ id: "cities", label: "Villes", roles: ["superadmin", "cityadmin"] },
+	{ id: "categories", label: "Catégories", roles: ["superadmin"] },
+	{
+		id: "users",
+		label: "Utilisateurs",
+		roles: ["superadmin", "cityadmin"],
+	},
+];
 
-  // Fonction pour afficher le composant en fonction du bouton sélectionné
-  const handleClick = (component: string) => {
-    setActiveComponent(component);
-  };
+export default function Dashboard({ userRole }: Props) {
+	// TODO: uncomment this when user role is implemented
+	// const accessibleTabs = tabs.filter((tab) => tab.roles.includes(userRole));
+	// const [activeTab, setActiveTab] = useState(
+	// 	accessibleTabs.length > 0 ? accessibleTabs[0].id : null,
+	// );
 
-  return (
-    <div className="w-full">
-      <span className="block mb-4">Administrateur</span>
-      <div className="w-full">
-        <div className="flex justify-between w-full">
-          {/* Onglet Ville : visible pour tous les admins, mais seulement accessible pour adminVille et superAdmin */}
-          {(userRole === "superAdmin" || userRole === "adminVille") && (
-            <button
-              onClick={() => handleClick("ville")}
-              className="text-black cursor-pointer hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
-            >
-              Ville
-            </button>
-          )}
+	const accessibleTabs = tabs;
+	const [activeTab, setActiveTab] = useState(
+		accessibleTabs.length > 0 ? accessibleTabs[0].id : null,
+	);
 
-          {/* Onglet Catégorie : visible uniquement pour superAdmin */}
-          {userRole === "superAdmin" && (
-            <button
-              onClick={() => handleClick("categorie")}
-              className="text-black cursor-pointer hover:text-gray-700 border-gray-300 px-3 py-2 text-sm font-medium last:border-none"
-            >
-              Catégorie
-            </button>
-          )}
+	return (
+		<div className="flex flex-col grow max-h-screen sm:h-full overflow-hidden w-full bg-gray-50">
+			<header className="p-6 sm:p-9 bg-white">
+				<h1 className="text-3xl font-bold text-gray-900">Administrateur</h1>
+			</header>
 
-          {/* Onglet Utilisateur : visible uniquement pour superAdmin */}
-          {(userRole === "superAdmin" || userRole === "adminVille") && (
-            <button
-              onClick={() => handleClick("utilisateur")}
-              className="text-black cursor-pointer hover:text-gray-700 last:border-none px-3 py-2 text-sm font-medium"
-            >
-              Utilisateurs
-            </button>
-          )}
-        </div>
-      </div>
+			<nav className="bg-white border-b border-gray-300">
+				<ul className="flex w-full">
+					{accessibleTabs.map((tab) => (
+						<li key={tab.id} className="flex-1">
+							<button
+								type="button"
+								onClick={() => setActiveTab(tab.id)}
+								className={`w-full cursor-pointer py-3 text-center text-lg font-medium 
+                  ${
+										activeTab === tab.id
+											? "border-b-4 border-indigo-600 text-indigo-600"
+											: "text-gray-600 hover:text-indigo-500"
+									} transition-colors duration-300`}
+								aria-current={activeTab === tab.id ? "page" : undefined}
+							>
+								{tab.label}
+							</button>
+						</li>
+					))}
+				</ul>
+			</nav>
 
-      <div className="mt-6">
-        {activeComponent === "ville" && <VilleComponent />}
-
-        {activeComponent === "categorie" && <CategoryManager />}
-
-        {activeComponent === "utilisateur" && <UserManager />}
-      </div>
-    </div>
-  );
+			<main className="flex grow p-3 w-full overflow-auto">
+				{activeTab === "cities" && <CityManager />}
+				{activeTab === "categories" && <CategoryManager />}
+				{activeTab === "users" && <UserManager />}
+				{!activeTab && (
+					<div className="text-gray-500 text-lg flex grow text-justify">
+						Vous n&rsquo;avez pas l&rsquo;autorisation d&rsquo;accéder à cette
+						page.
+					</div>
+				)}
+			</main>
+		</div>
+	);
 }
