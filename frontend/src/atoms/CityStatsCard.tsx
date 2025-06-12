@@ -2,12 +2,15 @@ import { motion } from "framer-motion";
 import { type ReactNode, useState } from "react";
 import type { User } from "../store/userStore";
 import { Modal } from "../organisms/Modal";
+import { EditCityForm } from "../pages/AdminDashboard/CityManager/EditCityForm";
 
 interface CityCardProps {
 	city: {
 		id: string | null;
 		name: string;
 		postalCode: string;
+		latitude: number;
+		longitude: number;
 	};
 	cityUsers: User[];
 	cityAdmins: User[];
@@ -47,7 +50,9 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 				className="absolute top-2 right-2 p-1 rounded-full text-gray-500 hover:bg-gray-100 hover:cursor-pointer hover:scale-125 transition-transform duration-200"
 				title="Afficher les informations détaillées"
 				onClick={() => {
-					openModalWithComponent(<div>Details form coming soon</div>);
+					openModalWithComponent(
+						<EditCityForm city={city} cityUsers={cityUsers} />,
+					);
 				}}
 			>
 				<svg
