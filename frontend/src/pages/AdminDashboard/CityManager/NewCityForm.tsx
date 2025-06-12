@@ -53,7 +53,6 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		e.preventDefault();
 		setErrorMessage(null);
 		if (!selectedCity) return;
-		console.log("Submitting form with data:", formData);
 		try {
 			const { data } = await createCity({
 				variables: {
@@ -64,9 +63,9 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 				},
 			});
 			fetchCities();
-			console.log("City successfully created:", data.createCity);
 			// TODO: handle success with toast
 			onCancel();
+			return data.createCity;
 		} catch (error) {
 			if (error instanceof ApolloError) {
 				if (error.graphQLErrors?.length) {
@@ -130,7 +129,6 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		}
 
 		const fetchSuggestions = async () => {
-			console.log("Fetching suggestions for:", userInput);
 			try {
 				const response = await fetch(
 					`https://data.geopf.fr/geocodage/completion/?text=${
@@ -138,7 +136,6 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 					}&terr=METROPOLE&poiType=administratif&type=PositionOfInterest&maximumResponses=10`,
 				);
 				const data = await response.json();
-				console.log("Data:", data);
 				if (data?.results) {
 					setSuggestions(data.results);
 					setDropdownIsOpen(true);
