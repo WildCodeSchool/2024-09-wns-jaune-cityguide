@@ -95,6 +95,18 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		}
 	}, [selectedCity]);
 
+	useEffect(() => {
+		if (userInput === "") {
+			setSelectedCity(null);
+			setFormData({
+				name: "",
+				postalCode: "",
+				latitude: 0,
+				longitude: 0,
+			});
+		}
+	}, [userInput]);
+
 	return (
 		<form
 			className="new-city-form flex flex-col w-full space-y-3"
