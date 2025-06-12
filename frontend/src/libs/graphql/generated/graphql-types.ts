@@ -395,7 +395,7 @@ export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: stri
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, email: string, role: UserRole }> };
+export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, email: string, role: UserRole, city: { __typename?: 'City', id: string, name: string } }> };
 
 export type GetUserByIdQueryVariables = Exact<{
   userId: Scalars['String']['input'];
@@ -902,6 +902,10 @@ export const GetUsersDocument = gql`
     lastname
     email
     role
+    city {
+      id
+      name
+    }
   }
 }
     `;
