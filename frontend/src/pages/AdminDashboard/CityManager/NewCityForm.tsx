@@ -37,6 +37,10 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 
 	const isFromSelectionRef = useRef(false);
 
+	const inputRef = useRef<HTMLInputElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const resultRefs = useRef<(HTMLLIElement | null)[]>([]);
+
 	const [formData, setFormData] = useState<NewCityFormData>({
 		name: "",
 		postalCode: "",
@@ -84,6 +88,39 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		}
 	};
 
+	const handleSelect = (city: APIResult) => {
+		isFromSelectionRef.current = true;
+		setSelectedCity(city);
+		setUserInput(city.fulltext);
+		setSuggestions([]);
+		setDropdownIsOpen(false);
+	};
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		const key = e.key;
+		if (!dropdownIsOpen || suggestions.length === 0) return;
+		if (key === "ArrowDown") {
+			e.preventDefault();
+			const nextIndex = (highlightedIndex + 1) % suggestions.length;
+			setHighlightedIndex(nextIndex);
+		}
+		if (key === "ArrowUp") {
+			e.preventDefault();
+			const nextIndex =
+				(highlightedIndex + suggestions.length - 1) % suggestions.length;
+			setHighlightedIndex(nextIndex);
+		}
+		if (key === "Enter") {
+			e.preventDefault();
+			if (highlightedIndex >= 0 && highlightedIndex < suggestions.length) {
+				handleSelect(suggestions[highlightedIndex]);
+			}
+		}
+		if (key === "Escape") {
+			setDropdownIsOpen(false);
+		}
+	};
+
 	useEffect(() => {
 		if (userInput.length < 3 || isFromSelectionRef.current) {
 			setSuggestions([]);
@@ -119,43 +156,6 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 			clearTimeout(debounce);
 		};
 	}, [userInput]);
-
-	const handleSelect = (city: APIResult) => {
-		isFromSelectionRef.current = true;
-		setSelectedCity(city);
-		setUserInput(city.fulltext);
-		setSuggestions([]);
-		setDropdownIsOpen(false);
-	};
-
-	const inputRef = useRef<HTMLInputElement>(null);
-	const containerRef = useRef<HTMLDivElement>(null);
-	const resultRefs = useRef<(HTMLLIElement | null)[]>([]);
-
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		const key = e.key;
-		if (!dropdownIsOpen || suggestions.length === 0) return;
-		if (key === "ArrowDown") {
-			e.preventDefault();
-			const nextIndex = (highlightedIndex + 1) % suggestions.length;
-			setHighlightedIndex(nextIndex);
-		}
-		if (key === "ArrowUp") {
-			e.preventDefault();
-			const nextIndex =
-				(highlightedIndex + suggestions.length - 1) % suggestions.length;
-			setHighlightedIndex(nextIndex);
-		}
-		if (key === "Enter") {
-			e.preventDefault();
-			if (highlightedIndex >= 0 && highlightedIndex < suggestions.length) {
-				handleSelect(suggestions[highlightedIndex]);
-			}
-		}
-		if (key === "Escape") {
-			setDropdownIsOpen(false);
-		}
-	};
 
 	useEffect(() => {
 		if (selectedCity) {
