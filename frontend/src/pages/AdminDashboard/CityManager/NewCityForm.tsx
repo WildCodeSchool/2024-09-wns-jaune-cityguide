@@ -105,7 +105,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 			</div>
 			<div className="form-body flex flex-col space-y-4">
 				<div className="form-group relative flex flex-col space-y-2">
-					<label htmlFor="search">Rechercher par nom ou code postal</label>
+					<label htmlFor="search">Rechercher par nom</label>
 					<input
 						id="search"
 						name="search"
