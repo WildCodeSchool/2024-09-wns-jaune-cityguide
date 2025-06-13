@@ -13,13 +13,22 @@ interface EditFormProps {
 		longitude: number;
 	};
 	cityUsers: User[];
+	cityAdmins: User[];
 }
 
 // TODO: handle adding admin user
 
-export function EditCityForm({ city }: EditFormProps) {
+export function EditCityForm({ city, cityAdmins, cityUsers }: EditFormProps) {
 	const [deleteCity, { loading }] = useMutation(DELETE_CITY);
 	const { fetchCities } = useCitiesStore();
+
+	const [userInput, setUserInput] = useState<string>("");
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+	const filteredUsers = cityUsers.filter((user) => {
+		const displayedResult = `${user.firstname} ${user.lastname}`.toLowerCase();
+		return displayedResult.includes(userInput.toLowerCase());
+	});
 
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -51,6 +60,74 @@ export function EditCityForm({ city }: EditFormProps) {
 			</div>
 
 			<div className="form-body flex flex-col space-y-4">
+				<div className="form-group flex flex-col space-y-2 relative">
+					<label htmlFor="search">Ajouter un administrateur</label>
+					<input
+						id="search"
+						type="text"
+						placeholder="Rechercher un utilisateur par nom ou prénom"
+						value={userInput}
+						onChange={(e) => {
+							setUserInput(e.target.value);
+							setIsDropdownOpen(true);
+						}}
+						onBlur={() => setTimeout(() => setIsDropdownOpen(false), 150)}
+						className="border border-[#706eeb] bg-white rounded-sm px-4 py-2 text-sm"
+					/>
+					{isDropdownOpen && filteredUsers.length > 0 && (
+						<ul className="absolute z-10 top-20 max-h-48 overflow-y-auto w-full border border-[#706eeb] bg-white rounded shadow-md text-sm">
+							{filteredUsers.map((user) => (
+								<li
+									key={user.id}
+									className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+								>
+									<button
+										type="button"
+										className="w-full text-left"
+										onClick={() => {
+											console.log("update complete", user.id);
+											setUserInput("");
+											setIsDropdownOpen(false);
+										}}
+									>
+										{user.firstname} {user.lastname}
+									</button>
+								</li>
+							))}
+						</ul>
+					)}
+				</div>
+				<div className="form-group flex flex-col space-y-2">
+					<p>Administrateurs actuels ({cityAdmins.length})</p>
+					<div className="rounded-sm space-y-2 min-h-[40px]">
+						{cityAdmins.length === 0 ? (
+							<p className="text-sm italic text-gray-500">
+								Aucun administrateur trouvé pour cette ville.
+							</p>
+						) : (
+							cityAdmins.map((admin) => (
+								<div
+									key={admin.id}
+									className="flex justify-between items-center border-b pb-1"
+								>
+									<div className="flex items-center gap-2">
+										👑
+										<span>
+											{admin.firstname} {admin.lastname}
+										</span>
+									</div>
+									<button
+										type="button"
+										onClick={() => console.log("remove admin", admin.id)}
+										className="text-red-500 hover:text-red-700"
+									>
+										X
+									</button>
+								</div>
+							))
+						)}
+					</div>
+				</div>
 				<div className="form-group flex flex-col space-y-2">
 					<label htmlFor="postalCode">Code postal</label>
 					<input
