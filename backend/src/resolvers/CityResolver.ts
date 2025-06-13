@@ -10,6 +10,8 @@ import {
 import { In, Like } from "typeorm";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
+import { GraphQLError } from "graphql";
+
 
 @InputType()
 export class CityInput {
@@ -60,6 +62,13 @@ export class CityResolver {
 
   @Mutation(() => City)
   async createCity(@Arg("data") data: CityInput) {
+    const existingCity = await City.findOne({ where: { postalCode: data.postalCode } });
+    if (existingCity) {
+      throw new GraphQLError("City already exists", {
+        //extensions: { code: "BAD_REQUEST", http: { status: 400 } },
+        extensions: { code: "BAD_REQUEST" },
+      });
+    }
     let city = new City();
     city = Object.assign(city, data);
     const interestPoints = data.interestPoints
