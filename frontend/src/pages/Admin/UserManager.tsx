@@ -4,13 +4,14 @@ import SearchBar from "./components/SearchBar";
 import UserStats from "./components/UserStats";
 import UserList from "./components/UserList";
 import UserEditForm from "./components/UserEditForm";
+import { UserRole } from "../../libs/graphql/generated/graphql-types";
 
 type User = {
   id: string;
   firstname: string;
   lastname: string;
   email: string;
-  role: string;
+  role: UserRole;
 };
 
 const GET_USERS = gql`

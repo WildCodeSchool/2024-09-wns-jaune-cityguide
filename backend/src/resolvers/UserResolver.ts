@@ -108,7 +108,6 @@ export class UserResolver {
       firstname: data.firstname,
       lastname: data.lastname,
       hashedPassword: hashedPassword,
-      role: UserRole.USER,
       city: city,
     });
 
@@ -186,9 +185,11 @@ export class UserResolver {
     });
 
     const profile = {
+      id: user.id,
       mail: user.email,
       firstname: user.firstname,
       city: user.city,
+      role: user.role,
     };
     return JSON.stringify(profile);
   }
