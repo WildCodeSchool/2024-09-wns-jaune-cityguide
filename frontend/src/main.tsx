@@ -12,7 +12,7 @@ import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import MapPage from "./pages/Map/MapPage.tsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.tsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.tsx";
-import CategoryManager from "./pages/CategoryManager/CategoryManager.tsx";
+import About from "./pages/About/About.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -50,6 +50,10 @@ const router = createBrowserRouter([
 			{
 				path: "/resetPassword",
 				element: <ResetPassword />
+			},
+			{
+				path: "/about",
+				element: <About />
 			},
 		],
 	},
