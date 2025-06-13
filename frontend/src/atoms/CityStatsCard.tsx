@@ -43,7 +43,7 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 				layout: { duration: 0.3, ease: "easeInOut" },
 				opacity: { duration: 0.2 },
 			}}
-			className="relative w-full max-w-xs sm:max-w-sm md:max-w-xs border border-[#706eeb] rounded-2xl bg-white shadow-md cursor-pointer"
+			className="relative w-full max-w-xs sm:max-w-sm md:max-w-xs border border-[#706eeb] rounded-2xl bg-white shadow-xl cursor-pointer"
 		>
 			<button
 				type="button"
