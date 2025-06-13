@@ -51,7 +51,11 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 				title="Afficher les informations détaillées"
 				onClick={() => {
 					openModalWithComponent(
-						<EditCityForm city={city} cityUsers={cityUsers} />,
+						<EditCityForm
+							city={city}
+							cityUsers={cityUsers}
+							cityAdmins={cityAdmins}
+						/>,
 					);
 				}}
 			>
