@@ -11,7 +11,7 @@ import accessibility from "../../assets/accessibility.png";
 import authenticity from "../../assets/authenticity.png";
 import collaboration from "../../assets/collaboration.png";
 import innovation from "../../assets/project-management.png";
-import travellers from "../../assets/couple-travellers.jpeg"
+
 
 const About = () => {
   return (
