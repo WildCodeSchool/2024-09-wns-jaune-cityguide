@@ -1,4 +1,8 @@
+import { useMutation } from "@apollo/client";
 import type { User } from "../../../store/userStore";
+import { DELETE_CITY } from "../../../libs/graphql/operations";
+import { useCitiesStore } from "../../../store/citiesStore";
+import { useState } from "react";
 
 interface EditFormProps {
 	city: {
@@ -14,16 +18,34 @@ interface EditFormProps {
 // TODO: handle adding admin user
 
 export function EditCityForm({ city }: EditFormProps) {
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	const [deleteCity, { loading }] = useMutation(DELETE_CITY);
+	const { fetchCities } = useCitiesStore();
+
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+	const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		console.log("");
+		if (!city.id) return;
+		setErrorMessage(null);
+		try {
+			const { data } = await deleteCity({
+				variables: {
+					cityId: city.id.toString(),
+				},
+			});
+			console.log("Deleting city with ID:", city.id);
+			fetchCities();
+			return data.deleteCity;
+		} catch (error) {
+			console.error("Error deleting city:", error);
+			setErrorMessage(
+				"Une erreur est survenue lors de la suppression de la ville.",
+			);
+		}
 	};
 
 	return (
-		<form
-			className="new-city-form relative flex flex-col w-full space-y-3"
-			onSubmit={handleSubmit}
-		>
+		<form className="new-city-form relative flex flex-col w-full space-y-3">
 			<div className="form-header flex w-full items-center justify-center p-4">
 				<h3 className="text-2xl font-medium">{city.name}</h3>
 			</div>
@@ -68,14 +90,18 @@ export function EditCityForm({ city }: EditFormProps) {
 						/>
 					</div>
 				</div>
+				{errorMessage && (
+					<p className="text-center text-sm text-red-600">{errorMessage}</p>
+				)}
 			</div>
 
 			<div className="form-footer flex justify-around items-center p-4">
 				<button
 					type="button"
+					onClick={handleDelete}
 					className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-400 transition-colors hover:cursor-pointer"
 				>
-					Supprimer
+					<span>{loading ? "En cours..." : "Supprimer"}</span>
 				</button>
 			</div>
 		</form>
