@@ -4,7 +4,7 @@ import type { City } from "../../../@types/types";
 import { CityStatsCard } from "../../../atoms/CityStatsCard";
 import { UserRole } from "../../../libs/graphql/generated/graphql-types";
 import { useCitiesStore } from "../../../store/citiesStore";
-import type { User } from "../../../store/userStore";
+//import type { User } from "../../../store/userStore";
 import { useUserStore } from "../../../store/userStore";
 
 import { Modal } from "../../../organisms/Modal";
@@ -16,7 +16,7 @@ export default function CityManager() {
 	const [sortBy, setSortBy] = useState<"name" | "postalCode">("name");
 
 	const { cities, isLoading } = useCitiesStore();
-	const { users } = useUserStore() as { users: User[] };
+	const { users, updateUserRole } = useUserStore();
 
 	// const [selectedCity, setSelectedCity] = useState<City | null>(null);
 
