@@ -236,3 +236,11 @@ export const DELETE_CITY = gql`
 mutation CreateCity($cityId: String!) {
   deleteCityById(cityId: $cityId)
 }`;
+
+export const UPDATE_USER_ROLE = gql`
+mutation UpdateUserRole($data: UpdateUserInput!, $userId: String!) {
+  updateUser(data: $data, userId: $userId) {
+    id,
+    role
+  }
+}`;
