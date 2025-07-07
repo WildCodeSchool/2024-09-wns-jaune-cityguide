@@ -75,6 +75,16 @@ export function EditCityForm({ city }: EditFormProps) {
 		}
 	};
 
+	const handleAssignUserRole = async (userId: string) => {
+		try {
+			await updateUserRole(userId, UserRole.User);
+			console.log("User role updated for user:", userId);
+			fetchUsers();
+		} catch (error) {
+			console.error("Error updating user role:", error);
+		}
+	};
+
 	return (
 		<form className="new-city-form relative flex flex-col w-full space-y-3">
 			<div className="form-header flex w-full items-center justify-center p-4">
@@ -140,7 +150,7 @@ export function EditCityForm({ city }: EditFormProps) {
 									</div>
 									<button
 										type="button"
-										onClick={() => console.log("remove admin", admin.id)}
+										onClick={() => handleAssignUserRole(admin.id)}
 										className="text-red-500 hover:text-red-700"
 									>
 										X
