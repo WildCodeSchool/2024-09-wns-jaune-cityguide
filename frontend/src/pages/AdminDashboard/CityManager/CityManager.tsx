@@ -16,7 +16,7 @@ export default function CityManager() {
 	const [sortBy, setSortBy] = useState<"name" | "postalCode">("name");
 
 	const { cities, isLoading } = useCitiesStore();
-	const { users, updateUserRole } = useUserStore();
+	const { users } = useUserStore();
 
 	// const [selectedCity, setSelectedCity] = useState<City | null>(null);
 
