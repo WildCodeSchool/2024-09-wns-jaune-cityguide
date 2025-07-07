@@ -17,6 +17,7 @@ export default function CityManager() {
 
 	const { cities, isLoading } = useCitiesStore();
 	const { users } = useUserStore() as { users: User[] };
+
 	// const [selectedCity, setSelectedCity] = useState<City | null>(null);
 
 	const openModalWithComponent = (component: ReactNode) => {

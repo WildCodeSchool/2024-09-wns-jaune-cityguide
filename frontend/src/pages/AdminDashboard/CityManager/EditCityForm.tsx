@@ -25,8 +25,10 @@ export function EditCityForm({ city, cityAdmins, cityUsers }: EditFormProps) {
 	const [userInput, setUserInput] = useState<string>("");
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+	console.log("City users in EditCityForm:", cityUsers);
 	const filteredUsers = cityUsers.filter((user) => {
-		const displayedResult = `${user.firstname} ${user.lastname}`.toLowerCase();
+		const displayedResult =
+			`${user.firstname} ${user.lastname} (${user.email})`.toLowerCase();
 		return displayedResult.includes(userInput.toLowerCase());
 	});
 
@@ -90,7 +92,7 @@ export function EditCityForm({ city, cityAdmins, cityUsers }: EditFormProps) {
 											setIsDropdownOpen(false);
 										}}
 									>
-										{user.firstname} {user.lastname}
+										{user.firstname} {user.lastname} ({user.email})
 									</button>
 								</li>
 							))}
@@ -113,7 +115,7 @@ export function EditCityForm({ city, cityAdmins, cityUsers }: EditFormProps) {
 									<div className="flex items-center gap-2">
 										👑
 										<span>
-											{admin.firstname} {admin.lastname}
+											{admin.firstname} {admin.lastname} ({admin.email})
 										</span>
 									</div>
 									<button
