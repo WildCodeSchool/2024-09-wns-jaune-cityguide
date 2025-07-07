@@ -1,8 +1,9 @@
 import { useMutation } from "@apollo/client";
-import type { User } from "../../../store/userStore";
 import { DELETE_CITY } from "../../../libs/graphql/operations";
 import { useCitiesStore } from "../../../store/citiesStore";
+import { useUserStore } from "../../../store/userStore";
 import { useState } from "react";
+import { UserRole } from "../../../libs/graphql/generated/graphql-types";
 
 interface EditFormProps {
 	city: {
@@ -12,20 +13,29 @@ interface EditFormProps {
 		latitude: number;
 		longitude: number;
 	};
-	cityUsers: User[];
-	cityAdmins: User[];
 }
 
 // TODO: handle adding admin user
 
-export function EditCityForm({ city, cityAdmins, cityUsers }: EditFormProps) {
+export function EditCityForm({ city }: EditFormProps) {
 	const [deleteCity, { loading }] = useMutation(DELETE_CITY);
 	const { fetchCities } = useCitiesStore();
+	const { updateUserRole } = useUserStore();
 
 	const [userInput, setUserInput] = useState<string>("");
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-	console.log("City users in EditCityForm:", cityUsers);
+	const { users, fetchUsers } = useUserStore();
+
+	const cityUsers = users.filter(
+		(user) => Number(user.city?.id) === Number(city.id),
+	);
+	const cityAdmins = users.filter(
+		(user) =>
+			Number(user.city.id) === Number(city.id) &&
+			user.role === UserRole.CityAdmin,
+	);
+
 	const filteredUsers = cityUsers.filter((user) => {
 		const displayedResult =
 			`${user.firstname} ${user.lastname} (${user.email})`.toLowerCase();
@@ -52,6 +62,16 @@ export function EditCityForm({ city, cityAdmins, cityUsers }: EditFormProps) {
 			setErrorMessage(
 				"Une erreur est survenue lors de la suppression de la ville.",
 			);
+		}
+	};
+
+	const handleAssignAdminRole = async (userId: string) => {
+		try {
+			await updateUserRole(userId, UserRole.CityAdmin);
+			console.log("User role updated for user:", userId);
+			fetchUsers();
+		} catch (error) {
+			console.error("Error updating user role:", error);
 		}
 	};
 
@@ -87,7 +107,7 @@ export function EditCityForm({ city, cityAdmins, cityUsers }: EditFormProps) {
 										type="button"
 										className="w-full text-left"
 										onClick={() => {
-											console.log("update complete", user.id);
+											handleAssignAdminRole(user.id);
 											setUserInput("");
 											setIsDropdownOpen(false);
 										}}
