@@ -9,6 +9,7 @@ export interface User {
 	firstname: string;
 	lastname: string;
 	role: UserRole;
+	email: string;
 	city: {
 		id: number;
 		name: string;
