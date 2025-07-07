@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { type ReactNode, useState } from "react";
-import type { User } from "../store/userStore";
+import { UserRole } from "../libs/graphql/generated/graphql-types";
 import { Modal } from "../organisms/Modal";
 import { EditCityForm } from "../pages/AdminDashboard/CityManager/EditCityForm";
+import { useUserStore } from "../store/userStore";
 
 interface CityCardProps {
 	city: {
@@ -12,16 +13,24 @@ interface CityCardProps {
 		latitude: number;
 		longitude: number;
 	};
-	cityUsers: User[];
-	cityAdmins: User[];
 }
 
-export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
+export function CityStatsCard({ city }: CityCardProps) {
+	const { users } = useUserStore();
 	const [showDetails, setShowDetails] = useState<boolean>(false);
 	const [formIsOpen, setFormIsOpen] = useState<boolean>(false);
 	const [modalContent, setModalContent] = useState<ReactNode>(null);
 
-	const totalUsers = cityUsers.length + cityAdmins.length;
+	const cityUsers = users.filter(
+		(user) => Number(user.city?.id) === Number(city.id),
+	);
+	const standardCityUsers = cityUsers.filter(
+		(user) => user.role === UserRole.User,
+	);
+	const cityAdmins = cityUsers.filter(
+		(user) => user.role === UserRole.CityAdmin,
+	);
+	const totalUsers = standardCityUsers.length + cityAdmins.length;
 
 	const openModalWithComponent = (component: ReactNode) => {
 		setModalContent(component);
@@ -50,13 +59,7 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 				className="absolute top-2 right-2 p-1 rounded-full text-gray-500 hover:bg-gray-100 hover:cursor-pointer hover:scale-125 transition-transform duration-200"
 				title="Afficher les informations détaillées"
 				onClick={() => {
-					openModalWithComponent(
-						<EditCityForm
-							city={city}
-							cityUsers={cityUsers}
-							cityAdmins={cityAdmins}
-						/>,
-					);
+					openModalWithComponent(<EditCityForm city={city} />);
 				}}
 			>
 				<svg
@@ -139,14 +142,14 @@ export function CityStatsCard({ city, cityUsers, cityAdmins }: CityCardProps) {
 							</span>
 						</div>
 						<div>
-							👤 <strong>{cityUsers.length}</strong>
+							👤 <strong>{standardCityUsers.length}</strong>
 							<span className="sm:hidden">
 								{" "}
-								utilisateur{cityUsers.length > 1 ? "s" : ""}
+								utilisateur{standardCityUsers.length > 1 ? "s" : ""}
 							</span>
 							<span className="hidden sm:inline">
 								{" "}
-								utilisateur{cityUsers.length > 1 ? "s" : ""} standard
+								utilisateur{standardCityUsers.length > 1 ? "s" : ""} standard
 							</span>
 						</div>
 					</div>
