@@ -4,9 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
 import { useMenuStore } from '../store/menuStore';
 import { useMutationMutation } from "../libs/graphql/generated/graphql-types";
+import { UserRole } from "../libs/graphql/generated/graphql-types";
 
 export default function Navbar() {
-  const { user, clearUser } = useUserStore();
+  const user = useUserStore((state) => state.user);
+  const clearUser = useUserStore((state) => state.clearUser);
   const [logout] = useMutationMutation();
   const navigate = useNavigate();
   const isOpen = useMenuStore((state) => state.isOpen);
@@ -111,7 +113,7 @@ export default function Navbar() {
                         Mon profil
                       </a>
 
-                      {user.role === "SUPER_ADMIN" && (
+                     {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
                         <a
                           href="#"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -126,8 +128,8 @@ export default function Navbar() {
 
                       <button
                         onClick={() => {
-                          handleLogout();
                           setIsOpen(false);
+                          handleLogout();
                         }}
                         className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
@@ -230,7 +232,7 @@ export default function Navbar() {
                         >
                           Mon profil
                         </Link>
-                        {user.role === "SUPER_ADMIN" && (
+                       {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
                           <Link
                             to="#"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -241,8 +243,8 @@ export default function Navbar() {
                         )}
                         <button
                           onClick={() => {
-                            handleLogout();
                             setIsOpen(false);
+                            handleLogout();
                           }}
                           className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                         >

@@ -6,6 +6,8 @@ import { Carousel } from "../atoms/Carousel";
 import EditInterestPointForm from "../organisms/EditInterestPointForm"
 import DeleteConfirmationModal from "../organisms/DeleteConfirmationModal";
 import { useDeleteInterestPointByIdMutation } from "../libs/graphql/generated/graphql-types";
+import { UserRole } from "../libs/graphql/generated/graphql-types";
+import { useUserStore } from "../store/userStore";
 
 type InterestPointSheetProps = {
 	isOpen: boolean;
@@ -18,6 +20,7 @@ export default function InterestPointDetails({
 	onClose,
 	interestPoint
 }: InterestPointSheetProps) {
+	const user = useUserStore((state) => state.user);
 	const { selectedInterestPoint } = useInterestPointsStore();
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [showConfirm, setShowConfirm] = useState(false);
@@ -79,6 +82,7 @@ export default function InterestPointDetails({
 					<>
 						<div className="flex justify-between items-center w-full">
 							<div className="flex gap-2">
+								{(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
 								<button
 									type="button"
 									onClick={() => setIsEditing(true)}
@@ -87,6 +91,8 @@ export default function InterestPointDetails({
 									<span className="material-symbols-outlined text-xs">edit</span>
 									Modifier
 								</button>
+											)}
+											{(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
 								<button
 									type="button"
 									onClick={() => setShowConfirm(true)}
@@ -95,6 +101,7 @@ export default function InterestPointDetails({
 									<span className="material-symbols-outlined text-xs">delete</span>
 									Supprimer
 								</button>
+								)}
 							</div>
 							<button
 								type="button"
