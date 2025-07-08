@@ -14,6 +14,8 @@ import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.tsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.tsx";
 import CategoryManager from "./pages/CategoryManager/CategoryManager.tsx";
 import ModificationProfile from "./pages/ModificationProfile/ModificationProfile.tsx";
+import About from "./pages/About/About.tsx";
+import Contact from "./pages/Contact/Contact.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -55,6 +57,14 @@ const router = createBrowserRouter([
 			{
 				path: "/resetPassword",
 				element: <ResetPassword />
+			},
+			{
+				path: "/about",
+				element: <About />
+			},
+			{
+				path: "/contact",
+				element: <Contact />
 			},
 		],
 	},

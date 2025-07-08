@@ -44,10 +44,10 @@ const Footer: FC = () => {
 						<Link to="#" className="text-white/80 hover:text-white transition">
 							Mentions légales
 						</Link>
-						<Link to="#" className="text-white/80 hover:text-white transition">
+						<Link to="/about" className="text-white/80 hover:text-white transition">
 							À propos
 						</Link>
-						<Link to="#" className="text-white/80 hover:text-white transition">
+						<Link to="/contact" className="text-white/80 hover:text-white transition">
 							Contact
 						</Link>
 					</div>
