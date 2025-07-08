@@ -3,14 +3,7 @@ import { ApolloError } from "@apollo/client";
 import { useEffect, useRef, useState } from "react";
 import { CREATE_CITY } from "../../../libs/graphql/operations";
 import { useCitiesStore } from "../../../store/citiesStore";
-
-interface APIResult {
-	fulltext: string;
-	names: string[];
-	zipcode?: string;
-	x: number;
-	y: number;
-}
+import type { APIResult } from "../../../@types/types";
 
 interface NewCityFormData {
 	name: string;

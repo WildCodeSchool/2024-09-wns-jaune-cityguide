@@ -37,3 +37,11 @@ export type Picture = {
 	description: string;
 	url: string;
 };
+
+export interface APIResult {
+	fulltext: string;
+	names: string[];
+	zipcode?: string;
+	x: number;
+	y: number;
+}
