@@ -140,7 +140,7 @@ export function EditCityForm({ city }: EditFormProps) {
 							cityAdmins.map((admin) => (
 								<div
 									key={admin.id}
-									className="flex justify-between items-center border-b pb-1"
+									className="flex justify-between items-center mb-1"
 								>
 									<div className="flex items-center gap-2">
 										👑
