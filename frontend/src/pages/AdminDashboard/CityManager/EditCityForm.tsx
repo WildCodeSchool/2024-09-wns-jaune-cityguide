@@ -15,8 +15,6 @@ interface EditFormProps {
 	};
 }
 
-// TODO: handle adding admin user
-
 export function EditCityForm({ city }: EditFormProps) {
 	const [deleteCity, { loading }] = useMutation(DELETE_CITY);
 	const { fetchCities } = useCitiesStore();
