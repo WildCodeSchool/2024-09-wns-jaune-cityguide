@@ -19,7 +19,7 @@ export default function CreateInterestPointForm({
   const { loading, error, data } = useGetCategoriesQuery();
   const [createInterestPoint, { data: createdData, loading: submitting, error: createError }] =
     useCreateInterestPointMutation();
-  const { data: cityData} = useGetCitiesQuery();
+  const { data: cityData } = useGetCitiesQuery();
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
@@ -226,23 +226,22 @@ export default function CreateInterestPointForm({
           </div>
         </div>
 
-        <div className="flex justify-between items-center pt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-100 hover:cursor-pointer"
-          >
-            Annuler
-          </button>
+        <button
+          type="submit"
+          className="flex justify-center items-center w-full text-sm px-4 py-2 rounded-md primary-bg text-white hover:bg-purple-700 transition hover:cursor-pointer hover:text-gray-100"
+          disabled={submitting}
+        >
+          {submitting ? "Création en cours..." : "Créer"}
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="flex justify-center items-center w-full border border-gray-300 px-3 py-2 text-sm px-4 py-2 rounded-md  hover:cursor-pointer hover:text-gray-500"
+          aria-label="Annuler la création"
+        >
+          Annuler
+        </button>
 
-          <button
-            type="submit"
-            className="bg-indigo-600 text-white px-6 py-2 rounded-md text-sm hover:bg-indigo-700 hover:cursor-pointer"
-            disabled={submitting}
-          >
-            {submitting ? "Création en cours..." : "Créer"}
-          </button>
-        </div>
       </form>
     </aside>
   )

@@ -77,33 +77,14 @@ export default function InterestPointDetails({
 						onClose={() => setIsEditing(false)} />
 				) : (
 					<>
-						<div className="flex justify-between items-start w-full">
-							<button
-								type="button"
-								onClick={onClose}
-								className="cursor-pointer text-gray-800 rounded-full hover:bg-gray-200 hover:text-gray-500 p-1"
-								aria-label="Fermer les détails"
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									className="w-4 h-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									strokeWidth={2}
-								>
-									<path d="M18 6 6 18" />
-									<path d="m6 6 12 12" />
-
-								</svg>
-							</button>
+						<div className="flex justify-between items-center w-full">
 							<div className="flex gap-2">
 								<button
 									type="button"
 									onClick={() => setIsEditing(true)}
 									className="cursor-pointer text-gray-600 hover:text-gray-800 flex items-center gap-1 text-sm"
-								><span className="material-symbols-outlined text-xs">
-										edit</span>
+								>
+									<span className="material-symbols-outlined text-xs">edit</span>
 									Modifier
 								</button>
 								<button
@@ -115,6 +96,14 @@ export default function InterestPointDetails({
 									Supprimer
 								</button>
 							</div>
+							<button
+								type="button"
+								onClick={onClose}
+								className="text-gray-500 hover:text-gray-700 hover:cursor-pointer text-lg"
+								aria-label="Fermer"
+							>
+								✕
+							</button>
 						</div>
 						<div className="sheet-header w-full flex items-center justify-center space-x-4 py-4 text-gray-600">
 							<div className="h-[1.5px] w-full bg-gray-600 rounded-full flex-grow" />
