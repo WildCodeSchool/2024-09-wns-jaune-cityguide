@@ -13,6 +13,7 @@ import MapPage from "./pages/Map/MapPage.tsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.tsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.tsx";
 import CategoryManager from "./pages/CategoryManager/CategoryManager.tsx";
+import ModificationProfile from "./pages/ModificationProfile/ModificationProfile.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
 			{
 				path: "/login",
 				element: <Login />,
+			},
+			{
+				path: "/modificationProfile",
+				element: <ModificationProfile />,
 			},
 			{
 				path: "/forgotPassword",

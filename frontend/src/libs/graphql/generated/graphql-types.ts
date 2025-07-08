@@ -287,6 +287,7 @@ export type UpdateCategoryInput = {
 };
 
 export type UpdateUserInput = {
+  city?: InputMaybe<Scalars['Float']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   firstname?: InputMaybe<Scalars['String']['input']>;
   lastname?: InputMaybe<Scalars['String']['input']>;
@@ -395,14 +396,14 @@ export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: stri
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, email: string, role: UserRole }> };
+export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, email: string, role: UserRole, city: { __typename?: 'City', id: string, name: string } }> };
 
 export type GetUserByIdQueryVariables = Exact<{
   userId: Scalars['String']['input'];
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', getUserById: { __typename?: 'User', id: string, firstname: string, lastname: string, email: string, role: UserRole } };
+export type GetUserByIdQuery = { __typename?: 'Query', getUserById: { __typename?: 'User', id: string, firstname: string, lastname: string, email: string, role: UserRole, city: { __typename?: 'City', id: string, name: string } } };
 
 export type UpdateUserMutationVariables = Exact<{
   data: UpdateUserInput;
@@ -410,7 +411,7 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, firstname: string, lastname: string, email: string } };
 
 export type DeleteUserMutationVariables = Exact<{
   userId: Scalars['String']['input'];
@@ -902,6 +903,10 @@ export const GetUsersDocument = gql`
     lastname
     email
     role
+    city {
+      id
+      name
+    }
   }
 }
     `;
@@ -945,6 +950,10 @@ export const GetUserByIdDocument = gql`
     lastname
     email
     role
+    city {
+      id
+      name
+    }
   }
 }
     `;
@@ -985,6 +994,9 @@ export const UpdateUserDocument = gql`
     mutation UpdateUser($data: UpdateUserInput!, $userId: String!) {
   updateUser(data: $data, userId: $userId) {
     id
+    firstname
+    lastname
+    email
   }
 }
     `;
