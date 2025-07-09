@@ -23,9 +23,12 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 	const { fetchCities } = useCitiesStore();
 
 	const [userInput, setUserInput] = useState<string>("");
-	const [suggestions, setSuggestions] = useState<APIResult[]>([]);
+	const [suggestions, setSuggestions] = useState<CityAutocompleteAPIResult[]>(
+		[],
+	);
 	const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
-	const [selectedCity, setSelectedCity] = useState<APIResult | null>(null);
+	const [selectedCity, setSelectedCity] =
+		useState<CityAutocompleteAPIResult | null>(null);
 	const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
 
 	const isFromSelectionRef = useRef(false);

@@ -364,6 +364,7 @@ export default function CreateInterestPointForm({
 							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
 							required
 							disabled
+							placeholder="Ville"
 							value={selectedAddress?.city || ""}
 						/>
 						<p className="text-xs text-red-600">{errorMessage}</p>
