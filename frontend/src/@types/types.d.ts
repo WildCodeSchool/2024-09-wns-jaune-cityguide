@@ -45,3 +45,17 @@ export interface APIResult {
 	x: number;
 	y: number;
 }
+
+export interface AddressAPIResult {
+	x: number;
+	y: number;
+	country: string;
+	city: string;
+	oldcity: string;
+	kind: string;
+	zipcode: string;
+	street: string;
+	metropole: boolean;
+	fulltext: string;
+	classification: number;
+}
