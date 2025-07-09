@@ -3,7 +3,7 @@ import { ApolloError } from "@apollo/client";
 import { useEffect, useRef, useState } from "react";
 import { CREATE_CITY } from "../../../libs/graphql/operations";
 import { useCitiesStore } from "../../../store/citiesStore";
-import type { APIResult } from "../../../@types/types";
+import type { CityAutocompleteAPIResult } from "../../../@types/types";
 
 interface NewCityFormData {
 	name: string;
@@ -80,7 +80,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		}
 	};
 
-	const handleSelect = (city: APIResult) => {
+	const handleSelect = (city: CityAutocompleteAPIResult) => {
 		isFromSelectionRef.current = true;
 		setSelectedCity(city);
 		setUserInput(city.fulltext);
