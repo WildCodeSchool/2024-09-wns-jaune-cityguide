@@ -1,11 +1,12 @@
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-	useGetCitiesQuery,
 	useCreateInterestPointMutation,
 	useGetCategoriesQuery,
 	type InterestPointInput,
 } from "../libs/graphql/generated/graphql-types";
+import type { AddressAutocompleteAPIResult } from "../@types/types";
+import { useCitiesStore } from "../store/citiesStore";
 
 type NewInterestPointFormProps = {
 	isOpen: boolean;
@@ -17,15 +18,91 @@ export default function CreateInterestPointForm({
 	onClose,
 }: NewInterestPointFormProps) {
 	const { loading, error, data } = useGetCategoriesQuery();
+	const { cities } = useCitiesStore();
 	const [
 		createInterestPoint,
 		{ data: createdData, loading: submitting, error: createError },
 	] = useCreateInterestPointMutation();
-	const { data: cityData } = useGetCitiesQuery();
+
+	const [errorMessage, setErrorMessage] = useState<string>("");
+	const [userInput, setUserInput] = useState<string>("");
+	const [suggestions, setSuggestions] = useState<
+		AddressAutocompleteAPIResult[]
+	>([]);
+	const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
+	const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
+	const [selectedAddress, setSelectedAddress] =
+		useState<AddressAutocompleteAPIResult | null>(null);
+	const [formCityId, setFormCityId] = useState<string>("");
+
 	const [showPopup, setShowPopup] = useState(false);
 	const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
+	const inputRef = useRef<HTMLInputElement>(null);
+	const resultRefs = useRef<(HTMLLIElement | null)[]>([]);
+	const isFromSelectionRef = useRef(false);
+
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (userInput.length < 3 || isFromSelectionRef.current) {
+			setSuggestions([]);
+			setDropdownIsOpen(false);
+			isFromSelectionRef.current = false;
+			return;
+		}
+
+		const fetchSuggestions = async () => {
+			try {
+				const response = await fetch(
+					`https://data.geopf.fr/geocodage/completion/?text=${
+						userInput
+					}&terr=DOMTOM%2CMETROPOLE&type=StreetAddress&maximumResponses=10`,
+				);
+				const data = await response.json();
+				if (data?.results) {
+					setSuggestions(data.results);
+					setDropdownIsOpen(true);
+				}
+			} catch (error) {
+				if (error instanceof Error) {
+					console.error("Error fetching suggestions:", error.message);
+				} else {
+					console.error("Unknown error fetching suggestions:", error);
+				}
+			}
+		};
+		const debounce = setTimeout(fetchSuggestions, 300);
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [userInput]);
+
+	const handleSelect = (address: AddressAutocompleteAPIResult) => {
+		isFromSelectionRef.current = true;
+		setErrorMessage("");
+		setSelectedAddress(address);
+		setUserInput(address.fulltext);
+		setDropdownIsOpen(false);
+
+		const matchedCity = cities.find((city) => {
+			const cityNameMatch =
+				city.name.toLowerCase().trim() === address.city.toLowerCase().trim();
+			const postalCodeMatch =
+				city.postalCode.slice(0, 2) === address.zipcode.slice(0, 2);
+			return cityNameMatch && postalCodeMatch;
+		});
+
+		if (matchedCity) {
+			setFormCityId(matchedCity.id);
+		} else {
+			setErrorMessage(
+				"La ville sélectionnée n'existe pas dans la base de données.",
+			);
+			setFormCityId("");
+			console.log("City not found in the database:", address.city);
+		}
+	};
 
 	const handleSubmit = async (evt: FormEvent) => {
 		evt.preventDefault();
@@ -37,7 +114,11 @@ export default function CreateInterestPointForm({
 			...formJson,
 			latitude: Number.parseFloat(formJson.latitude as string),
 			longitude: Number.parseFloat(formJson.longitude as string),
+			city: formCityId,
+			address: selectedAddress?.fulltext,
 		};
+
+		console.log(formattedData);
 		try {
 			const result = await createInterestPoint({
 				variables: {
@@ -46,7 +127,7 @@ export default function CreateInterestPointForm({
 			});
 
 			if (result?.data?.createInterestPoint) {
-				console.log("point créé1");
+				console.log("Interest point created successfully");
 			}
 		} catch (err) {
 			console.error("Erreur lors de la création :", err);
@@ -67,6 +148,29 @@ export default function CreateInterestPointForm({
 
 		return () => clearTimeout(timer);
 	}, [createdData, navigate, onClose]);
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (!dropdownIsOpen || suggestions.length === 0) return;
+		if (e.key === "ArrowDown") {
+			e.preventDefault();
+			setHighlightedIndex((prev) => (prev + 1) % suggestions.length);
+		}
+		if (e.key === "ArrowUp") {
+			e.preventDefault();
+			setHighlightedIndex(
+				(prev) => (prev + suggestions.length - 1) % suggestions.length,
+			);
+		}
+		if (e.key === "Enter") {
+			e.preventDefault();
+			if (highlightedIndex >= 0) {
+				handleSelect(suggestions[highlightedIndex]);
+			}
+		}
+		if (e.key === "Escape") {
+			setDropdownIsOpen(false);
+		}
+	};
 
 	if (error || createError) return <>Error!</>;
 	if (loading) return <>Loading...</>;
@@ -196,45 +300,53 @@ export default function CreateInterestPointForm({
 						Adresse
 					</label>
 					<input
-						name="address"
-						className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
-						required
+						type="text"
+						ref={inputRef}
+						value={userInput}
+						onChange={(e) => setUserInput(e.target.value)}
+						onKeyDown={handleKeyDown}
+						className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500 focus:outline-none"
 						placeholder="Adresse complète"
+						required
 					/>
+					{dropdownIsOpen && suggestions.length > 0 && (
+						<ul className="absolute z-10 w-full bg-white border mt-1 rounded shadow max-h-60 overflow-auto">
+							{suggestions.map((item, index) => (
+								<li
+									key={item.fulltext}
+									ref={(el) => {
+										resultRefs.current[index] = el;
+									}}
+									className={`px-4 py-2 cursor-pointer ${highlightedIndex === index ? "bg-indigo-100" : ""}`}
+									onClick={() => handleSelect(item)}
+									onKeyDown={(e) => {
+										if (e.key === "Enter" || e.key === " ") {
+											e.preventDefault();
+											handleSelect(item);
+										}
+									}}
+								>
+									{item.fulltext}
+								</li>
+							))}
+						</ul>
+					)}
 				</div>
 
 				<div className="grid grid-cols-2 gap-4">
 					<div>
-						<label
-							htmlFor="latitude"
-							className="block text-sm font-medium text-gray-700 mb-1"
-						>
-							Latitude
-						</label>
 						<input
+							type="hidden"
 							name="latitude"
-							type="number"
-							step="any"
-							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
-							required
-							placeholder="Ex: 48.8584"
+							value={selectedAddress?.y ?? ""}
 						/>
 					</div>
 
 					<div>
-						<label
-							htmlFor="longitude"
-							className="block text-sm font-medium text-gray-700 mb-1"
-						>
-							Longitude
-						</label>
 						<input
+							type="hidden"
 							name="longitude"
-							type="number"
-							step="any"
-							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
-							required
-							placeholder="Ex: 2.2945"
+							value={selectedAddress?.x ?? ""}
 						/>
 					</div>
 				</div>
@@ -247,17 +359,14 @@ export default function CreateInterestPointForm({
 						>
 							Ville
 						</label>
-						<select
+						<input
 							name="city"
 							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
 							required
-						>
-							{cityData?.getCities.map((city) => (
-								<option key={city.id} value={city.id}>
-									{city.name} ({city.postalCode})
-								</option>
-							))}
-						</select>
+							disabled
+							value={selectedAddress?.city || ""}
+						/>
+						<p className="text-xs text-red-600">{errorMessage}</p>
 					</div>
 
 					<div>
