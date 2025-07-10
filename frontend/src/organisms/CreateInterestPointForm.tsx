@@ -34,6 +34,7 @@ export default function CreateInterestPointForm({
 	const [selectedAddress, setSelectedAddress] =
 		useState<AddressAutocompleteAPIResult | null>(null);
 	const [formCityId, setFormCityId] = useState<string>("");
+	const [cityExists, setCityExists] = useState<boolean>(false);
 
 	const [showPopup, setShowPopup] = useState(false);
 	const [popupMessage, setPopupMessage] = useState<string[]>([]);
@@ -95,12 +96,14 @@ export default function CreateInterestPointForm({
 
 		if (matchedCity) {
 			setFormCityId(matchedCity.id);
+			setCityExists(true);
 		} else {
 			setErrorMessage(
 				"La ville sélectionnée n'existe pas dans la base de données.",
 			);
 			setFormCityId("");
 			console.log("City not found in the database:", address.city);
+			setCityExists(false);
 		}
 	};
 
@@ -396,8 +399,12 @@ export default function CreateInterestPointForm({
 
 					<button
 						type="submit"
-						className="bg-indigo-600 text-white px-6 py-2 rounded-md text-sm hover:bg-indigo-700 hover:cursor-pointer"
-						disabled={submitting}
+						className={`bg-indigo-600 text-white px-6 py-2 rounded-md text-sm hover:bg-indigo-700 hover:cursor-pointer ${
+							!cityExists
+								? "bg-purple-200 text-gray-500 cursor-not-allowed"
+								: "bg-[#706eeb] text-white hover:bg-[#5c5acf]"
+						}`}
+						disabled={submitting || !cityExists}
 					>
 						{submitting ? "Création en cours..." : "Créer"}
 					</button>
