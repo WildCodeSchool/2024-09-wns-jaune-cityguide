@@ -287,6 +287,7 @@ export type UpdateCategoryInput = {
 };
 
 export type UpdateUserInput = {
+  city?: InputMaybe<Scalars['Float']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   firstname?: InputMaybe<Scalars['String']['input']>;
   lastname?: InputMaybe<Scalars['String']['input']>;
@@ -402,7 +403,7 @@ export type GetUserByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', getUserById: { __typename?: 'User', id: string, firstname: string, lastname: string, email: string, role: UserRole } };
+export type GetUserByIdQuery = { __typename?: 'Query', getUserById: { __typename?: 'User', id: string, firstname: string, lastname: string, email: string, role: UserRole, city: { __typename?: 'City', id: string, name: string } } };
 
 export type UpdateUserMutationVariables = Exact<{
   data: UpdateUserInput;
@@ -410,7 +411,7 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, firstname: string, lastname: string, email: string } };
 
 export type DeleteUserMutationVariables = Exact<{
   userId: Scalars['String']['input'];
@@ -949,6 +950,10 @@ export const GetUserByIdDocument = gql`
     lastname
     email
     role
+    city {
+      id
+      name
+    }
   }
 }
     `;
@@ -989,6 +994,9 @@ export const UpdateUserDocument = gql`
     mutation UpdateUser($data: UpdateUserInput!, $userId: String!) {
   updateUser(data: $data, userId: $userId) {
     id
+    firstname
+    lastname
+    email
   }
 }
     `;
