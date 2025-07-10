@@ -38,7 +38,7 @@ export type Picture = {
 	url: string;
 };
 
-export interface APIResult {
+export interface CityAutocompleteAPIResult {
 	fulltext: string;
 	names: string[];
 	zipcode?: string;
@@ -46,7 +46,7 @@ export interface APIResult {
 	y: number;
 }
 
-export interface AddressAPIResult {
+export interface AddressAutocompleteAPIResult {
 	x: number;
 	y: number;
 	country: string;
