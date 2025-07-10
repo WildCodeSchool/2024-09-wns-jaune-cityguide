@@ -8,10 +8,13 @@ import { useUserStore } from "../../store/userStore";
 // L'utilisateur sera passé en prop ou stocké dans un contexte (par exemple `role`)
 // Ici, on suppose que le rôle de l'utilisateur est "superAdmin", "adminVille", ou "user"
 // Si l'utilisateur est "user" il verra une page blanche
-export default function Dashboard( ) {
+
+
+export default function Dashboard() {
+  const user = useUserStore((state) => state.user);
+
   // État pour suivre le bouton cliqué et afficher le bon élément en conséquence
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
-  const user = useUserStore((state) => state.user);
 
   // Fonction pour afficher le composant en fonction du bouton sélectionné
   const handleClick = (component: string) => {
@@ -19,7 +22,7 @@ export default function Dashboard( ) {
   };
   console.log(user)
   console.log(user?.role)
-  
+
   return (
     <div className="w-full">
       <span className="block mb-4">Administrateur</span>
@@ -46,7 +49,7 @@ export default function Dashboard( ) {
           )}
 
           {/* Onglet Utilisateur : visible uniquement pour superAdmin et city admin*/}
-          {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin)  && (
+          {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
             <button
               onClick={() => handleClick("utilisateur")}
               className="text-black hover:text-gray-700 last:border-none px-3 py-2 text-sm font-medium"
@@ -58,12 +61,22 @@ export default function Dashboard( ) {
       </div>
 
       <div className="mt-6">
-        {activeComponent === "ville" && <VilleComponent />}
+        {(activeComponent === "ville") &&
+          (user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
+            <VilleComponent />
+          )}
 
-        {activeComponent === "categorie" && <CategoryManager />}
+        {(activeComponent === "categorie") &&
+          user?.role === UserRole.SuperAdmin && (
+            <CategoryManager />
+          )}
 
-        {activeComponent === "utilisateur" && <UserManager />}
+        {(activeComponent === "utilisateur") &&
+          (user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
+            <UserManager />
+          )}
       </div>
+
     </div>
   );
 }

@@ -114,8 +114,8 @@ export default function Navbar() {
                       </a>
 
                      {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
-                        <a
-                          href="#"
+                        <Link
+                          to={"/dashboard"}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           role="menuitem"
                           tabIndex={-1}
@@ -123,7 +123,7 @@ export default function Navbar() {
                           onClick={() => setIsOpen(false)}
                         >
                           Dashboard
-                        </a>
+                        </Link>
                       )}
 
                       <button
@@ -234,7 +234,7 @@ export default function Navbar() {
                         </Link>
                        {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
                           <Link
-                            to="#"
+                            to={"/dashboard"}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             onClick={() => setIsOpen(false)}
                           >

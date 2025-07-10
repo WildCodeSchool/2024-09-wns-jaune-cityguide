@@ -39,9 +39,8 @@ export default function MapPage() {
 		}
 	}, [selectedInterestPoint, editModalOpen]);
 
-	console.log(user)
-  console.log(user?.role)
-	console.log(user?.id)
+	console.log("user connecté :", user)
+  console.log("role du user connecté", user?.role)
 
 	return (
 		<div className="map-page-container relative flex flex-col h-full w-full overflow-hidden">

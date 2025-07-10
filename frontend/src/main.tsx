@@ -13,6 +13,9 @@ import MapPage from "./pages/Map/MapPage.tsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.tsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.tsx";
 import CategoryManager from "./pages/CategoryManager/CategoryManager.tsx";
+import { UserRole } from "./libs/graphql/generated/graphql-types";
+import ProtectedRoute from "./security/ProtectedRoute.tsx";
+
 
 const router = createBrowserRouter([
 	{
@@ -37,8 +40,13 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/dashboard",
-				element: <AdminDashboard userRole={"superAdmin"} />, // Une fois le role mis dans le contexte il faudra passer la props à ce composant
+				element: (
+					<ProtectedRoute allowedRoles={[UserRole.SuperAdmin, UserRole.CityAdmin]}>
+						<AdminDashboard />
+					</ProtectedRoute>
+				),
 			},
+
 			{
 				path: "/login",
 				element: <Login />,
