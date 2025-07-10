@@ -9,9 +9,11 @@ import {
 	useGetUserByIdQuery,
 	useGetUsersQuery,
 } from "../../libs/graphql/generated/graphql-types";
+import { useUserStore } from "../../store/userStore";
 
 export default function UserManager() {
 	const { data, loading, error, refetch } = useGetUsersQuery();
+	const { fetchUsers } = useUserStore();
 	const [selectedUser, setSelectedUser] = useState<string | null>(null);
 	const [selectedCardRef, setSelectedCardRef] = useState<HTMLDivElement | null>(
 		null,
@@ -49,11 +51,13 @@ export default function UserManager() {
 	) => {
 		setSelectedUser(updatedUser.id);
 		await refetch();
+		fetchUsers();
 	};
 
 	const handleUserDeleted = async () => {
 		setSelectedUser(null);
 		await refetch();
+		fetchUsers();
 	};
 
 	const handleCancel = () => {

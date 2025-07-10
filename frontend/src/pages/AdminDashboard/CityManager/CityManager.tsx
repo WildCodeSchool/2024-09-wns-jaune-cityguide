@@ -2,10 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { type ReactNode, useState } from "react";
 import type { City } from "../../../@types/types";
 import { CityStatsCard } from "../../../atoms/CityStatsCard";
-import { UserRole } from "../../../libs/graphql/generated/graphql-types";
 import { useCitiesStore } from "../../../store/citiesStore";
-import type { User } from "../../../store/userStore";
-import { useUserStore } from "../../../store/userStore";
 
 import { Modal } from "../../../organisms/Modal";
 import { NewCityForm } from "./NewCityForm";
@@ -16,7 +13,7 @@ export default function CityManager() {
 	const [sortBy, setSortBy] = useState<"name" | "postalCode">("name");
 
 	const { cities, isLoading } = useCitiesStore();
-	const { users } = useUserStore() as { users: User[] };
+
 	// const [selectedCity, setSelectedCity] = useState<City | null>(null);
 
 	const openModalWithComponent = (component: ReactNode) => {
@@ -158,17 +155,6 @@ export default function CityManager() {
 					<div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2 py-4 sm:px-4 sm:py-6 w-full max-w-screen-xl mx-auto">
 						<AnimatePresence>
 							{filteredCities.map((city: City) => {
-								const cityUsers = users.filter(
-									(user) =>
-										Number(user.city.id) === Number(city.id) &&
-										user.role === UserRole.User,
-								);
-								const cityAdmins = users.filter(
-									(user) =>
-										Number(user.city.id) === Number(city.id) &&
-										user.role === UserRole.CityAdmin,
-								);
-
 								return (
 									<motion.div
 										key={city.name}
@@ -177,11 +163,7 @@ export default function CityManager() {
 										exit={{ opacity: 0, scale: 0.95 }}
 										transition={{ duration: 0.2 }}
 									>
-										<CityStatsCard
-											cityUsers={cityUsers}
-											cityAdmins={cityAdmins}
-											city={city}
-										/>
+										<CityStatsCard city={city} />
 									</motion.div>
 								);
 							})}

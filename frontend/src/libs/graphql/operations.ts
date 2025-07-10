@@ -252,9 +252,6 @@ export const DELETE_CATEGORY = gql`
     deleteCategoryById(categoryId: $categoryId)
   }
 `;
-mutation DeleteCategoryById($categoryId: String!) {
-  deleteCategoryById(categoryId: $categoryId)
-}`;
 
 export const CREATE_CITY = gql`
 mutation CreateCity($data: CityInput!) {
@@ -265,6 +262,14 @@ mutation CreateCity($data: CityInput!) {
 }`;
 
 export const DELETE_CITY = gql`
-mutation CreateCity($cityId: String!) {
+mutation DeleteCity($cityId: String!) {
   deleteCityById(cityId: $cityId)
+}`;
+
+export const UPDATE_USER_ROLE = gql`
+mutation UpdateUserRole($data: UpdateUserInput!, $userId: String!) {
+  updateUser(data: $data, userId: $userId) {
+    id,
+    role
+  }
 }`;
