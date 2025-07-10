@@ -7,6 +7,7 @@ import { useMutationMutation } from "../libs/graphql/generated/graphql-types";
 
 export default function Navbar() {
 	const { user, clearUser } = useUserStore();
+	console.log("Navbar render user:", user);
 	const [logout] = useMutationMutation();
 	const navigate = useNavigate();
 	const isOpen = useMenuStore((state) => state.isOpen);

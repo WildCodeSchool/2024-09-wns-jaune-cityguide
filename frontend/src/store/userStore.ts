@@ -8,8 +8,8 @@ export interface User {
 	id: string;
 	firstname: string;
 	lastname: string;
-	role: UserRole;
 	email: string;
+	role: UserRole;
 	city: {
 		id: number;
 		name: string;
@@ -33,7 +33,7 @@ export const useUserStore = create<UserStore>()(
 				user: null,
 				users: [],
 				isLoading: false,
-				setUser: (user) => set({ user }),
+				setUser: (user) => set((state) => ({ user })),
 				fetchUsers: async () => {
 					set({ isLoading: false });
 					try {
