@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./TutorialOverlay.css";
 
@@ -24,17 +24,23 @@ type Position = {
   height: number;
 };
 
-export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps) {
+export default function TutorialOverlay({
+  steps,
+  onClose,
+}: TutorialOverlayProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [targetPos, setTargetPos] = useState<Position | null>(null);
   const navigate = useNavigate();
+  const nextButtonRef = useRef<HTMLButtonElement>(null);
 
   const step = steps[currentStep];
 
   useEffect(() => {
     const tryFindElement = () => {
       const el = document.querySelector(step.selector) as HTMLElement;
-      const scrollContainer = document.querySelector(".tutorial-container") as HTMLElement;
+      const scrollContainer = document.querySelector(
+        ".tutorial-container"
+      ) as HTMLElement;
 
       if (el && scrollContainer) {
         el.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -58,6 +64,14 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
     tryFindElement();
   }, [step]);
 
+  useEffect(() => {
+    if (targetPos && nextButtonRef.current) {
+      setTimeout(() => {
+        nextButtonRef.current?.focus();
+      }, 100);
+    }
+  }, [targetPos, currentStep]);
+
   const handleNext = () => {
     const current = steps[currentStep];
     if (current.action) {
@@ -76,7 +90,8 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
   if (!targetPos) return <div className="tutorial-overlay" />;
 
   const tooltipHeight = 140;
-  const placeAbove = window.innerHeight - (targetPos.top - window.scrollY) < tooltipHeight;
+  const placeAbove =
+    window.innerHeight - (targetPos.top - window.scrollY) < tooltipHeight;
   const tooltipOffsetHeight = step.tooltipOffsetHeight ?? 0;
   const tooltipOffsetWidth = step.tooltipOffsetWidth ?? 0;
   const leftAdjustment = step.leftAdjustment ?? 0;
@@ -106,11 +121,14 @@ export default function TutorialOverlay({ steps, onClose }: TutorialOverlayProps
       >
         <h3 className="font-bold mb-2">{step.title}</h3>
         <p className="mb-2">{step.description}</p>
-        <button className="font-bold custom-purple" onClick={handleNext}>
+        <button
+          ref={nextButtonRef}
+          className="font-bold custom-purple tutorial-next-button"
+          onClick={handleNext}
+        >
           Suivant
         </button>
       </div>
     </>
   );
 }
-
