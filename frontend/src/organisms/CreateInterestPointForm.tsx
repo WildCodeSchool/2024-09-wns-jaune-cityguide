@@ -210,10 +210,10 @@ export default function CreateInterestPointForm({
 					</div>
 				</div>
 			)}
-			<form onSubmit={handleSubmit} className="space-y-6">
+			<form onSubmit={handleSubmit} className="space-y-4 overflow-auto p-2">
 				<div className="flex justify-between items-start">
 					<h2 className="text-xl font-semibold text-gray-800">
-						Créer un point d’intérêt
+						Créer un point d&rsquo;intérêt
 					</h2>
 					<button
 						type="button"
@@ -226,20 +226,6 @@ export default function CreateInterestPointForm({
 				</div>
 
 				<div>
-					<label
-						htmlFor="pictures"
-						className="block text-sm font-medium text-gray-700 mb-1"
-					>
-						Photos
-					</label>
-					<input
-						name="pictures"
-						className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
-						placeholder="URL de l'image"
-					/>
-				</div>
-
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<div>
 						<label
 							htmlFor="name"
@@ -249,47 +235,34 @@ export default function CreateInterestPointForm({
 						</label>
 						<input
 							name="name"
-							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
+							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500 placeholder:text-xs"
 							required
-							placeholder="Ex: Tour Eiffel"
+							placeholder="Ex : Tour Eiffel"
 						/>
-					</div>
-
-					<div>
-						<label
-							htmlFor="category"
-							className="block text-sm font-medium text-gray-700 mb-1"
-						>
-							Catégorie
-						</label>
-						<select
-							name="category"
-							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
-							required
-						>
-							{data.getCategories.map((category) => (
-								<option key={category.id} value={category.id}>
-									{category.name}
-								</option>
-							))}
-						</select>
 					</div>
 				</div>
 
 				<div>
 					<label
-						htmlFor="description"
+						htmlFor="category"
 						className="block text-sm font-medium text-gray-700 mb-1"
 					>
-						Description
+						Catégorie
 					</label>
-					<textarea
-						name="description"
-						rows={3}
+					<select
+						name="category"
 						className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
-						placeholder="Brève description du lieu"
 						required
-					/>
+					>
+						<option value="" disabled selected className="text-gray-400">
+							Sélectionner une catégorie...
+						</option>
+						{data.getCategories.map((category) => (
+							<option key={category.id} value={category.id}>
+								{category.name}
+							</option>
+						))}
+					</select>
 				</div>
 
 				<div>
@@ -305,12 +278,12 @@ export default function CreateInterestPointForm({
 						value={userInput}
 						onChange={(e) => setUserInput(e.target.value)}
 						onKeyDown={handleKeyDown}
-						className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500 focus:outline-none"
-						placeholder="Adresse complète"
+						className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500 focus:outline-none placeholder:text-xs"
+						placeholder="Rechercher une adresse (min. 3 caractères)..."
 						required
 					/>
 					{dropdownIsOpen && suggestions.length > 0 && (
-						<ul className="absolute z-10 w-full bg-white border mt-1 rounded shadow max-h-60 overflow-auto">
+						<ul className="absolute z-10 w-full bg-white border border-gray-400 mt-1 rounded shadow max-h-60 overflow-auto">
 							{suggestions.map((item, index) => (
 								<li
 									key={item.fulltext}
@@ -332,6 +305,67 @@ export default function CreateInterestPointForm({
 						</ul>
 					)}
 				</div>
+				<div>
+					<label
+						htmlFor="city"
+						className="block text-sm font-medium text-gray-700 mb-1"
+					>
+						Ville
+					</label>
+					<input
+						name="city"
+						className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-500 cursor-not-allowed placeholder:text-xs"
+						required
+						disabled
+						placeholder="Ville"
+						value={selectedAddress?.city || ""}
+					/>
+					<p className="text-xs text-red-600">{errorMessage}</p>
+				</div>
+
+				<div>
+					<label
+						htmlFor="pictures"
+						className="block text-sm font-medium text-gray-700 mb-1"
+					>
+						Photos
+					</label>
+					<input
+						name="pictures"
+						className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 placeholder:text-xs"
+						placeholder="URL de l'image"
+					/>
+				</div>
+
+				<div>
+					<label
+						htmlFor="description"
+						className="block text-sm font-medium text-gray-700 mb-1"
+					>
+						Description
+					</label>
+					<textarea
+						name="description"
+						rows={3}
+						className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500 placeholder:text-xs"
+						placeholder="Brève description du lieu"
+						required
+					/>
+				</div>
+
+				<div>
+					<label
+						htmlFor="link_url"
+						className="block text-sm font-medium text-gray-700 mb-1"
+					>
+						Lien (site officiel)
+					</label>
+					<input
+						name="link_url"
+						className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500 placeholder:text-xs"
+						placeholder="https://..."
+					/>
+				</div>
 
 				<div className="grid grid-cols-2 gap-4">
 					<div>
@@ -347,40 +381,6 @@ export default function CreateInterestPointForm({
 							type="hidden"
 							name="longitude"
 							value={selectedAddress?.x ?? ""}
-						/>
-					</div>
-				</div>
-
-				<div className="grid grid-cols-2 gap-4">
-					<div>
-						<label
-							htmlFor="city"
-							className="block text-sm font-medium text-gray-700 mb-1"
-						>
-							Ville
-						</label>
-						<input
-							name="city"
-							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
-							required
-							disabled
-							placeholder="Ville"
-							value={selectedAddress?.city || ""}
-						/>
-						<p className="text-xs text-red-600">{errorMessage}</p>
-					</div>
-
-					<div>
-						<label
-							htmlFor="link_url"
-							className="block text-sm font-medium text-gray-700 mb-1"
-						>
-							Lien (site officiel)
-						</label>
-						<input
-							name="link_url"
-							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-indigo-500"
-							placeholder="https://..."
 						/>
 					</div>
 				</div>
