@@ -262,7 +262,7 @@ mutation CreateCity($data: CityInput!) {
 }`;
 
 export const DELETE_CITY = gql`
-mutation CreateCity($cityId: String!) {
+mutation DeleteCity($cityId: String!) {
   deleteCityById(cityId: $cityId)
 }`;
 
