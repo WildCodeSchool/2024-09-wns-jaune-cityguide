@@ -1,4 +1,5 @@
 import { FormEvent, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   type InterestPoint,
   type InterestPointInput,
@@ -20,6 +21,8 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
   const [newImageUrl, setNewImageUrl] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
+
+  const navigate = useNavigate();
 
   if (!interestPoint) return null;
 
@@ -47,6 +50,7 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
 
       if (result?.data?.replaceInterestPointById) {
         console.log("Point modifié !");
+        navigate(0);
       }
     } catch (err) {
       console.error("Erreur lors de la modification :", err);
@@ -107,7 +111,7 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
           </div>
         </aside>
       )}
-      <div className="max-h-screen overflow-y-auto sm:overflow-visible sm:max-h-none pb-6">
+      <div className="max-h-screen overflow-y-auto sm:overflow-visible sm:max-h-none px-4 pb-6">
 
         <form onSubmit={handleSubmit}>
           <div className="flex justify-end">

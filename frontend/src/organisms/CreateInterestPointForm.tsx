@@ -6,6 +6,8 @@ import {
   useGetCategoriesQuery,
   type InterestPointInput,
 } from "../libs/graphql/generated/graphql-types";
+import { useInterestPointsStore } from "../store/interestPointsStore";
+import { useCitiesStore } from "../store/citiesStore";
 
 type NewInterestPointFormProps = {
   isOpen: boolean;
@@ -16,12 +18,15 @@ export default function CreateInterestPointForm({
   isOpen,
   onClose,
 }: NewInterestPointFormProps) {
+
   const { loading, error, data } = useGetCategoriesQuery();
   const [createInterestPoint, { data: createdData, loading: submitting, error: createError }] =
     useCreateInterestPointMutation();
   const { data: cityData } = useGetCitiesQuery();
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
+  const { selectedCity } = useCitiesStore();
+  const { fetchInterestPointsByCity } = useInterestPointsStore();
 
   const navigate = useNavigate();
 
@@ -45,6 +50,10 @@ export default function CreateInterestPointForm({
 
       if (result?.data?.createInterestPoint) {
         console.log("point créé1")
+        if (selectedCity) {
+        fetchInterestPointsByCity(selectedCity.id); // Récupérer les points mis à jour
+      }
+      onClose?.();
       }
     } catch (err) {
       console.error("Erreur lors de la création :", err);

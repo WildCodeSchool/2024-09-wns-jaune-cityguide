@@ -19,6 +19,8 @@ export default function MapPage() {
 	const [sheetIsOpen, setSheetIsOpen] = useState(false);
 	const [createModalOpen, setCreateModalOpen] = useState(false);
 
+
+
 	const toggleDetails = () => {
 		setSheetIsOpen(!sheetIsOpen);
 	};
@@ -32,6 +34,7 @@ export default function MapPage() {
 		setSelectedInterestPoint(updatedPoint);
 		setEditModalOpen(false);
 	};
+
 
 	useEffect(() => {
 		if (selectedInterestPoint || editModalOpen) {
