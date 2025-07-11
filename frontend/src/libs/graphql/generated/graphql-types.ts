@@ -287,6 +287,7 @@ export type UpdateCategoryInput = {
 };
 
 export type UpdateUserInput = {
+  city?: InputMaybe<Scalars['Float']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   firstname?: InputMaybe<Scalars['String']['input']>;
   lastname?: InputMaybe<Scalars['String']['input']>;

@@ -63,7 +63,7 @@ export class UpdateUserInput {
 @Resolver(User)
 export class UserResolver {
   @Query(() => [User])
-  /* @Authorized(UserRole.SUPER_ADMIN) */
+  @Authorized(UserRole.SUPER_ADMIN)
   async getUsers() {
     const users = await User.find({
       relations: ["city"],
@@ -72,7 +72,7 @@ export class UserResolver {
   }
 
   @Query(() => User)
-  /* @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN) */
+  @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN)
   async getUserById(@Arg("userId") id: string) {
     const user = await User.findOneOrFail({
       where: { id },
@@ -114,7 +114,6 @@ export class UserResolver {
       firstname: data.firstname,
       lastname: data.lastname,
       hashedPassword: hashedPassword,
-      role: UserRole.USER,
       city: city,
     });
 
@@ -196,6 +195,7 @@ export class UserResolver {
       mail: user.email,
       firstname: user.firstname,
       city: user.city,
+      role: user.role,
     };
     return JSON.stringify(profile);
   }
@@ -211,28 +211,56 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  /* @Authorized(UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN, UserRole.SUPER_USER, UserRole.USER) */
+  @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN)
   async updateUser(
     @Arg("userId") id: string,
-    @Arg("data") data: UpdateUserInput
+    @Arg("data") data: UpdateUserInput,
+    @Ctx() { user }: { user: User }
   ) {
-    let user = await User.findOneByOrFail({ id });
-    user = Object.assign(user, data);
-    user.save();
-    return user;
-  }
+     // Autorisé si SUPER_ADMIN ou si c'est le propre utilisateur
+    if (user.role !== UserRole.SUPER_ADMIN && user.id !== id) {
+      throw new GraphQLError("Accès interdit", {
+        extensions: { code: "FORBIDDEN" },
+      });
+    }
+
+    const targetUser = await User.findOneByOrFail({ id });
+    Object.assign(targetUser, data);
+    await targetUser.save();
+    return targetUser;
+}
+  //   let user = await User.findOneByOrFail({ id });
+  //   user = Object.assign(user, data);
+  //   user.save();
+  //   return user;
+  // }
 
   @Mutation(() => User)
-  /* @Authorized(UserRole.SUPER_ADMIN, UserRole.SUPER_USER, UserRole.USER) */
-  async deleteUser(@Arg("userId") id: string) {
-    const user = await User.findOneByOrFail({ id });
+  @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN)
+  async deleteUser(
+    @Arg("userId") id: string,
+    @Ctx() { user }: { user: User }
+  ) {
+     // Autorisé si SUPER_ADMIN ou si c'est le propre utilisateur
+    if (user.role !== UserRole.SUPER_ADMIN && user.id !== id) {
+      throw new GraphQLError("Accès interdit", {
+        extensions: { code: "FORBIDDEN" },
+      });
+    }
 
-    // Stocker une copie de l'utilisateur avant suppression
-    const deletedUser = { ...user };
-
-    await user.remove();
-
-    // Retourner la copie de l'utilisateur supprimé
-    return deletedUser;
+    const targetUser = await User.findOneByOrFail({ id });
+    const deletedCopy = { ...targetUser };
+    await targetUser.remove();
+    return deletedCopy;
   }
+//     const user = await User.findOneByOrFail({ id });
+
+//     // Stocker une copie de l'utilisateur avant suppression
+//     const deletedUser = { ...user };
+
+//     await user.remove();
+
+//     // Retourner la copie de l'utilisateur supprimé
+//     return deletedUser;
+//   }
 }

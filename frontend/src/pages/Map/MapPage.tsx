@@ -5,11 +5,15 @@ import InterestPointDetails from "../../organisms/InterestPointDetails";
 import CreateInterestPointForm from "../../organisms/CreateInterestPointForm";
 import MapComponent from "../../organisms/MapComponent";
 import SearchBar from "../../atoms/SearchBar";
-import type { InterestPoint } from "../../@types/types";
+import type { InterestPoint } from "../../libs/graphql/generated/graphql-types";
 import { useInterestPointsStore } from "../../store/interestPointsStore";
+import { useUserStore } from "../../store/userStore";
+import { UserRole } from "../../libs/graphql/generated/graphql-types";
+
 
 export default function MapPage() {
 	// const [isOpen, setIsOpen] = useState(false);
+	const user = useUserStore((state) => state.user);
 	const { selectedInterestPoint, setSelectedInterestPoint } = useInterestPointsStore();
 	const [editModalOpen, setEditModalOpen] = useState(false);
 	const [sheetIsOpen, setSheetIsOpen] = useState(false);
@@ -29,11 +33,15 @@ export default function MapPage() {
 		setEditModalOpen(false);
 	};
 
+
 	useEffect(() => {
 		if (selectedInterestPoint || editModalOpen) {
 			setCreateModalOpen(false);
 		}
 	}, [selectedInterestPoint, editModalOpen]);
+
+	console.log("user connecté :", user)
+  console.log("role du user connecté", user?.role)
 
 	return (
 		<div className="map-page-container relative flex flex-col h-full w-full overflow-hidden">
@@ -41,12 +49,14 @@ export default function MapPage() {
 				<div className="flex-grow">
 					<SearchBar />
 				</div>
-				<button
-					onClick={() => setCreateModalOpen(true)}
-					className="cursor-pointer primary-bg text-white px-4 py-2 h-10 rounded-md text-sm font-medium border border-gray-300 shadow-xl hover:bg-indigo-700 transition-all sm:ml-4 w-auto whitespace-nowrap"
-				>
-					+ Créer
-				</button>
+				{(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
+					<button
+						onClick={() => setCreateModalOpen(true)}
+						className="cursor-pointer primary-bg text-white px-4 py-2 h-10 rounded-md text-sm font-medium border border-gray-300 shadow-xl hover:bg-indigo-700 transition-all sm:ml-4 w-auto whitespace-nowrap"
+					>
+						+ Créer
+					</button>
+				)}
 
 			</div>
 
@@ -61,22 +71,26 @@ export default function MapPage() {
 					interestPoint={selectedInterestPoint}
 					onClose={toggleDetails}
 					onEdit={() => setEditModalOpen(true)}
+							
 				/>
 			)}
 
 			{editModalOpen && selectedInterestPoint && (
+			(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
 				<EditInterestPointForm
 					interestPoint={selectedInterestPoint}
 					onClose={() => setEditModalOpen(false)}
 					onSave={handleSaveEdit}
 				/>
-
+			)
 			)}
 
 			{createModalOpen && (
+				(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
 				<CreateInterestPointForm
 					isOpen={createModalOpen}
 					onClose={() => setCreateModalOpen(false)} />
+				)
 			)}
 		</div>
 

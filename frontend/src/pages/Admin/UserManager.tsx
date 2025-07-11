@@ -10,6 +10,7 @@ import {
 	useGetUsersQuery,
 } from "../../libs/graphql/generated/graphql-types";
 import { useUserStore } from "../../store/userStore";
+import { UserRole } from "../../libs/graphql/generated/graphql-types";
 
 export default function UserManager() {
 	const { data, loading, error, refetch } = useGetUsersQuery();

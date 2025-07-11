@@ -44,6 +44,7 @@ const Login = () => {
 			if (data?.loginUser) {
 				const parsed = JSON.parse(data.loginUser);
 
+				console.log("parsed user from response:", parsed);
 				setUser({
 					id: parsed.id,
 					firstname: parsed.firstname,
