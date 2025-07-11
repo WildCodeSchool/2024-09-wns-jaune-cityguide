@@ -19,8 +19,6 @@ export default function MapPage() {
 	const [sheetIsOpen, setSheetIsOpen] = useState(false);
 	const [createModalOpen, setCreateModalOpen] = useState(false);
 
-
-
 	const toggleDetails = () => {
 		setSheetIsOpen(!sheetIsOpen);
 	};
@@ -73,22 +71,26 @@ export default function MapPage() {
 					interestPoint={selectedInterestPoint}
 					onClose={toggleDetails}
 					onEdit={() => setEditModalOpen(true)}
+							
 				/>
 			)}
 
 			{editModalOpen && selectedInterestPoint && (
+			(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
 				<EditInterestPointForm
 					interestPoint={selectedInterestPoint}
 					onClose={() => setEditModalOpen(false)}
 					onSave={handleSaveEdit}
 				/>
-
+			)
 			)}
 
 			{createModalOpen && (
+				(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
 				<CreateInterestPointForm
 					isOpen={createModalOpen}
 					onClose={() => setCreateModalOpen(false)} />
+				)
 			)}
 		</div>
 

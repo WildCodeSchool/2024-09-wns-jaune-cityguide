@@ -6,6 +6,8 @@ import {
   useGetCategoriesQuery,
   useReplaceInterestPointByIdMutation,
 } from "../libs/graphql/generated/graphql-types";
+import { useInterestPointsStore } from "../store/interestPointsStore";
+import { useCitiesStore } from "../store/citiesStore";
 
 type EditInterestPointFormProps = {
   interestPoint: InterestPoint | null;
@@ -21,6 +23,8 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
   const [newImageUrl, setNewImageUrl] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
+  const { selectedCity } = useCitiesStore();
+  const { fetchInterestPointsByCity } = useInterestPointsStore();
 
   const navigate = useNavigate();
 
@@ -50,14 +54,16 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
 
       if (result?.data?.replaceInterestPointById) {
         console.log("Point modifié !");
-        navigate(0);
+        if (selectedCity) {
+          fetchInterestPointsByCity(selectedCity.id);
+        }
+
+        onClose?.();
       }
     } catch (err) {
       console.error("Erreur lors de la modification :", err);
     }
   };
-
-
 
   useEffect(() => {
     if (!editedData) return;
@@ -81,27 +87,27 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
   return (
     <>
       {showPopup && (
-        
-       <aside
-				className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-[900] ${isOpen ? "translate-x-0" : "translate-x-full"
-					} rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
-			>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-       
+
+        <aside
+          className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-[900] ${isOpen ? "translate-x-0" : "translate-x-full"
+            } rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+
           <div className="text-sm text-[#706eeb] font-medium">
             {popupMessage.map((line, index) => (
               <p key={index} className="mb-2">
