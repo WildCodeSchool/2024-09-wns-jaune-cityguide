@@ -1,17 +1,21 @@
 import { FormEvent, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   type InterestPoint,
   type InterestPointInput,
   useGetCategoriesQuery,
   useReplaceInterestPointByIdMutation,
 } from "../libs/graphql/generated/graphql-types";
+import { useInterestPointsStore } from "../store/interestPointsStore";
+import { useCitiesStore } from "../store/citiesStore";
 
 type EditInterestPointFormProps = {
-  interestPoint: InterestPoint | null;
+  interestPoint: InterestPoint;
+  isOpen: boolean;
   onClose: () => void;
 };
 
-export default function EditInterestPointForm({ interestPoint, onClose }: EditInterestPointFormProps) {
+export default function EditInterestPointForm({ interestPoint, onClose, isOpen }: EditInterestPointFormProps) {
   const { loading, error, data } = useGetCategoriesQuery();
   const [replaceInterestPoint, { data: editedData, loading: submitting, error: editError }] =
     useReplaceInterestPointByIdMutation();
@@ -20,6 +24,10 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
   const [newImageUrl, setNewImageUrl] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
+  const { selectedCity } = useCitiesStore();
+  const { fetchInterestPointsByCity, fetchInterestPointById } = useInterestPointsStore();
+  
+  const navigate = useNavigate();
 
   if (!interestPoint) return null;
 
@@ -42,18 +50,22 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
         variables: {
           data: formattedData as InterestPointInput,
           interestPointId: interestPoint!.id,
-        },
+        }
       });
 
       if (result?.data?.replaceInterestPointById) {
-          console.log("Point modifié !");
+        console.log("Point modifié !");
+        if (selectedCity) {
+          fetchInterestPointsByCity(selectedCity.id);
+        }
       }
+      console.log("Type of POI id:", typeof interestPoint.id);
+      fetchInterestPointById(String(interestPoint.id));
+      onClose();
     } catch (err) {
       console.error("Erreur lors de la modification :", err);
     }
   };
-
-
 
   useEffect(() => {
     if (!editedData) return;
@@ -64,10 +76,11 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
     const timer = setTimeout(() => {
       setShowPopup(false);
       onClose?.();
+      navigate("/map");
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [editedData]);
+  }, [editedData, onClose]);
 
   if (!interestPoint) return null;
   if (error || editError) return <>Error!</>;
@@ -77,24 +90,27 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
   return (
     <>
       {showPopup && (
-        <div className="fixed bottom-4 right-4 bg-white border border-[#706eeb] px-6 py-3 rounded-xl shadow-xl z-[900]">
-          <div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </div>
+
+        <aside
+          className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-[900] ${isOpen ? "translate-x-0" : "translate-x-full"
+            } rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+
           <div className="text-sm text-[#706eeb] font-medium">
             {popupMessage.map((line, index) => (
               <p key={index} className="mb-2">
@@ -102,20 +118,29 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
               </p>
             ))}
           </div>
-        </div>
+        </aside>
       )}
       <div className="max-h-screen overflow-y-auto sm:overflow-visible sm:max-h-none px-4 pb-6">
 
         <form onSubmit={handleSubmit}>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700 hover:cursor-pointer text-lg"
+              aria-label="Fermer"
+            >
+              ✕
+            </button>
+          </div>
           <div className="sheet-header w-full flex items-center justify-center space-x-4 py-4 text-gray-600">
-
-
             <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
             <input
               name="name"
               defaultValue={interestPoint.name || ""}
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
             />
+
           </div>
 
           {/* Pictures */}
@@ -208,13 +233,13 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
               defaultValue={interestPoint.link_url || ""}
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
             />
+
             <button
               type="submit"
               className="flex justify-center items-center w-full text-sm px-4 py-2 rounded-md primary-bg text-white hover:bg-purple-700 transition hover:cursor-pointer hover:text-gray-100"
             >
               {submitting ? "Modification..." : "Valider"}
             </button>
-
 
             <button
               type="button"
@@ -224,6 +249,7 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
             >
               Annuler
             </button>
+
           </div>
         </form>
       </div>

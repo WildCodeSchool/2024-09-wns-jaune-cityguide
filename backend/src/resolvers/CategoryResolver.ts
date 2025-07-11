@@ -1,5 +1,20 @@
-import { Arg, Field, InputType, Query, Resolver, Mutation, ID } from "type-graphql";
+import { 
+  Arg,
+  Field,
+  InputType,
+  Query,
+  Resolver,
+  Mutation,
+  ID,
+  Ctx,
+ } from "type-graphql";
 import { Category } from "../entities/Category";
+import { requireRole } from "../middleware/authChecker";
+import { UserRole } from "../entities/User";
+
+interface Context {
+  user?: { id: string; role: UserRole };
+}
 
 @InputType()
 class CategoryInput {
@@ -40,7 +55,12 @@ export class CategoryResolver {
   }
 
   @Mutation(() => Category)
-  async createCategory(@Arg("data") data: CategoryInput) {
+  async createCategory(
+    @Arg("data") data: CategoryInput,
+    @Ctx() { user }: Context
+) {
+   requireRole(user, [UserRole.SUPER_ADMIN]);
+
     const category = new Category();
     Object.assign(category, data);
     await category.save();
@@ -50,8 +70,12 @@ export class CategoryResolver {
   @Mutation(() => Category)
   async replaceCategoryById(
     @Arg("categoryId") id: string,
-    @Arg("data") data: UpdateCategoryInput
+    @Arg("data") data: UpdateCategoryInput,
+    @Ctx() { user }: Context
   ) {
+
+    requireRole(user, [UserRole.SUPER_ADMIN]);
+
     const category = await Category.findOneByOrFail({ id });
     Object.assign(category, {
       name: data.name,
@@ -63,7 +87,13 @@ export class CategoryResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteCategoryById(@Arg("categoryId") id: string) {
+  async deleteCategoryById(
+    @Arg("categoryId") id: string,
+    @Ctx() { user }: Context
+) {
+
+    requireRole(user, [UserRole.SUPER_ADMIN]);
+    
     return (await Category.delete({ id })).affected;
   }
 }

@@ -10,6 +10,7 @@ import {
 	useGetUsersQuery,
 } from "../../libs/graphql/generated/graphql-types";
 import { useUserStore } from "../../store/userStore";
+import { UserRole } from "../../libs/graphql/generated/graphql-types";
 
 export default function UserManager() {
 	const currentUser = useUserStore((state) => state.user);
@@ -19,6 +20,7 @@ export default function UserManager() {
 	}
 	
 	const { data, loading, error, refetch } = useGetUsersQuery();
+	const { fetchUsers } = useUserStore();
 	const [selectedUser, setSelectedUser] = useState<string | null>(null);
 	const [selectedCardRef, setSelectedCardRef] = useState<HTMLDivElement | null>(
 		null,
@@ -56,11 +58,13 @@ export default function UserManager() {
 	) => {
 		setSelectedUser(updatedUser.id);
 		await refetch();
+		fetchUsers();
 	};
 
 	const handleUserDeletedByAdmin = async () => {
 		setSelectedUser(null);
 		await refetch();
+		fetchUsers();
 	};
 
 	const handleCancel = () => {

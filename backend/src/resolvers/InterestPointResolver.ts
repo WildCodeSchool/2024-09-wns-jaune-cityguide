@@ -6,10 +6,17 @@ import {
   Resolver,
   Mutation,
   ID,
+  Ctx,
 } from "type-graphql";
 import { InterestPoint } from "../entities/InterestPoint";
 import { City } from "../entities/City";
 import { Category } from "../entities/Category";
+import { requireRole } from "../middleware/authChecker";
+import { UserRole } from "../entities/User";
+
+interface Context {
+  user?: { id: string; role: UserRole };
+}
 
 @InputType()
 export class InterestPointInput {
@@ -84,7 +91,13 @@ export class InterestPointResolver {
   }
 
   @Mutation(() => InterestPoint)
-  async createInterestPoint(@Arg("data") data: InterestPointInput) {
+  async createInterestPoint(
+    @Arg("data") data: InterestPointInput,
+    @Ctx() { user }: Context
+  ) {
+
+      requireRole(user, [UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN]);
+
     const city = await City.findOneOrFail({ where: { id: data.city } });
     const category = await Category.findOneOrFail({
       where: { id: data.category },
@@ -100,18 +113,30 @@ export class InterestPointResolver {
 	}
 	
 	@Mutation(() => Boolean)
-	async deleteInterestPointById( @Arg("interestPointId") id: string) {
+	async deleteInterestPointById( 
+    @Arg("interestPointId") id: string,
+    @Ctx() { user }: Context) {
+
+    requireRole(user, [UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN]);
+
 		return (await InterestPoint.delete({id})).affected
 	}
 	
 	@Mutation(() => InterestPoint)
-	async replaceInterestPointById( @Arg("interestPointId") id: string, @Arg("data") data: InterestPointInput ) {
+	async replaceInterestPointById( 
+    @Arg("interestPointId") id: string, 
+    @Arg("data") data: InterestPointInput,
+    @Ctx() { user }: Context 
+  ) {
+
+    requireRole(user, [UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN]);
+
 		let interestPoint = await InterestPoint.findOne({
 			where: {id: id},
 			relations: ["category", "pictures"]
 		})
 		if (!interestPoint) throw new Error("oupsi.")
-		console.log(interestPoint)
+
 		let newcategory: Category
 		if(interestPoint.category.id !== data.category) {
 			newcategory = await Category.findOneByOrFail({id: data.category})
@@ -121,7 +146,7 @@ export class InterestPointResolver {
 			category: newcategory
 		})
 		await interestPoint.save()
-		console.log(interestPoint)
+
 		return interestPoint;
 	}
 }

@@ -37,3 +37,25 @@ export type Picture = {
 	description: string;
 	url: string;
 };
+
+export interface CityAutocompleteAPIResult {
+	fulltext: string;
+	names: string[];
+	zipcode?: string;
+	x: number;
+	y: number;
+}
+
+export interface AddressAutocompleteAPIResult {
+	x: number;
+	y: number;
+	country: string;
+	city: string;
+	oldcity: string;
+	kind: string;
+	zipcode: string;
+	street: string;
+	metropole: boolean;
+	fulltext: string;
+	classification: number;
+}
