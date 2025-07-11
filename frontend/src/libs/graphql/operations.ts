@@ -186,12 +186,16 @@ export const UPDATE_USER = gql`
 `;
 
 export const DELETE_USER = gql`
-  mutation DeleteUser($userId: String!) {
-    deleteUser(userId: $userId) {
-      id
-    }
+  mutation DeleteUser($password: String!, $userId: String!) {
+  deleteUser(password: $password, userId: $userId) {
+    id
   }
-`;
+}`;
+
+export const DELETE_USER_BY_ADMIN = gql`
+  mutation DeleteUserByAdmin($userId: String!) {
+  deleteUserByAdmin(userId: $userId)
+}`;
 
 export const GET_STATS = gql`
   query GetStats {

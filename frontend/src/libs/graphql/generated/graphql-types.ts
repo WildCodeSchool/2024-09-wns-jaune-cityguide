@@ -88,6 +88,7 @@ export type Mutation = {
   deleteInterestPointById: Scalars['Boolean']['output'];
   deletePictureById: Scalars['Boolean']['output'];
   deleteUser: User;
+  deleteUserByAdmin: Scalars['Boolean']['output'];
   forgotPassword: Scalars['String']['output'];
   loginUser: Scalars['String']['output'];
   logoutUser: Scalars['String']['output'];
@@ -142,6 +143,12 @@ export type MutationDeletePictureByIdArgs = {
 
 
 export type MutationDeleteUserArgs = {
+  password: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteUserByAdminArgs = {
   userId: Scalars['String']['input'];
 };
 
@@ -291,6 +298,7 @@ export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   firstname?: InputMaybe<Scalars['String']['input']>;
   lastname?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<UserRole>;
 };
 
@@ -414,11 +422,19 @@ export type UpdateUserMutationVariables = Exact<{
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, firstname: string, lastname: string, email: string } };
 
 export type DeleteUserMutationVariables = Exact<{
+  password: Scalars['String']['input'];
   userId: Scalars['String']['input'];
 }>;
 
 
 export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: { __typename?: 'User', id: string } };
+
+export type DeleteUserByAdminMutationVariables = Exact<{
+  userId: Scalars['String']['input'];
+}>;
+
+
+export type DeleteUserByAdminMutation = { __typename?: 'Mutation', deleteUserByAdmin: boolean };
 
 export type GetStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1050,8 +1066,8 @@ export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutati
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const DeleteUserDocument = gql`
-    mutation DeleteUser($userId: String!) {
-  deleteUser(userId: $userId) {
+    mutation DeleteUser($password: String!, $userId: String!) {
+  deleteUser(password: $password, userId: $userId) {
     id
   }
 }
@@ -1071,6 +1087,7 @@ export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, D
  * @example
  * const [deleteUserMutation, { data, loading, error }] = useDeleteUserMutation({
  *   variables: {
+ *      password: // value for 'password'
  *      userId: // value for 'userId'
  *   },
  * });
@@ -1082,6 +1099,37 @@ export function useDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
 export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
 export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
+export const DeleteUserByAdminDocument = gql`
+    mutation DeleteUserByAdmin($userId: String!) {
+  deleteUserByAdmin(userId: $userId)
+}
+    `;
+export type DeleteUserByAdminMutationFn = Apollo.MutationFunction<DeleteUserByAdminMutation, DeleteUserByAdminMutationVariables>;
+
+/**
+ * __useDeleteUserByAdminMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserByAdminMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserByAdminMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserByAdminMutation, { data, loading, error }] = useDeleteUserByAdminMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useDeleteUserByAdminMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserByAdminMutation, DeleteUserByAdminMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserByAdminMutation, DeleteUserByAdminMutationVariables>(DeleteUserByAdminDocument, options);
+      }
+export type DeleteUserByAdminMutationHookResult = ReturnType<typeof useDeleteUserByAdminMutation>;
+export type DeleteUserByAdminMutationResult = Apollo.MutationResult<DeleteUserByAdminMutation>;
+export type DeleteUserByAdminMutationOptions = Apollo.BaseMutationOptions<DeleteUserByAdminMutation, DeleteUserByAdminMutationVariables>;
 export const GetStatsDocument = gql`
     query GetStats {
   getUserCount

@@ -13,6 +13,12 @@ import { useUserStore } from "../../store/userStore";
 import { UserRole } from "../../libs/graphql/generated/graphql-types";
 
 export default function UserManager() {
+	const currentUser = useUserStore((state) => state.user);
+
+	if (!currentUser) {
+		return;
+	}
+	
 	const { data, loading, error, refetch } = useGetUsersQuery();
 	const { fetchUsers } = useUserStore();
 	const [selectedUser, setSelectedUser] = useState<string | null>(null);
@@ -55,7 +61,7 @@ export default function UserManager() {
 		fetchUsers();
 	};
 
-	const handleUserDeleted = async () => {
+	const handleUserDeletedByAdmin = async () => {
 		setSelectedUser(null);
 		await refetch();
 		fetchUsers();
@@ -101,10 +107,10 @@ export default function UserManager() {
 						<UserEditForm
 							user={selectedUserData.getUserById}
 							onUserUpdated={handleUserUpdated}
-							onUserDeleted={handleUserDeleted}
+							onUserDeleted={handleUserDeletedByAdmin}
 							onCancel={handleCancel}
 						/>
-					</motion.div>
+ 					</motion.div>
 				)}
 			</AnimatePresence>
 		</div>
