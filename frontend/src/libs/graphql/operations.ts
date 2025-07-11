@@ -273,3 +273,24 @@ mutation UpdateUserRole($data: UpdateUserInput!, $userId: String!) {
     role
   }
 }`;
+
+export const GET_INTEREST_POINT_BY_ID = gql`
+query GetInterestPointById($interestPointId: String!) {
+  getInterestPointById(interestPointId: $interestPointId) {
+    id
+    name
+    address
+    description
+    latitude
+    longitude
+    link_url
+    city {
+      id
+      name
+    }
+    category {
+      id
+      name
+    }
+  }
+}`;

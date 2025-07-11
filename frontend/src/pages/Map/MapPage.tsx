@@ -5,7 +5,7 @@ import InterestPointDetails from "../../organisms/InterestPointDetails";
 import CreateInterestPointForm from "../../organisms/CreateInterestPointForm";
 import MapComponent from "../../organisms/MapComponent";
 import SearchBar from "../../atoms/SearchBar";
-import type { InterestPoint } from "../../@types/types";
+import type { InterestPoint } from "../../libs/graphql/generated/graphql-types";
 import { useInterestPointsStore } from "../../store/interestPointsStore";
 import { useUserStore } from "../../store/userStore";
 import { UserRole } from "../../libs/graphql/generated/graphql-types";

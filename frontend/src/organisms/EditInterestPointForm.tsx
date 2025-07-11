@@ -10,11 +10,12 @@ import { useInterestPointsStore } from "../store/interestPointsStore";
 import { useCitiesStore } from "../store/citiesStore";
 
 type EditInterestPointFormProps = {
-  interestPoint: InterestPoint | null;
+  interestPoint: InterestPoint;
+  isOpen: boolean;
   onClose: () => void;
 };
 
-export default function EditInterestPointForm({ interestPoint, onClose }: EditInterestPointFormProps) {
+export default function EditInterestPointForm({ interestPoint, onClose, isOpen }: EditInterestPointFormProps) {
   const { loading, error, data } = useGetCategoriesQuery();
   const [replaceInterestPoint, { data: editedData, loading: submitting, error: editError }] =
     useReplaceInterestPointByIdMutation();
@@ -24,8 +25,8 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState<string[]>([]);
   const { selectedCity } = useCitiesStore();
-  const { fetchInterestPointsByCity } = useInterestPointsStore();
-
+  const { fetchInterestPointsByCity, fetchInterestPointById } = useInterestPointsStore();
+  
   const navigate = useNavigate();
 
   if (!interestPoint) return null;
@@ -49,7 +50,7 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
         variables: {
           data: formattedData as InterestPointInput,
           interestPointId: interestPoint!.id,
-        },
+        }
       });
 
       if (result?.data?.replaceInterestPointById) {
@@ -57,9 +58,10 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
         if (selectedCity) {
           fetchInterestPointsByCity(selectedCity.id);
         }
-
-        onClose?.();
       }
+      console.log("Type of POI id:", typeof interestPoint.id);
+      fetchInterestPointById(String(interestPoint.id));
+      onClose();
     } catch (err) {
       console.error("Erreur lors de la modification :", err);
     }
@@ -74,10 +76,11 @@ export default function EditInterestPointForm({ interestPoint, onClose }: EditIn
     const timer = setTimeout(() => {
       setShowPopup(false);
       onClose?.();
+      navigate("/map");
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [editedData]);
+  }, [editedData, onClose]);
 
   if (!interestPoint) return null;
   if (error || editError) return <>Error!</>;
