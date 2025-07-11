@@ -16,6 +16,9 @@ import CategoryManager from "./pages/CategoryManager/CategoryManager.tsx";
 import { UserRole } from "./libs/graphql/generated/graphql-types";
 import ProtectedRoute from "./security/ProtectedRoute.tsx";
 
+import ModificationProfile from "./pages/ModificationProfile/ModificationProfile.tsx";
+import About from "./pages/About/About.tsx";
+import Contact from "./pages/Contact/Contact.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -52,12 +55,24 @@ const router = createBrowserRouter([
 				element: <Login />,
 			},
 			{
+				path: "/modificationProfile",
+				element: <ModificationProfile />,
+			},
+			{
 				path: "/forgotPassword",
 				element: <ForgotPassword />
 			},
 			{
 				path: "/resetPassword",
 				element: <ResetPassword />
+			},
+			{
+				path: "/about",
+				element: <About />
+			},
+			{
+				path: "/contact",
+				element: <Contact />
 			},
 		],
 	},

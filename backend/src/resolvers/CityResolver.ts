@@ -18,6 +18,8 @@ import { UserRole } from "../entities/User";
 interface Context {
   user?: { id: string; role: UserRole };
 }
+import { GraphQLError } from "graphql";
+
 
 @InputType()
 export class CityInput {
@@ -71,6 +73,13 @@ export class CityResolver {
        
     requireRole(context.user, [UserRole.SUPER_ADMIN]);
     
+    const existingCity = await City.findOne({ where: { postalCode: data.postalCode } });
+    if (existingCity) {
+      throw new GraphQLError("City already exists", {
+        //extensions: { code: "BAD_REQUEST", http: { status: 400 } },
+        extensions: { code: "BAD_REQUEST" },
+      });
+    }
     let city = new City();
     city = Object.assign(city, data);
 

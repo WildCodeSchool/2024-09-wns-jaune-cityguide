@@ -17,7 +17,7 @@ export default function UserStats({ users }: Props) {
         <h2 className="text-2xl font-bold text-gray-800">{total}</h2>
       </div>
       <div className="bg-white p-4 rounded-xl shadow-md text-center">
-        <p className="text-sm text-gray-500">Admins de ville</p>
+        <p className="text-sm text-gray-500">Nombre total d'admins de ville</p>
         <h2 className="text-2xl font-bold text-gray-800">{cityAdmins}</h2>
       </div>
     </div>

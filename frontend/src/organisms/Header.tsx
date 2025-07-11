@@ -2,116 +2,117 @@ import { useState } from "react";
 import logo from "../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
-import { useMenuStore } from '../store/menuStore';
+import { useMenuStore } from "../store/menuStore";
 import { useMutationMutation } from "../libs/graphql/generated/graphql-types";
 import { UserRole } from "../libs/graphql/generated/graphql-types";
 
 export default function Navbar() {
-  const user = useUserStore((state) => state.user);
+	const user = useUserStore((state) => state.user);
   const clearUser = useUserStore((state) => state.clearUser);
-  const [logout] = useMutationMutation();
-  const navigate = useNavigate();
-  const isOpen = useMenuStore((state) => state.isOpen);
-  const setIsOpen = useMenuStore((state) => state.setIsOpen);
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState<string[]>([]);
+	console.log("Navbar render user:", user);
+	const [logout] = useMutationMutation();
+	const navigate = useNavigate();
+	const isOpen = useMenuStore((state) => state.isOpen);
+	const setIsOpen = useMenuStore((state) => state.setIsOpen);
+	const [showPopup, setShowPopup] = useState(false);
+	const [popupMessage, setPopupMessage] = useState<string[]>([]);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      clearUser();
-      setPopupMessage([
-        "Déconnexion réussie ! 👋",
-        "Vous allez être redirigé(e) vers la page d'accueil.",
-      ]);
+	const handleLogout = async () => {
+		try {
+			await logout();
+			clearUser();
+			setPopupMessage([
+				"Déconnexion réussie ! 👋",
+				"Vous allez être redirigé(e) vers la page d'accueil.",
+			]);
 
-      setShowPopup(true);
+			setShowPopup(true);
 
-      setTimeout(() => {
-        setShowPopup(false);
-        navigate("/");
-      }, 3000);
-    } catch (error) {
-      console.log("Error logging out:", error);
-    }
-  };
+			setTimeout(() => {
+				setShowPopup(false);
+				navigate("/");
+			}, 3000);
+		} catch (error) {
+			console.log("Error logging out:", error);
+		}
+	};
 
-  return (
-    <>
-      <nav className="nav-container primary-bg z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between h-auto sm:h-20">
-        <div className="desktop-nav hidden sm:flex items-center justify-between h-full w-full p-14">
-          {/* Logo */}
-          <div className="flex justify-center -mt-12 lg:mt-12 z-[901]">
-            <a href="/" className="flex-shrink-0">
-              <img
-                className="rounded-full border-5 lg:w-28 lg:h-28 z-[901]"
-                style={{ borderColor: "#706EEB" }}
-                src={logo}
-                alt="City Guide"
-              />
-            </a>
-          </div>
+	return (
+		<>
+			<nav className="nav-container primary-bg z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between h-auto sm:h-20">
+				<div className="desktop-nav hidden sm:flex items-center justify-between h-full w-full p-14">
+					{/* Logo */}
+					<div className="flex justify-center -mt-12 sm:mt-12 z-[901]">
+						<a href="/" className="flex-shrink-0">
+							<img
+								className="rounded-full border-5 sm:w-28 md:h-28 z-[901]"
+								style={{ borderColor: "#706EEB" }}
+								src={logo}
+								alt="City Guide"
+							/>
+						</a>
+					</div>
 
-          {/* Version desktop */}
-          <div className="hidden sm:flex items-center space-x-4">
-            {user ? (
-              <>
-                <span className="text-white text-base font-bold">
-                  Bonjour, {user.firstname}
-                </span>
+					{/* Version desktop */}
+					<div className="hidden sm:flex items-center space-x-4">
+						{user ? (
+							<>
+								<span className="text-white text-base font-bold">
+									Bonjour, {user.firstname}
+								</span>
 
-                <div className="relative inline-block text-left">
-                  {/* Bouton d'ouverture */}
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => setIsOpen(!isOpen)}
-                      className="inline-flex w-full justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
-                      aria-expanded={isOpen}
-                      aria-haspopup="true"
-                    >
-                      <span className="material-symbols-outlined">
-                        account_circle
-                      </span>
-                      Menu
-                      <svg
-                        className="-mr-1 size-5 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </button>
-                  </div>
+								<div className="relative inline-block text-left">
+									{/* Bouton d'ouverture */}
+									<div>
+										<button
+											type="button"
+											onClick={() => setIsOpen(!isOpen)}
+											className="inline-flex w-full justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+											aria-expanded={isOpen}
+											aria-haspopup="true"
+										>
+											<span className="material-symbols-outlined">
+												account_circle
+											</span>
+											Menu
+											<svg
+												className="-mr-1 size-5 text-gray-400"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												aria-hidden="true"
+											>
+												<path
+													fillRule="evenodd"
+													d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+													clipRule="evenodd"
+												/>
+											</svg>
+										</button>
+									</div>
 
-                  {/* Dropdown */}
-                  <div
-                    className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
-                      isOpen
-                        ? "scale-100 opacity-100"
-                        : "scale-95 opacity-0 pointer-events-none"
-                    }`}
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="menu-button"
-                    tabIndex={-1}
-                  >
-                    <div className="py-1" role="none">
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        tabIndex={-1}
-                        id="menu-item-0"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Mon profil
-                      </a>
+									{/* Dropdown */}
+									<div
+										className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
+											isOpen
+												? "scale-100 opacity-100"
+												: "scale-95 opacity-0 pointer-events-none"
+										}`}
+										role="menu"
+										aria-orientation="vertical"
+										aria-labelledby="menu-button"
+										tabIndex={-1}
+									>
+										<div className="py-1" role="none">
+											<a
+												href="#"
+												className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+												role="menuitem"
+												tabIndex={-1}
+												id="menu-item-0"
+												onClick={() => setIsOpen(false)}
+											>
+												Mon profil
+											</a>
 
                      {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
                         <Link
@@ -167,50 +168,50 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+				{/* Mobile Menu */}
 
-        <div className="w-full h-15 sm:hidden relative px-4">
-          <div className="flex items-center justify-between h-full">
-            <a href="/" className="absolute -bottom-6 left-4 z-[901]">
-              <img
-                className="rounded-full border-4 w-16 h-16 z-[901]"
-                style={{ borderColor: "#706EEB" }}
-                src={logo}
-                alt="City Guide"
-              />
-            </a>
+				<div className="w-full h-15 sm:hidden relative px-4">
+					<div className="flex items-center justify-between h-full">
+						<a href="/" className="absolute -bottom-6 left-4 z-[901]">
+							<img
+								className="rounded-full border-4 w-16 h-16 z-[901]"
+								style={{ borderColor: "#706EEB" }}
+								src={logo}
+								alt="City Guide"
+							/>
+						</a>
 
-            <div className="flex items-center justify-end ml-auto gap-4">
-              {user ? (
-                <>
-                  <span className="text-white text-base font-bold">
-                    Bonjour, {user.firstname}
-                  </span>
-                  {/* Dropdown utilisateur */}
-                  <div className="relative inline-block text-left">
-                    <button
-                      type="button"
-                      onClick={() => setIsOpen(!isOpen)}
-                      className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
-                      aria-expanded={isOpen}
-                      aria-haspopup="true"
-                    >
-                      <span className="material-symbols-outlined">
-                        account_circle
-                      </span>
-                      <svg
-                        className="-mr-1 size-5 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </button>
+						<div className="flex items-center justify-end ml-auto gap-4">
+							{user ? (
+								<>
+									<span className="text-white text-base font-bold">
+										Bonjour, {user.firstname}
+									</span>
+									{/* Dropdown utilisateur */}
+									<div className="relative inline-block text-left">
+										<button
+											type="button"
+											onClick={() => setIsOpen(!isOpen)}
+											className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+											aria-expanded={isOpen}
+											aria-haspopup="true"
+										>
+											<span className="material-symbols-outlined">
+												account_circle
+											</span>
+											<svg
+												className="-mr-1 size-5 text-gray-400"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												aria-hidden="true"
+											>
+												<path
+													fillRule="evenodd"
+													d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+													clipRule="evenodd"
+												/>
+											</svg>
+										</button>
 
                     {/* Dropdown */}
                     <div
@@ -280,71 +281,71 @@ export default function Navbar() {
                       </svg>
                     </button>
 
-                    {/* Dropdown */}
-                    <div
-                      className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
-                        isOpen
-                          ? "scale-100 opacity-100"
-                          : "scale-95 opacity-0 pointer-events-none"
-                      }`}
-                      role="menu"
-                      aria-orientation="vertical"
-                      aria-labelledby="menu-button"
-                      tabIndex={-1}
-                    >
-                      <div className="py-1" role="none">
-                        <Link
-                          to="/login"
-                          className="tuto-connexion-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          CONNEXION
-                        </Link>
-                        <Link
-                          to="/inscription"
-                          className="tuto-inscription-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          INSCRIPTION
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
+										{/* Dropdown */}
+										<div
+											className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
+												isOpen
+													? "scale-100 opacity-100"
+													: "scale-95 opacity-0 pointer-events-none"
+											}`}
+											role="menu"
+											aria-orientation="vertical"
+											aria-labelledby="menu-button"
+											tabIndex={-1}
+										>
+											<div className="py-1" role="none">
+												<Link
+													to="/login"
+													className="tuto-connexion-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+													onClick={() => setIsOpen(false)}
+												>
+													CONNEXION
+												</Link>
+												<Link
+													to="/inscription"
+													className="tuto-inscription-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+													onClick={() => setIsOpen(false)}
+												>
+													INSCRIPTION
+												</Link>
+											</div>
+										</div>
+									</div>
+								</>
+							)}
+						</div>
+					</div>
+				</div>
+			</nav>
 
-      {showPopup && (
-        <div className="fixed top-20 right-3 max-w-[350px] w-auto z-1000 mt-5 bg-white border-3 border-[#706eeb] px-6 py-4 rounded-xl shadow-lg flex items-center justify-start space-x-3 transition-all ease-in-out duration-300 transform opacity-100 scale-100">
-          <div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </div>
-          <div className="text-sm text-[#706eeb] font-medium">
-            {popupMessage.map((line, index) => (
-              <p key={index} className="mb-2">
-                {line}
-              </p>
-            ))}
-          </div>
-        </div>
-      )}
-    </>
-  );
+			{showPopup && (
+				<div className="fixed top-20 right-3 max-w-[350px] w-auto z-1000 mt-5 bg-white border-3 border-[#706eeb] px-6 py-4 rounded-xl shadow-lg flex items-center justify-start space-x-3 transition-all ease-in-out duration-300 transform opacity-100 scale-100">
+					<div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="h-6 w-6"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							aria-hidden="true"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M5 13l4 4L19 7"
+							/>
+						</svg>
+					</div>
+					<div className="text-sm text-[#706eeb] font-medium">
+						{popupMessage.map((line, index) => (
+							<p key={index} className="mb-2">
+								{line}
+							</p>
+						))}
+					</div>
+				</div>
+			)}
+		</>
+	);
 }

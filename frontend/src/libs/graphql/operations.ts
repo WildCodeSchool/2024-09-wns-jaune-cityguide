@@ -9,8 +9,8 @@ export const GET_CITIES = gql`
       latitude
       longitude
     }
-}`;
-
+  }
+`;
 
 export const LOGIN = gql`
   mutation LoginUser($data: UserInput!) {
@@ -20,10 +20,9 @@ export const LOGIN = gql`
 
 export const LOGOUT = gql`
   mutation Mutation {
-  logoutUser
-}
+    logoutUser
+  }
 `;
-
 
 export const FORGOT_PASSWORD = gql`
   mutation ForgotPassword($email: String!) {
@@ -31,9 +30,8 @@ export const FORGOT_PASSWORD = gql`
   }
 `;
 
-
 export const RESET_PASSWORD = gql`
-  mutation resetPassword($newPassword: String!, $token: String!){
+  mutation resetPassword($newPassword: String!, $token: String!) {
     resetPassword(newPassword: $newPassword, token: $token)
   }
 `;
@@ -42,10 +40,14 @@ export const CREATE_INTERESTPOINT = gql`
     createInterestPoint(data: $data) {
       id
     }
-}`;
+  }
+`;
 
 export const REPLACE_INTERESTPOINT = gql`
-  mutation ReplaceInterestPointById($data: InterestPointInput!, $interestPointId: String!) {
+  mutation ReplaceInterestPointById(
+    $data: InterestPointInput!
+    $interestPointId: String!
+  ) {
     replaceInterestPointById(data: $data, interestPointId: $interestPointId) {
       id
       name
@@ -63,78 +65,133 @@ export const REPLACE_INTERESTPOINT = gql`
         name
       }
     }
-}`;
+  }
+`;
 
 export const DELETE_INTERESTPOINT = gql`
   mutation DeleteInterestPointById($interestPointId: String!) {
     deleteInterestPointById(interestPointId: $interestPointId)
-}`;
-
+  }
+`;
 
 export const GET_INTEREST_POINTS = gql`
-query GetInterestPoints {
-  getInterestPoints {
-    id
-    name
-    description
-    address
-    latitude
-    longitude
-    link_url
-    city {
-      id
-      name
-      postalCode
-    }
-    category {
+  query GetInterestPoints {
+    getInterestPoints {
       id
       name
       description
-      color
-    }
-    pictures {
-      id
-      url
-      name
-      description
+      address
+      latitude
+      longitude
+      link_url
+      city {
+        id
+        name
+        postalCode
+      }
+      category {
+        id
+        name
+        description
+        color
+      }
+      pictures {
+        id
+        url
+        name
+        description
+      }
     }
   }
-}`;
+`;
 
 export const GET_INTEREST_POINTS_BY_CITY = gql`
-query GetInterestPointsByCity($cityId: String!) {
-  getInterestPointsByCity(cityId: $cityId) {
-    id
-    name
-    description
-    address
-    latitude
-    longitude
-    link_url
-    city {
-      id
-      name
-      postalCode
-    }
-    category {
+  query GetInterestPointsByCity($cityId: String!) {
+    getInterestPointsByCity(cityId: $cityId) {
       id
       name
       description
-      color
-    }
-    pictures {
-      id
-      url
-      name
-      description
+      address
+      latitude
+      longitude
+      link_url
+      city {
+        id
+        name
+        postalCode
+      }
+      category {
+        id
+        name
+        description
+        color
+      }
+      pictures {
+        id
+        url
+        name
+        description
+      }
     }
   }
-}`;
+`;
 
 export const REGISTER_USER = gql`
   mutation RegisterUser($data: NewUserInput!) {
     registerUser(data: $data)
-}`;
+  }
+`;
+
+export const GET_USERS = gql`
+  query GetUsers {
+    getUsers {
+      id
+      firstname
+      lastname
+      email
+      role
+      city {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const GET_USER_BY_ID = gql`
+  query GetUserById($userId: String!) {
+    getUserById(userId: $userId) {
+      id
+      firstname
+      lastname
+      email
+      role
+      city {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const UPDATE_USER = gql`
+  mutation UpdateUser($data: UpdateUserInput!, $userId: String!) {
+    updateUser(data: $data, userId: $userId) {
+      id
+      firstname
+      lastname
+      email
+    }
+  }
+`;
+
+export const DELETE_USER = gql`
+  mutation DeleteUser($userId: String!) {
+    deleteUser(userId: $userId) {
+      id
+    }
+  }
+`;
 
 export const GET_STATS = gql`
   query GetStats {
@@ -145,49 +202,74 @@ export const GET_STATS = gql`
 `;
 
 export const GET_CATEGORIES = gql`
-query GetCategories {
-  getCategories {
-    id
-    name
-    description
-    color
+  query GetCategories {
+    getCategories {
+      id
+      name
+      description
+      color
+    }
   }
-}`;
-
+`;
 
 export const GET_CATEGORY_BY_ID = gql`
-query GetCategoryById($categoryId: String!) {
-  getCategoryById(categoryId: $categoryId) {
-    id
-    name
-    description
-    color
+  query GetCategoryById($categoryId: String!) {
+    getCategoryById(categoryId: $categoryId) {
+      id
+      name
+      description
+      color
+    }
   }
-}`;
-
+`;
 
 export const CREATE_CATEGORY = gql`
-mutation CreateCategory($data: CategoryInput!) {
-  createCategory(data: $data) {
-    name
-    description
-    color
+  mutation CreateCategory($data: CategoryInput!) {
+    createCategory(data: $data) {
+      name
+      description
+      color
+    }
   }
-}`;
-
+`;
 
 export const REPLACE_CATEGORY_BY_ID = gql`
-mutation ReplaceCategoryById($data: UpdateCategoryInput!, $categoryId: String!) {
-  replaceCategoryById(data: $data, categoryId: $categoryId) {
-    id
-    name
-    description
-    color
+  mutation ReplaceCategoryById(
+    $data: UpdateCategoryInput!
+    $categoryId: String!
+  ) {
+    replaceCategoryById(data: $data, categoryId: $categoryId) {
+      id
+      name
+      description
+      color
+    }
+  }
+`;
+
+export const DELETE_CATEGORY = gql`
+  mutation DeleteCategoryById($categoryId: String!) {
+    deleteCategoryById(categoryId: $categoryId)
+  }
+`;
+
+export const CREATE_CITY = gql`
+mutation CreateCity($data: CityInput!) {
+  createCity(data: $data) {
+     id,
+     name
   }
 }`;
 
+export const DELETE_CITY = gql`
+mutation DeleteCity($cityId: String!) {
+  deleteCityById(cityId: $cityId)
+}`;
 
-export const DELETE_CATEGORY = gql`
-mutation DeleteCategoryById($categoryId: String!) {
-  deleteCategoryById(categoryId: $categoryId)
+export const UPDATE_USER_ROLE = gql`
+mutation UpdateUserRole($data: UpdateUserInput!, $userId: String!) {
+  updateUser(data: $data, userId: $userId) {
+    id,
+    role
+  }
 }`;

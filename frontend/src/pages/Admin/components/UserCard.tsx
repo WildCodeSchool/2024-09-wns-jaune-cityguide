@@ -1,34 +1,33 @@
-import React from "react";
+import { GetUsersQuery, UserRole } from "../../../libs/graphql/generated/graphql-types";
+import { forwardRef } from "react";
 
 type Props = {
-  user: {
-    id: string;
-    firstname: string;
-    lastname: string;
-    role: string;
-  };
+  user: GetUsersQuery["getUsers"][0];
   onClick: () => void;
 };
 
-const roleLabel: Record<string, string> = {
-  user: "Utilisateur",
-  cityadmin: "Admin de ville",
-  superuser: "Super utilisateur",
-  superadmin: "Super admin",
+const roleLabel: Record<UserRole, string> = {
+  USER: "Utilisateur",
+  CITY_ADMIN: "Admin de ville",
+  SUPER_USER: "Super utilisateur",
+  SUPER_ADMIN: "Super admin",
 };
 
-export default function UserCard({ user, onClick }: Props) {
+const UserCard = forwardRef<HTMLDivElement, Props>(({ user, onClick }, ref) => {
   return (
     <div
+      ref={ref}
       onClick={onClick}
       className="border p-4 rounded-lg shadow hover:shadow-md hover:bg-gray-50 cursor-pointer transition duration-200 flex flex-col gap-2"
     >
-      <p className="text-lg font-semibold text-gray-800">
+      <p className="text-lg text-center font-semibold text-gray-800">
         {user.firstname} {user.lastname}
       </p>
-      <span className="inline-block w-fit text-xs font-medium bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-        {user.role}
+      <span className="inline-block m-auto w-fit text-xs font-medium bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+        {roleLabel[user.role]}
       </span>
     </div>
   );
-}
+});
+
+export default UserCard;

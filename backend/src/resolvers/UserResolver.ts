@@ -53,6 +53,9 @@ export class UpdateUserInput {
   @Field({ nullable: true })
   email?: string;
 
+  @Field({ nullable: true })
+  city?: number;
+
   @Field(() => UserRole, { nullable: true })
   role?: UserRole;
 }
@@ -71,7 +74,10 @@ export class UserResolver {
   @Query(() => User)
   @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN)
   async getUserById(@Arg("userId") id: string) {
-    const user = await User.findOneBy({ id });
+    const user = await User.findOneOrFail({
+      where: { id },
+      relations: ["city"],
+    });
     if (!user) {
       throw new Error("User note found");
     }
@@ -131,7 +137,7 @@ export class UserResolver {
     const profile = {
       mail: user.email,
       firstname: user.firstname,
-      city: city,
+      city: user.city,
     };
     console.log("profile", profile);
     return JSON.stringify(profile);

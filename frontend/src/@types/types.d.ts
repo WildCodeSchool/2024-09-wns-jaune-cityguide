@@ -11,6 +11,7 @@ export type City = {
 	postalCode: string;
 	latitude: number;
 	longitude: number;
+	users?: User[];
 };
 
 export type InterestPoint = {
@@ -37,18 +38,24 @@ export type Picture = {
 	url: string;
 };
 
-export type User = {
-  id: string;
-  firstname: string;
-  lastname: string;
-  role?: string;
-};
+export interface CityAutocompleteAPIResult {
+	fulltext: string;
+	names: string[];
+	zipcode?: string;
+	x: number;
+	y: number;
+}
 
-export type City = {
-  id?: string;
-  name: string;
-  postalCode: string;
-  latitude: number | string;
-  longitude: number | string;
-  users?: User[];
+export interface AddressAutocompleteAPIResult {
+	x: number;
+	y: number;
+	country: string;
+	city: string;
+	oldcity: string;
+	kind: string;
+	zipcode: string;
+	street: string;
+	metropole: boolean;
+	fulltext: string;
+	classification: number;
 }

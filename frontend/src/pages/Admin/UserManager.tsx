@@ -1,82 +1,112 @@
-import React, { useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { useState, useRef, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import UserStats from "./components/UserStats";
 import UserList from "./components/UserList";
 import UserEditForm from "./components/UserEditForm";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+	type GetUserByIdQuery,
+	useGetUserByIdQuery,
+	useGetUsersQuery,
+} from "../../libs/graphql/generated/graphql-types";
+import { useUserStore } from "../../store/userStore";
 import { UserRole } from "../../libs/graphql/generated/graphql-types";
 
-type User = {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  role: UserRole;
-};
-
-const GET_USERS = gql`
-  query {
-    getUsers {
-      id
-      firstname
-      lastname
-      email
-      role
-    }
-  }
-`;
-
 export default function UserManager() {
-  const { data, loading, error, refetch } = useQuery(GET_USERS);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+	const { data, loading, error, refetch } = useGetUsersQuery();
+	const { fetchUsers } = useUserStore();
+	const [selectedUser, setSelectedUser] = useState<string | null>(null);
+	const [selectedCardRef, setSelectedCardRef] = useState<HTMLDivElement | null>(
+		null,
+	);
+	const [searchUser, setSearchUser] = useState("");
+	const formRef = useRef<HTMLDivElement | null>(null);
+	const [showAllUsers, setShowAllUsers] = useState(false);
+	const userRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  if (loading) return <p>Chargement des utilisateurs...</p>;
-  if (error) return <p>Erreur : {error.message}</p>;
+	const { data: selectedUserData } = useGetUserByIdQuery({
+		variables: { userId: selectedUser || "" },
+		skip: !selectedUser, // Ne pas exécuter la requête si aucun utilisateur n'est sélectionné
+	});
 
-  const users: User[] = data?.getUsers || [];
+	useEffect(() => {
+		if (selectedUser && selectedUserData?.getUserById && formRef.current) {
+			formRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+		}
+	}, [selectedUser, selectedUserData]);
 
-  const filteredUsers = users.filter((user) =>
-    `${user.firstname} ${user.lastname}`
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-  );
+	if (loading) return <p>Chargement des utilisateurs...</p>;
+	if (error) return <p>Erreur : {error.message}</p>;
+	if (!data) return <p>Aucun utilisateur trouvé.</p>;
 
-  const handleUserSelect = (user: User) => {
-    setSelectedUser(user);
-  };
+	const users = data?.getUsers || [];
 
-  const handleUserUpdated = (updatedUser: User) => {
-    setSelectedUser(updatedUser);
-    refetch();
-  };
+	const filteredUsers = users.filter((user) =>
+		`${user.firstname} ${user.lastname}`
+			.toLowerCase()
+			.includes(searchUser.toLowerCase()),
+	);
 
-  const handleUserDeleted = (userId: string) => {
-    setSelectedUser(null);
-    refetch(); // recharge les users
-  };
+	const handleUserUpdated = async (
+		updatedUser: GetUserByIdQuery["getUserById"],
+	) => {
+		setSelectedUser(updatedUser.id);
+		await refetch();
+		fetchUsers();
+	};
 
-  return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-center">
-        <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
-      </div>
+	const handleUserDeleted = async () => {
+		setSelectedUser(null);
+		await refetch();
+		fetchUsers();
+	};
 
-      <div className="flex justify-center">
-        <UserStats users={filteredUsers} />
-      </div>
+	const handleCancel = () => {
+		setSelectedUser(null);
+		if (selectedCardRef) {
+			selectedCardRef.scrollIntoView({ behavior: "smooth", block: "center" });
+		}
+	};
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-        <UserList users={filteredUsers} onSelect={handleUserSelect} />
-      </div>
+	return (
+		<div className="w-full p-6 space-y-6 bg-gray-50 min-h-screen">
+			<div className="flex justify-center">
+				<SearchBar searchTerm={searchUser} onSearch={setSearchUser} />
+			</div>
 
-      {selectedUser && (
-        <UserEditForm
-          user={selectedUser}
-          onUserUpdated={handleUserUpdated}
-          onUserDeleted={handleUserDeleted}
-        />
-      )}
-    </div>
-  );
+			<div className="flex justify-center">
+				<UserStats users={filteredUsers} />
+			</div>
+
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+				<UserList
+					users={filteredUsers}
+					onSelect={(id) => setSelectedUser(id)}
+					showAll={showAllUsers}
+					onShowMore={() => setShowAllUsers(true)}
+					onShowLess={() => setShowAllUsers(false)}
+					userRefs={userRefs}
+				/>
+			</div>
+
+			<AnimatePresence>
+				{selectedUser && selectedUserData?.getUserById && (
+					<motion.div
+						ref={formRef}
+						initial={{ opacity: 0, height: 0 }}
+						animate={{ opacity: 1, height: "auto" }}
+						exit={{ opacity: 0, height: 0 }}
+						transition={{ duration: 0.3, ease: "easeInOut" }}
+					>
+						<UserEditForm
+							user={selectedUserData.getUserById}
+							onUserUpdated={handleUserUpdated}
+							onUserDeleted={handleUserDeleted}
+							onCancel={handleCancel}
+						/>
+					</motion.div>
+				)}
+			</AnimatePresence>
+		</div>
+	);
 }
