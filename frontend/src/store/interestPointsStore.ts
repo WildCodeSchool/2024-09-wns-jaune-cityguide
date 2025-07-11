@@ -4,7 +4,8 @@ import {
 	GET_INTEREST_POINTS,
 	GET_INTEREST_POINTS_BY_CITY,
 } from "../libs/graphql/operations";
-import type { InterestPoint } from "../@types/types";
+// import type { InterestPoint } from "../@types/types";
+import type { InterestPoint } from "../libs/graphql/generated/graphql-types";
 
 type InterestPointsState = {
 	isLoading: boolean;

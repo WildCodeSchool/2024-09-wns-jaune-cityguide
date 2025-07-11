@@ -1,16 +1,16 @@
-
 import { useEffect, useState } from "react";
 import EditInterestPointForm from "../../organisms/EditInterestPointForm";
 import InterestPointDetails from "../../organisms/InterestPointDetails";
 import CreateInterestPointForm from "../../organisms/CreateInterestPointForm";
 import MapComponent from "../../organisms/MapComponent";
 import SearchBar from "../../atoms/SearchBar";
-import type { InterestPoint } from "../../@types/types";
+import type { InterestPoint } from "../../libs/graphql/generated/graphql-types";
 import { useInterestPointsStore } from "../../store/interestPointsStore";
 
 export default function MapPage() {
 	// const [isOpen, setIsOpen] = useState(false);
-	const { selectedInterestPoint, setSelectedInterestPoint } = useInterestPointsStore();
+	const { selectedInterestPoint, setSelectedInterestPoint } =
+		useInterestPointsStore();
 	const [editModalOpen, setEditModalOpen] = useState(false);
 	const [sheetIsOpen, setSheetIsOpen] = useState(false);
 	const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -47,9 +47,7 @@ export default function MapPage() {
 				>
 					+ Créer
 				</button>
-
 			</div>
-
 
 			<div className="map-container flex grow items-center">
 				<MapComponent onSelectPoint={handleSelectPoint} />
@@ -70,16 +68,14 @@ export default function MapPage() {
 					onClose={() => setEditModalOpen(false)}
 					onSave={handleSaveEdit}
 				/>
-
 			)}
 
 			{createModalOpen && (
 				<CreateInterestPointForm
 					isOpen={createModalOpen}
-					onClose={() => setCreateModalOpen(false)} />
+					onClose={() => setCreateModalOpen(false)}
+				/>
 			)}
 		</div>
-
 	);
 }
-

@@ -6,7 +6,7 @@ import L from "leaflet";
 import { useCitiesStore } from "../store/citiesStore";
 import { useInterestPointsStore } from "../store/interestPointsStore";
 
-import type { InterestPoint } from "../@types/types";
+import type { InterestPoint } from "../libs/graphql/generated/graphql-types";
 
 export default function MapComponent({
 	onSelectPoint,
