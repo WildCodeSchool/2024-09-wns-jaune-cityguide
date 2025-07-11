@@ -166,10 +166,15 @@ export const UPDATE_USER = gql`
 }`;
 
 export const DELETE_USER = gql`
-  mutation DeleteUser($userId: String!) {
-    deleteUser(userId: $userId) {
-      id
-    }
+  mutation DeleteUser($password: String!, $userId: String!) {
+  deleteUser(password: $password, userId: $userId) {
+    id
+  }
+}`;
+
+export const DELETE_USER_BY_ADMIN = gql`
+  mutation DeleteUserByAdmin($userId: String!) {
+  deleteUserByAdmin(userId: $userId)
 }`;
 
 export const GET_STATS = gql`
@@ -233,6 +238,6 @@ mutation CreateCity($data: CityInput!) {
 }`;
 
 export const DELETE_CITY = gql`
-mutation CreateCity($cityId: String!) {
+mutation DeleteCityById($cityId: String!) {
   deleteCityById(cityId: $cityId)
 }`;

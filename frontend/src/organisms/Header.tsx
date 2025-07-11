@@ -6,7 +6,7 @@ import { useMenuStore } from "../store/menuStore";
 import { useMutationMutation } from "../libs/graphql/generated/graphql-types";
 
 export default function Navbar() {
-	const { user, clearUser } = useUserStore();
+	const { user, clearUser } = useUserStore();	
 	const [logout] = useMutationMutation();
 	const navigate = useNavigate();
 	const isOpen = useMenuStore((state) => state.isOpen);
@@ -101,7 +101,7 @@ export default function Navbar() {
 									>
 										<div className="py-1" role="none">
 											<a
-												href="#"
+												href="/profile"
 												className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 												role="menuitem"
 												tabIndex={-1}

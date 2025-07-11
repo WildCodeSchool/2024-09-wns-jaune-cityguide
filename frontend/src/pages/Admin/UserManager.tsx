@@ -9,8 +9,15 @@ import {
 	useGetUserByIdQuery,
 	useGetUsersQuery,
 } from "../../libs/graphql/generated/graphql-types";
+import { useUserStore } from "../../store/userStore";
 
 export default function UserManager() {
+	const currentUser = useUserStore((state) => state.user);
+
+	if (!currentUser) {
+		return;
+	}
+	
 	const { data, loading, error, refetch } = useGetUsersQuery();
 	const [selectedUser, setSelectedUser] = useState<string | null>(null);
 	const [selectedCardRef, setSelectedCardRef] = useState<HTMLDivElement | null>(
@@ -51,7 +58,7 @@ export default function UserManager() {
 		await refetch();
 	};
 
-	const handleUserDeleted = async () => {
+	const handleUserDeletedByAdmin = async () => {
 		setSelectedUser(null);
 		await refetch();
 	};
@@ -96,10 +103,10 @@ export default function UserManager() {
 						<UserEditForm
 							user={selectedUserData.getUserById}
 							onUserUpdated={handleUserUpdated}
-							onUserDeleted={handleUserDeleted}
+							onUserDeleted={handleUserDeletedByAdmin}
 							onCancel={handleCancel}
 						/>
-					</motion.div>
+ 					</motion.div>
 				)}
 			</AnimatePresence>
 		</div>
