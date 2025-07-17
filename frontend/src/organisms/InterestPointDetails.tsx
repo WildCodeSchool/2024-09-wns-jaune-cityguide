@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { InterestPoint } from "../@types/types";
+import type { InterestPoint } from "../libs/graphql/generated/graphql-types";
 import { useInterestPointsStore } from "../store/interestPointsStore";
 import { Carousel } from "../atoms/Carousel";
-import EditInterestPointForm from "../organisms/EditInterestPointForm"
+import EditInterestPointForm from "../organisms/EditInterestPointForm";
 import DeleteConfirmationModal from "../organisms/DeleteConfirmationModal";
 import { useDeleteInterestPointByIdMutation } from "../libs/graphql/generated/graphql-types";
 
@@ -16,13 +16,14 @@ type InterestPointSheetProps = {
 export default function InterestPointDetails({
 	isOpen,
 	onClose,
-	interestPoint
+	interestPoint,
 }: InterestPointSheetProps) {
 	const { selectedInterestPoint } = useInterestPointsStore();
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [showConfirm, setShowConfirm] = useState(false);
 	const [showDeletedPopup, setShowDeletedPopup] = useState(false);
-	const [deletePoint, { data: deletedData }] = useDeleteInterestPointByIdMutation();
+	const [deletePoint, { data: deletedData }] =
+		useDeleteInterestPointByIdMutation();
 	const navigate = useNavigate();
 
 	// Handling click outside of the sheet: https://dev.to/rashed_iqbal/how-to-handle-outside-clicks-in-react-with-typescript-4lmc
@@ -62,19 +63,20 @@ export default function InterestPointDetails({
 				navigate("/map");
 			}, 3000);
 		}
-	}, [deletedData]);
-
+	}, [deletedData, navigate, onClose]);
 
 	return (
 		<>
 			<aside
-				className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-[900] ${isOpen ? "translate-x-0" : "translate-x-full"
-					} rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
+				className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-[900] ${
+					isOpen ? "translate-x-0" : "translate-x-full"
+				} rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
 			>
 				{isEditing ? (
 					<EditInterestPointForm
 						interestPoint={selectedInterestPoint}
-						onClose={() => setIsEditing(false)} />
+						onClose={() => setIsEditing(false)}
+					/>
 				) : (
 					<>
 						<div className="flex justify-between items-start w-full">
@@ -92,9 +94,9 @@ export default function InterestPointDetails({
 									stroke="currentColor"
 									strokeWidth={2}
 								>
+									<title>Fermer les détails</title>
 									<path d="M18 6 6 18" />
 									<path d="m6 6 12 12" />
-
 								</svg>
 							</button>
 							<div className="flex gap-2">
@@ -102,8 +104,10 @@ export default function InterestPointDetails({
 									type="button"
 									onClick={() => setIsEditing(true)}
 									className="cursor-pointer text-gray-600 hover:text-gray-800 flex items-center gap-1 text-sm"
-								><span className="material-symbols-outlined text-xs">
-										edit</span>
+								>
+									<span className="material-symbols-outlined text-xs">
+										edit
+									</span>
 									Modifier
 								</button>
 								<button
@@ -111,7 +115,9 @@ export default function InterestPointDetails({
 									onClick={() => setShowConfirm(true)}
 									className="cursor-pointer text-red-600 flex items-center gap-1 text-sm"
 								>
-									<span className="material-symbols-outlined text-xs">delete</span>
+									<span className="material-symbols-outlined text-xs">
+										delete
+									</span>
 									Supprimer
 								</button>
 							</div>
@@ -136,7 +142,9 @@ export default function InterestPointDetails({
 
 							{selectedInterestPoint?.address && (
 								<div>
-									<h4 className="font-semibold text-[#706eeb]">📍&nbsp;Adresse</h4>
+									<h4 className="font-semibold text-[#706eeb]">
+										📍&nbsp;Adresse
+									</h4>
 									<p>{selectedInterestPoint.address}</p>
 								</div>
 							)}
@@ -144,7 +152,9 @@ export default function InterestPointDetails({
 							<div className="grid grid-cols-2 gap-4">
 								{selectedInterestPoint?.city && (
 									<div>
-										<h4 className="font-semibold text-[#706eeb]">🏙️&nbsp;Ville</h4>
+										<h4 className="font-semibold text-[#706eeb]">
+											🏙️&nbsp;Ville
+										</h4>
 										<p>{selectedInterestPoint?.city.name}</p>
 									</div>
 								)}
