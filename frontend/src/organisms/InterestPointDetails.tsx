@@ -47,7 +47,8 @@ export default function InterestPointDetails({
 
 	const handleDelete = async () => {
 		try {
-			await deletePoint({ variables: { interestPointId: interestPoint.id } });
+			if (interestPoint)
+				await deletePoint({ variables: { interestPointId: interestPoint.id } });
 		} catch (error) {
 			console.error("Erreur suppression :", error);
 		}
