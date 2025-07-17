@@ -176,22 +176,20 @@ describe("Submit valid form without triggering any server error", () => {
 		await waitFor(() => {
 			expect(mockNavigate).toHaveBeenCalledTimes(1);
 		});
-		// expect(mockNavigate).toHaveBeenCalledTimes(1);
 	});
+	it("should display a success message after successful registration", async () => {
+		fillValidForm();
+		const submitButton = screen.getByRole("button", { name: "M'inscrire" });
 
-	// it("should display a success message after successful registration", async () => {
-	// 	fillValidForm();
-	// 	const submitButton = screen.getByRole("button", { name: "M'inscrire" });
+		fireEvent.click(submitButton);
+		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
 
-	// 	fireEvent.click(submitButton);
-	// 	await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
-
-	// 	expect(
-	// 		screen.getByText(
-	// 			"Félicitations, votre compte a été créé avec succès ! 🎉",
-	// 		),
-	// 	).toBeInTheDocument();
-	// });
+		expect(
+			screen.getByText(
+				"Félicitations, votre compte a été créé avec succès ! 🎉",
+			),
+		).toBeInTheDocument();
+	});
 });
 
 describe("Submit valid form but trigger server errors", () => {
