@@ -116,6 +116,7 @@ export default function SearchBar() {
 											: "hover:bg-gray-100"
 									}`}
 									onClick={() => handleCitySelect(city)}
+									data-testid={`city-option-${city.name.toLowerCase()}`}
 								>
 									{city.name} ({city.postalCode})
 								</button>
