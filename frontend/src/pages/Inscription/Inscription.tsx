@@ -242,6 +242,7 @@ function Inscription() {
 									}
 									value={formData[field]}
 									onChange={handleChange}
+									data-testid={`input-${field}`}
 									className="w-full outline-none text-gray-800 bg-transparent"
 								/>
 								{(field === "password" || field === "confirmPassword") && (
@@ -298,6 +299,7 @@ function Inscription() {
 					</div>
 
 					<button
+						data-testid="register-button"
 						type="submit"
 						className="w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] mt-5"
 					>
