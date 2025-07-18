@@ -1,11 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import {
-	act,
-	fireEvent,
-	render,
-	screen,
-	waitFor,
-} from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 vi.mock("../../store/citiesStore.ts", () => ({
