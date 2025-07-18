@@ -243,7 +243,6 @@ function Inscription() {
 									value={formData[field]}
 									onChange={handleChange}
 									className="w-full outline-none text-gray-800 bg-transparent"
-									role="textbox"
 								/>
 								{(field === "password" || field === "confirmPassword") && (
 									<button
