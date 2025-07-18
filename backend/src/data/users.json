@@ -1,43 +1,57 @@
 [
 	{
-		"name": "Anthony",
+		"firstname": "Anthony",
+		"lastname": "User",
 		"email": "anthony@email.com",
 		"password": "Anthony!123",
-		"city": "Paris",
+		"city": "Montpellier",
 		"role": "user"
 	},
 	{
-		"name": "Bechir",
+		"firstname": "Bechir",
+		"lastname": "User",
 		"email": "bechir@email.com",
 		"password": "Bechir!123",
-		"city": "Paris",
+		"city": "Toulouse",
 		"role": "user"
 	},
 	{
-		"name": "Caroline",
+		"firstname": "Caroline",
+		"lastname": "User",
 		"email": "caroline@email.com",
 		"password": "Caroline!123",
 		"city": "Paris",
 		"role": "user"
 	},
 	{
-		"name": "Maëva",
+		"firstname": "Maëva",
+		"lastname": "User",
 		"email": "maeva@email.com",
 		"password": "Maeva!123",
 		"city": "Paris",
 		"role": "user"
 	},
 	{
-		"name": "Noëllie",
+		"firstname": "Noëllie",
+		"lastname": "User",
 		"email": "noellie@email.com",
 		"password": "Noellie!123",
 		"city": "Paris",
 		"role": "user"
 	},
 	{
-		"name": "Raphael",
+		"firstname": "Raphael",
+		"lastname": "User",
 		"email": "raphael@email.com",
 		"password": "Raphael!123",
+		"city": "Montpellier",
+		"role": "user"
+	},
+	{
+		"firstname": "Test",
+		"lastname": "User",
+		"email": "test@email.com",
+		"password": "Test!123",
 		"city": "Paris",
 		"role": "user"
 	}
