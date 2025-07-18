@@ -196,7 +196,10 @@ function Inscription() {
 								/>
 							</svg>
 						</div>
-						<div className="text-sm text-[#706eeb] font-medium">
+						<div
+							className="text-sm text-[#706eeb] font-medium"
+							data-testid="popup-message"
+						>
 							{popupMessage.map((line, index) => (
 								<p key={index} className="mb-2">
 									{line}
@@ -240,6 +243,7 @@ function Inscription() {
 									value={formData[field]}
 									onChange={handleChange}
 									className="w-full outline-none text-gray-800 bg-transparent"
+									role="textbox"
 								/>
 								{(field === "password" || field === "confirmPassword") && (
 									<button
