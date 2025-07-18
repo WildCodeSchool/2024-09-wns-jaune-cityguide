@@ -97,6 +97,7 @@ export default function SearchBar() {
 				}}
 				onFocus={() => setDropdownIsOpen(true)}
 				onKeyDown={handleKeyDown}
+				data-testid="search-bar-input"
 			/>
 			{dropdownIsOpen && (
 				<ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-30 overflow-y-auto shadow-lg">
