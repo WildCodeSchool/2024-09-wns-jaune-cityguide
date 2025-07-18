@@ -10,7 +10,6 @@ interface NewCityFormData {
 	postalCode: string;
 	latitude: number;
 	longitude: number;
-	interestPoints?: [];
 }
 
 interface NewCityFormProps {
@@ -42,7 +41,6 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		postalCode: "",
 		latitude: 0,
 		longitude: 0,
-		interestPoints: [],
 	});
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,7 +52,6 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 				variables: {
 					data: {
 						...formData,
-						interestPoints: formData.interestPoints ?? [],
 					},
 				},
 			});
@@ -67,7 +64,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 				if (error.graphQLErrors?.length) {
 					const graphQLError = error.graphQLErrors[0];
 					console.error("GraphQL Error:", graphQLError);
-					if (graphQLError?.extensions?.code === "BAD_REQUEST") {
+					if (graphQLError?.extensions?.code === "BAD_USER_INPUT") {
 						setErrorMessage(
 							"La ville sélectionnée existe déjà en base de données.",
 						);
