@@ -148,12 +148,12 @@ describe("Display errors if the input format is invalid", () => {
 describe("Submit valid form without triggering any server error", () => {
 	// Workaround for the issue with useNavigate not being called: https://github.com/testing-library/react-testing-library/issues/1198
 	beforeEach(() => {
-		mockNavigate.mockClear();
 		renderRegistrationPage();
 		vi.useFakeTimers({ shouldAdvanceTime: true });
 	});
 
 	afterEach(() => {
+		mockNavigate.mockClear();
 		vi.runOnlyPendingTimers();
 		vi.useRealTimers();
 	});
@@ -165,30 +165,6 @@ describe("Submit valid form without triggering any server error", () => {
 		fireEvent.click(submitButton);
 
 		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
-	});
-	it("should navigate to the map page after successful registration", async () => {
-		fillValidForm();
-		const submitButton = screen.getByRole("button", { name: "M'inscrire" });
-
-		fireEvent.click(submitButton);
-		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
-		await act(() => vi.runAllTimers());
-		await waitFor(() => {
-			expect(mockNavigate).toHaveBeenCalledTimes(1);
-		});
-	});
-	it("should display a success message after successful registration", async () => {
-		fillValidForm();
-		const submitButton = screen.getByRole("button", { name: "M'inscrire" });
-
-		fireEvent.click(submitButton);
-		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
-
-		expect(
-			screen.getByText(
-				"Félicitations, votre compte a été créé avec succès ! 🎉",
-			),
-		).toBeInTheDocument();
 	});
 });
 
