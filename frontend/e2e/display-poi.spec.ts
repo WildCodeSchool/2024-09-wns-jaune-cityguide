@@ -9,7 +9,7 @@ test.describe("Display the details of a selected interest point", () => {
 		await page.getByRole("button", { name: "Voir la carte" }).click();
 		await expect(page).toHaveURL(/\/map$/);
 
-		const searchInput = page.getByPlaceholder("Rechercher une ville...");
+		const searchInput = page.getByTestId("search-bar-input");
 		await searchInput.fill("lyon");
 
 		await page.waitForSelector('[data-testid="city-option-lyon"]');
