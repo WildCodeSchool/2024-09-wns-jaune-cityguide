@@ -85,6 +85,9 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		setUserInput(city.fulltext);
 		setSuggestions([]);
 		setDropdownIsOpen(false);
+		if (!city.zipcode) {
+			setErrorMessage("Le code postal est manquant.");
+		}
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
