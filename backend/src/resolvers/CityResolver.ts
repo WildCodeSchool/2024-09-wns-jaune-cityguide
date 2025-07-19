@@ -62,6 +62,12 @@ export class CityResolver {
         extensions: { code: "BAD_USER_INPUT" },
       });
     }
+    if (!data.postalCode || data.postalCode.trim() === "") {
+      throw new GraphQLError("Invalid postal code", {
+        extensions: { code: "BAD_USER_INPUT" },
+      });
+    }
+
     let city = new City();
     city = Object.assign(city, data);
     await city.save();
