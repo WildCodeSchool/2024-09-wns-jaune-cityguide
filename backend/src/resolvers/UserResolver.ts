@@ -1,3 +1,11 @@
+import * as argon from "argon2";
+import { Type } from "class-transformer";
+import {
+  IsInt, IsString, IsUrl, Length, Max, Min 
+} from "class-validator";
+import type { Response } from "express";
+import { GraphQLError } from "graphql";
+import * as jwt from "jsonwebtoken";
 import {
   Arg,
   Authorized,
@@ -8,19 +16,19 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { User, UserRole } from "../entities/User";
-import type { Response } from "express";
-import * as argon from "argon2";
-import * as jwt from "jsonwebtoken";
-import { GraphQLError } from "graphql";
 import { City } from "../entities/City";
+import { User, UserRole } from "../entities/User";
 
 @InputType()
 export class NewUserInput {
   @Field()
+  @IsString()
+  @Length(2, 100)
   firstname!: string;
 
   @Field()
+  @IsString()
+  @Length(2, 100)
   lastname!: string;
 
   @Field()

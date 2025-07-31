@@ -1,19 +1,31 @@
-import { Field, InputType, ObjectType, Mutation, Resolver, ID, Arg, Query } from "type-graphql";
-import { Picture } from "../entities/Picture";
+import { Arg, Field, ID, InputType, Mutation, ObjectType, Query, Resolver } from "type-graphql";
 import { InterestPoint } from "../entities/InterestPoint";
+import { Picture } from "../entities/Picture";
+
+import { Type } from "class-transformer";
+import {
+  IsInt, IsString, IsUrl, Length, Max, Min 
+} from "class-validator";
 
 @InputType()
 export class PictureInput {
 	@Field()
+    @IsString()
+  @Length(2, 255)
 	name!: string;
 
 	@Field()
+  @IsString()
+  @Length(10, 2000)
 	description!: string;
 
 	@Field()
+    @IsUrl({ require_protocol: true })
 	url!: string;
 
-	@Field(()=> ID)
+	@Field(() => ID)
+  @Type(() => Number)
+  @IsInt()
 	interestPoint!: string;
 }
 

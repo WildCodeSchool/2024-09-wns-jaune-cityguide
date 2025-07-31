@@ -1,43 +1,67 @@
+import { Type } from "class-transformer";
+import {IsArray, 
+  IsInt, IsNumber, IsOptional, IsString, IsUrl, Length, Max, Min 
+} from "class-validator";
 import {
   Arg,
   Field,
+  ID,
   InputType,
+  Mutation,
   Query,
   Resolver,
-  Mutation,
-  ID,
 } from "type-graphql";
-import { InterestPoint } from "../entities/InterestPoint";
-import { City } from "../entities/City";
 import { Category } from "../entities/Category";
+import { City } from "../entities/City";
+import { InterestPoint } from "../entities/InterestPoint";
 
 @InputType()
 export class InterestPointInput {
   @Field()
+  @IsString()
+  @Length(2, 255)
   name!: string;
 
   @Field()
+  @IsString()
+  @Length(10, 2000)
   description!: string;
 
   @Field()
+  @IsString()
+  @Length(2, 255)
   address!: string;
 
   @Field()
+  @IsNumber()
+  @Min(-90)
+  @Max(90)
   latitude!: number;
 
   @Field()
+  @IsNumber()
+  @Min(-180)
+  @Max(180)
   longitude!: number;
 
   @Field()
+  @IsUrl({require_protocol: true})
   link_url!: string;
 
   @Field(() => ID)
+  @Type(() => Number)
+  @IsInt()
   city!: string;
 
   @Field(() => ID)
-  category!: string;
+  @Type(() => Number)
+  @IsInt()
+  category!: number;
 
   @Field(() => [ID], { nullable: true })
+  @IsOptional()
+  @IsArray()
+  @Type(() => Number)
   pictures?: string[];
 }
 

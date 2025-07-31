@@ -1,15 +1,24 @@
-import { Arg, Field, InputType, Query, Resolver, Mutation, ID } from "type-graphql";
+import {
+  IsString, Length
+} from "class-validator";
+import { Arg, Field, ID, InputType, Mutation, Query, Resolver } from "type-graphql";
 import { Category } from "../entities/Category";
 
 @InputType()
 class CategoryInput {
   @Field()
+  @IsString()
+  @Length(2, 100)
   name!: string;
 
   @Field({ nullable: true })
+  @IsString()
+  @Length(10, 2000)
   description?: string;
 
   @Field()
+  @IsString()
+  @Length(7, 7)
   color!: string;
 }
 

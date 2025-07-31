@@ -1,16 +1,20 @@
+import { Type } from "class-transformer";
+import {IsArray, 
+  IsInt, IsNumber, IsOptional, IsString, IsUrl, Length, Max, Min 
+} from "class-validator";
+import { GraphQLError } from "graphql";
 import {
   Arg,
   Field,
+  ID,
   InputType,
+  Mutation,
   Query,
   Resolver,
-  Mutation,
-  ID,
 } from "type-graphql";
 import { In, Like } from "typeorm";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
-import { GraphQLError } from "graphql";
 
 
 @InputType()
