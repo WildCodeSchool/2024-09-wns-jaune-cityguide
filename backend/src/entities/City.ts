@@ -5,6 +5,8 @@ import {
 	Entity,
 	PrimaryGeneratedColumn,
 	OneToMany,
+	CreateDateColumn,
+	UpdateDateColumn,
 } from "typeorm";
 import { InterestPoint } from "./InterestPoint";
 import { User } from "./User";
@@ -45,4 +47,20 @@ export class City extends BaseEntity {
 		(user) => user.city,
 	)
 	users!: User[];
+
+	@Field(() => Date)
+	@CreateDateColumn({
+		name: "created_at",
+		type: "timestamptz",
+		default: () => "CURRENT_TIMESTAMP",
+	})
+	createdAt!: Date;
+
+	@Field(() => Date, { nullable: true })
+	@UpdateDateColumn({
+		name: "updated_at",
+		type: "timestamptz",
+		nullable: true,
+	})
+	updatedAt?: Date;
 }

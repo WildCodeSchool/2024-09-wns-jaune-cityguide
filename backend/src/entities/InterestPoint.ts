@@ -6,6 +6,8 @@ import {
 	PrimaryGeneratedColumn,
 	ManyToOne,
 	OneToMany,
+	CreateDateColumn,
+	UpdateDateColumn,
 } from "typeorm";
 import { Category } from "./Category";
 import { City } from "./City";
@@ -64,4 +66,20 @@ export class InterestPoint extends BaseEntity {
 		{ onDelete: "CASCADE", onUpdate: "CASCADE" },
 	)
 	pictures!: Picture[];
+
+	@Field(() => Date)
+	@CreateDateColumn({
+		name: "created_at",
+		type: "timestamptz",
+		default: () => "CURRENT_TIMESTAMP",
+	})
+	createdAt!: Date;
+
+	@Field(() => Date, { nullable: true })
+	@UpdateDateColumn({
+		name: "updated_at",
+		type: "timestamptz",
+		nullable: true,
+	})
+	updatedAt?: Date;
 }
