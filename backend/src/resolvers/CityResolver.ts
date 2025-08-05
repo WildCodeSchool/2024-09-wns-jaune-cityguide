@@ -1,4 +1,4 @@
-import {IsArray, IsNumber, IsOptional, IsString, IsUrl, Length, Max, Min } from "class-validator";
+import {IsArray, IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
 import {
   Arg,
   Field,
@@ -78,10 +78,15 @@ export class CityResolver {
 
   @Mutation(() => City)
   async createCity(@Arg("data") data: CityInput) {
-    const existingCity = await City.findOne({ where: { postalCode: data.postalCode } });
-    if (existingCity) {
-      throw badUserInputError("La ville existe déjà.");
-    }
+    const existingCity = await City.findOne({ 
+      where: { 
+        name: data.name, 
+        postalCode: data.postalCode 
+      } 
+    });
+  if (existingCity) {
+    throw badUserInputError("Une ville avec ce nom et ce code postal existe déjà.");
+  }
     let city = new City();
     city = Object.assign(city, data);
     const interestPoints = data.interestPoints
