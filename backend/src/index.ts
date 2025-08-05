@@ -67,7 +67,7 @@ const start = async () => {
 		},
 	});
 
-	console.log("Backend started on port#" + port);
+	console.log(`Backend started on port #${port}`);
 };
 
 start();
