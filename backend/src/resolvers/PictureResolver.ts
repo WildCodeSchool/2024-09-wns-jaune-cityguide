@@ -1,16 +1,16 @@
 import { Arg, Field, ID, InputType, Mutation, ObjectType, Query, Resolver } from "type-graphql";
 import { InterestPoint } from "../entities/InterestPoint";
 import { Picture } from "../entities/Picture";
-
 import { Type } from "class-transformer";
 import {
   IsInt, IsString, IsUrl, Length, Max, Min 
 } from "class-validator";
+import { checkIdFormat, notFoundError } from "../utils/errors";
 
 @InputType()
 export class PictureInput {
 	@Field()
-    @IsString()
+  @IsString()
   @Length(2, 255)
 	name!: string;
 
@@ -20,7 +20,7 @@ export class PictureInput {
 	description!: string;
 
 	@Field()
-    @IsUrl({ require_protocol: true })
+  @IsUrl({ require_protocol: true })
 	url!: string;
 
 	@Field(() => ID)
@@ -45,18 +45,27 @@ export class PictureResolver {
 
   @Query(() => Picture)
   async getPictureById(@Arg("pictureId") id: string) {
-    const picture = await Picture.findOneOrFail({ 
+    checkIdFormat(id);
+    const picture = await Picture.findOne({ 
       where: { id }, 
       relations: [
         "interestPoint", 
         "interestPoint.city"
       ] 
     });
+    if (!picture) {
+      throw notFoundError("L'image sélectionnée n'existe pas.");
+    }
     return picture;
   }
 
   @Query(() => [Picture])
   async getPicturesByInterestPoint(@Arg("interestPointId") id: string) {
+    checkIdFormat(id);
+    const interestPoint = await InterestPoint.findOneBy({ id });
+    if (!interestPoint) {
+      throw notFoundError("Le point d'intérêt sélectionné n'existe pas.");
+    }
     const pictures = await Picture.find({ 
       where: { interestPoint: { id } }, 
       relations: [
