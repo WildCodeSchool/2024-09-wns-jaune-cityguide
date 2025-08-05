@@ -7,6 +7,7 @@ import {
 	JoinColumn,
 	ManyToOne,
 	PrimaryGeneratedColumn,
+	Unique,
 	UpdateDateColumn,
 } from "typeorm";
 import { City } from "./City";
@@ -25,6 +26,7 @@ registerEnumType(UserRole, {
 
 @Entity()
 @ObjectType()
+@Unique(["email"])
 export class User extends BaseEntity {
 	@Field()
 	@PrimaryGeneratedColumn()
