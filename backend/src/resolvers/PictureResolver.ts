@@ -1,7 +1,7 @@
 import { Arg, Field, ID, InputType, Mutation, ObjectType, Query, Resolver } from "type-graphql";
 import { InterestPoint } from "../entities/InterestPoint";
 import { Picture } from "../entities/Picture";
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 import {
   IsInt, IsString, IsUrl, Length, Max, Min 
 } from "class-validator";
@@ -10,6 +10,7 @@ import { checkIdFormat, notFoundError } from "../utils/errors";
 @InputType()
 export class PictureInput {
 	@Field()
+  @Transform(({ value }) => value.trim())
   @IsString()
   @Length(2, 255)
 	name!: string;
@@ -20,6 +21,7 @@ export class PictureInput {
 	description!: string;
 
 	@Field()
+  @Transform(({ value }) => value.trim())
   @IsUrl({ require_protocol: true })
 	url!: string;
 
@@ -78,8 +80,11 @@ export class PictureResolver {
 
   @Mutation(() => Picture)
   async createPicture(@Arg("data") data: PictureInput) {
-    const interestPoint = await InterestPoint.findOneOrFail({ where: { id: data.interestPoint } });
-
+    checkIdFormat(data.interestPoint);
+    const interestPoint = await InterestPoint.findOne({ where: { id: data.interestPoint } });
+    if (!interestPoint) {
+      throw notFoundError("Le point d'intérêt sélectionné n'existe pas.");
+    }
     const picture = new Picture();
     Object.assign(picture, data);
     picture.interestPoint = interestPoint;
@@ -95,8 +100,6 @@ export class PictureResolver {
     picture = Object.assign(picture, data);
     
     const interestPoint = await InterestPoint.findOneOrFail({ where: { id: data.interestPoint } });
-    
-    Object.assign(picture, data);
     picture.interestPoint = interestPoint;
     
     await picture.save();
@@ -105,6 +108,11 @@ export class PictureResolver {
 
   @Mutation(() => Boolean)
   async deletePictureById(@Arg("pictureId") id: string) {
+    checkIdFormat(id);
+    const picture = await Picture.findOne({ where: { id } });
+    if (!picture) {
+      throw notFoundError("L'image sélectionnée n'existe pas.");
+    }
     return (await Picture.delete({ id })).affected;
   }
 }

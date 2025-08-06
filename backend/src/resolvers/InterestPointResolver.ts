@@ -12,10 +12,12 @@ import { Category } from "../entities/Category";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
 import { checkIdFormat, notFoundError } from "../utils/errors";
+import { Transform } from "class-transformer/types/decorators/transform.decorator";
 
 @InputType()
 export class InterestPointInput {
   @Field()
+  @Transform(({ value }) => value.trim())
   @IsString({ message: "Le nom du point d'intérêt doit être une chaîne de caractères." })
   @Length(2, 255)
   name!: string;
@@ -26,6 +28,7 @@ export class InterestPointInput {
   description!: string;
 
   @Field()
+  @Transform(({ value }) => value.trim())
   @IsString({ message: "L'adresse doit être une chaîne de caractères" })
   @Length(2, 255, {
     message: "L'adresse doit contenir entre 2 et 255 caractères.",
@@ -45,6 +48,7 @@ export class InterestPointInput {
   longitude!: number;
 
   @Field()
+  @Transform(({ value }) => value.trim())
   @IsUrl({require_protocol: true})
   link_url!: string;
 

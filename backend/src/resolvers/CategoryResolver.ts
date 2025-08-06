@@ -1,14 +1,16 @@
+import { Transform } from "class-transformer";
 import {
   IsString, Length,
   Matches
 } from "class-validator";
 import { Arg, Field, ID, InputType, Mutation, Query, Resolver } from "type-graphql";
 import { Category } from "../entities/Category";
-import { checkIdFormat, notFoundError } from "../utils/errors";
+import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
 
 @InputType()
 class CategoryInput {
   @Field()
+  @Transform(({ value }) => value.trim())
   @IsString({ message: "Le nom de la catégorie doit être une chaîne de caractères." })
   @Length(2, 100, {
     message: "Le nom de la catégorie doit contenir entre 2 et 100 caractères.",
@@ -16,11 +18,13 @@ class CategoryInput {
   name!: string;
 
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim())
   @IsString()
   @Length(10, 2000)
   description?: string;
 
   @Field()
+  @Transform(({ value }) => value.trim().toLowerCase())
   @IsString()
   @Matches(/^#[0-9a-fA-F]{6}$/, {
   message: "La couleur doit être un code hexadécimal valide (ex: #aabbcc)",
@@ -31,6 +35,7 @@ class CategoryInput {
 @InputType()
 class UpdateCategoryInput {
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim())
   @IsString({ message: "Le nom de la catégorie doit être une chaîne de caractères." })
   @Length(2, 100, {
     message: "Le nom de la catégorie doit contenir entre 2 et 100 caractères.",
@@ -38,11 +43,13 @@ class UpdateCategoryInput {
   name?: string;
 
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim())
   @IsString()
   @Length(10, 2000)
   description?: string;
 
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim().toLowerCase())
   @IsString()
     @Matches(/^#[0-9a-fA-F]{6}$/, {
   message: "La couleur doit être un code hexadécimal valide (ex: #aabbcc)",
@@ -70,6 +77,8 @@ export class CategoryResolver {
 
   @Mutation(() => Category)
   async createCategory(@Arg("data") data: CategoryInput) {
+    const existingCategory = await Category.findOne({ where: { name: data.name } });
+    if (existingCategory) throw badUserInputError("Une catégorie avec ce nom existe déjà.");
     const category = new Category();
     Object.assign(category, data);
     await category.save();

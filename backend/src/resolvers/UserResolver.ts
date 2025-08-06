@@ -18,20 +18,24 @@ import {
 import { City } from "../entities/City";
 import { User, UserRole } from "../entities/User";
 import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
+import { Transform } from "class-transformer";
 
 @InputType()
 export class NewUserInput {
   @Field()
+  @Transform(({ value }) => value.trim())
   @IsString()
   @Length(1, 100)
   firstname!: string;
 
   @Field()
+  @Transform(({ value }) => value.trim())
   @IsString()
   @Length(1, 100)
   lastname!: string;
 
   @Field()
+  @Transform(({ value }) => value.trim().toLowerCase())
   @IsString()
   @Length(5, 255)
   @Matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
@@ -43,12 +47,14 @@ export class NewUserInput {
   password!: string;
 
   @Field()
+  @Transform(({ value }) => value.trim())
   cityId!: string;
 }
 
 @InputType()
 export class UserInput {
   @Field()
+  @Transform(({ value }) => value.trim().toLowerCase())
   @IsString()
   @Length(5, 255)
   @Matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
@@ -57,18 +63,22 @@ export class UserInput {
   email!: string;
 
   @Field()
+  @Transform(({ value }) => value.trim())
   password!: string;
 }
 
 @InputType()
 export class UpdateUserInput {
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim())
   firstname?: string;
 
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim())
   lastname?: string;
 
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim().toLowerCase())
   @IsString()
   @Length(5, 255)
   @Matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {

@@ -1,3 +1,4 @@
+import { Transform } from "class-transformer";
 import {IsArray, IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
 import {
   Arg,
@@ -17,11 +18,13 @@ import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors
 @InputType()
 export class CityInput {
   @Field()
+  @Transform(({ value }) => value.trim())
   @IsString()
   @Length(2, 255)
   name!: string;
 
   @Field()
+  @Transform(({ value }) => value.trim())
   @IsString({ message: "Le code postal doit être une chaîne de caractères." })
   @Length(5, 10, {
     message: "Le code postal doit contenir entre 5 et 10 caractères.",
@@ -43,7 +46,7 @@ export class CityInput {
   @Field(() => [ID])
   @IsOptional()
   @IsArray()
-  interestPoints?: InterestPoint[];
+  interestPoints?: string[];
 }
 
 @Resolver(City)
@@ -102,8 +105,8 @@ export class CityResolver {
     @Arg("cityId") id: string,
     @Arg("data") data: CityInput
   ) {
-    let city = await City.findOneByOrFail({ id });
     checkIdFormat(id);
+    let city = await City.findOneByOrFail({ id });
     city = Object.assign(city, data);
     const interestPoints = data.interestPoints
       ? await InterestPoint.findBy({ id: In(data.interestPoints) })
@@ -116,6 +119,10 @@ export class CityResolver {
   @Mutation(() => Boolean)
   async deleteCityById(@Arg("cityId") id: string) {
     checkIdFormat(id);
-    return (await City.delete({ id })).affected;
+    const city = await City.findOne({ where: { id } });
+    if (!city) {
+      throw notFoundError("La ville sélectionnée n'existe pas.");
+    }
+    return (await City.delete(city.id)).affected;
   }
 }
