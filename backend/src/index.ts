@@ -16,7 +16,7 @@ config();
 
 const port = process.env.PORT ? Number.parseInt(process.env.PORT, 10) : 3000;
 
-if (isNaN(port) || port < 0 || port > 65535) {
+if (Number.isNaN(port) || port < 0 || port > 65535) {
 	throw new Error(`Invalid port value: ${process.env.PORT}`);
 }
 
