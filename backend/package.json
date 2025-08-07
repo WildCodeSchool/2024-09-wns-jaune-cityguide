@@ -21,6 +21,7 @@
 		"dotenv": "^16.4.7",
 		"graphql": "^16.10.0",
 		"graphql-scalars": "^1.23.0",
+		"isomorphic-dompurify": "^2.26.0",
 		"jsonwebtoken": "^9.0.2",
 		"nodemailer": "^6.10.0",
 		"pg": "^8.13.1",
