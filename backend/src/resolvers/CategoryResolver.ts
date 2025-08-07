@@ -6,6 +6,7 @@ import {
 import { Arg, Field, ID, InputType, Mutation, Query, Resolver } from "type-graphql";
 import { Category } from "../entities/Category";
 import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
+import { sanitizeObjectStrings } from "../utils/sanitize";
 
 @InputType()
 class CategoryInput {
@@ -80,7 +81,12 @@ export class CategoryResolver {
     const existingCategory = await Category.findOne({ where: { name: data.name } });
     if (existingCategory) throw badUserInputError("Une catégorie avec ce nom existe déjà.");
     const category = new Category();
-    Object.assign(category, data);
+    const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "description",
+      "color",
+    ]);
+    Object.assign(category, cleanData);
     await category.save();
     return category;
   }
@@ -95,11 +101,12 @@ export class CategoryResolver {
     if (!category) {
       throw notFoundError("La catégorie sélectionnée n'existe pas.");
     }
-    Object.assign(category, {
-      name: data.name,
-      description: data.description,
-      color: data.color,
-    });
+    const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "description",
+      "color",
+    ]);
+    Object.assign(category, cleanData);
     await category.save();
     return category;
   }

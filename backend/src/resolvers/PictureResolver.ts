@@ -6,6 +6,8 @@ import {
   IsInt, IsString, IsUrl, Length, Max, Min 
 } from "class-validator";
 import { checkIdFormat, notFoundError } from "../utils/errors";
+import { sanitize } from "isomorphic-dompurify";
+import { sanitizeObjectStrings } from "../utils/sanitize";
 
 @InputType()
 export class PictureInput {
@@ -86,7 +88,12 @@ export class PictureResolver {
       throw notFoundError("Le point d'intérêt sélectionné n'existe pas.");
     }
     const picture = new Picture();
-    Object.assign(picture, data);
+    const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "description",
+      "url",
+    ]);
+    Object.assign(picture, cleanData);
     picture.interestPoint = interestPoint;
 
     await picture.save();
@@ -96,9 +103,13 @@ export class PictureResolver {
   @Mutation(() => Picture)
   async updatePictureById(@Arg("pictureId") id: string, @Arg("data") data: PictureInput) {
     let picture = await Picture.findOneByOrFail({ id });
-    
-    picture = Object.assign(picture, data);
-    
+    const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "description",
+      "url",
+    ]);
+    picture = Object.assign(picture, cleanData);
+
     const interestPoint = await InterestPoint.findOneOrFail({ where: { id: data.interestPoint } });
     picture.interestPoint = interestPoint;
     

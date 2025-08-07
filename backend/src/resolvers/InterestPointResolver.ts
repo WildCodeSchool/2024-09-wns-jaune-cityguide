@@ -12,7 +12,8 @@ import { Category } from "../entities/Category";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
 import { checkIdFormat, notFoundError } from "../utils/errors";
-import { Transform } from "class-transformer/types/decorators/transform.decorator";
+import { Transform } from "class-transformer";
+import { sanitizeObjectStrings } from "../utils/sanitize";
 
 @InputType()
 export class InterestPointInput {
@@ -132,11 +133,17 @@ export class InterestPointResolver {
     }
 
     let interestPoint = new InterestPoint();
-    interestPoint = Object.assign(interestPoint, data);
+    const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "description",
+      "address",
+      "link_url",
+    ]);
+    interestPoint = Object.assign(interestPoint, cleanData);
     interestPoint.city = city;
     interestPoint.category = category;
-    
-    await interestPoint.save()
+
+    await interestPoint.save();
     return interestPoint;
   }
 	
@@ -159,9 +166,15 @@ export class InterestPointResolver {
 		let newcategory: Category
     if(interestPoint.category.id !== String(data.category)) {
       newcategory = await Category.findOneByOrFail({id: String(data.category)})
-    } else newcategory = interestPoint.category
+    } else newcategory = interestPoint.category;
+    const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "description",
+      "address",
+      "link_url",
+    ]);
 		interestPoint = Object.assign(interestPoint, {
-			...data,
+			...cleanData,
 			category: newcategory
 		})
 		await interestPoint.save()

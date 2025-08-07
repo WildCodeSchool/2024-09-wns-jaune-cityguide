@@ -13,6 +13,7 @@ import { In } from "typeorm";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
 import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
+import { sanitizeObjectStrings } from "../utils/sanitize";
 
 
 @InputType()
@@ -91,7 +92,13 @@ export class CityResolver {
     throw badUserInputError("Une ville avec ce nom et ce code postal existe déjà.");
   }
     let city = new City();
-    city = Object.assign(city, data);
+    const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "postalCode",
+      "latitude",
+      "longitude",
+    ]);
+    city = Object.assign(city, cleanData);
     const interestPoints = data.interestPoints
       ? await InterestPoint.findBy({ id: In(data.interestPoints) })
       : [];
@@ -107,7 +114,13 @@ export class CityResolver {
   ) {
     checkIdFormat(id);
     let city = await City.findOneByOrFail({ id });
-    city = Object.assign(city, data);
+        const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "postalCode",
+      "latitude",
+      "longitude",
+    ]);
+    city = Object.assign(city, cleanData);
     const interestPoints = data.interestPoints
       ? await InterestPoint.findBy({ id: In(data.interestPoints) })
       : [];
