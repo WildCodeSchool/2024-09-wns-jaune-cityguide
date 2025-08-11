@@ -31,7 +31,7 @@ export function sanitizeObjectStrings<T>(
 				console.warn(
 					`[SECURITY WARNING] Field "${String(key)}" has been emptied during sanitization.`,
 				);
-				console.warn(`→ Initial content: "${value}"`);
+				console.warn(`Initial content: "${value}"`);
 				throw badUserInputError(
 					`Le champ "${String(key)}" contient du contenu invalide. Opération interrompue.`,
 				);
