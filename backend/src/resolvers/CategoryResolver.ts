@@ -3,7 +3,7 @@ import {
   IsString, Length,
   Matches
 } from "class-validator";
-import { Arg, Field, ID, InputType, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
 import { Category } from "../entities/Category";
 import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
 import { sanitizeObjectStrings } from "../utils/sanitize";
@@ -12,9 +12,9 @@ import { sanitizeObjectStrings } from "../utils/sanitize";
 class CategoryInput {
   @Field()
   @Transform(({ value }) => value.trim())
-  @IsString({ message: "Le nom de la catégorie doit être une chaîne de caractères." })
+  @IsString({ message: "Category name must be a string." })
   @Length(2, 100, {
-    message: "Le nom de la catégorie doit contenir entre 2 et 100 caractères.",
+    message: "Category name must be between 2 and 100 characters.",
   })
   name!: string;
 
@@ -28,8 +28,8 @@ class CategoryInput {
   @Transform(({ value }) => value.trim().toLowerCase())
   @IsString()
   @Matches(/^#[0-9a-fA-F]{6}$/, {
-  message: "La couleur doit être un code hexadécimal valide (ex: #aabbcc)",
-})
+    message: "Color must be a valid hexadecimal code (ex: #aabbcc)",
+  })
   color!: string;
 }
 
@@ -37,9 +37,9 @@ class CategoryInput {
 class UpdateCategoryInput {
   @Field({ nullable: true })
   @Transform(({ value }) => value.trim())
-  @IsString({ message: "Le nom de la catégorie doit être une chaîne de caractères." })
+  @IsString({ message: "Category name must be a string." })
   @Length(2, 100, {
-    message: "Le nom de la catégorie doit contenir entre 2 et 100 caractères.",
+    message: "Category name must be between 2 and 100 characters.",
   })
   name?: string;
 
@@ -52,9 +52,9 @@ class UpdateCategoryInput {
   @Field({ nullable: true })
   @Transform(({ value }) => value.trim().toLowerCase())
   @IsString()
-    @Matches(/^#[0-9a-fA-F]{6}$/, {
-  message: "La couleur doit être un code hexadécimal valide (ex: #aabbcc)",
-})
+  @Matches(/^#[0-9a-fA-F]{6}$/, {
+    message: "Color must be a valid hexadecimal code (ex: #aabbcc)",
+  })
   color?: string;
 }
 
@@ -71,7 +71,7 @@ export class CategoryResolver {
     checkIdFormat(id);
     const category = await Category.findOne({ where: { id } });
     if (!category) {
-      throw notFoundError("La catégorie sélectionnée n'existe pas.");
+      throw notFoundError("Selected category does not exist.");
     }
     return category;
   }
@@ -79,7 +79,7 @@ export class CategoryResolver {
   @Mutation(() => Category)
   async createCategory(@Arg("data") data: CategoryInput) {
     const existingCategory = await Category.findOne({ where: { name: data.name } });
-    if (existingCategory) throw badUserInputError("Une catégorie avec ce nom existe déjà.");
+    if (existingCategory) throw badUserInputError("A category with this name already exists.", "CATEGORY_ALREADY_EXISTS");
     const category = new Category();
     const cleanData = sanitizeObjectStrings(data, [
       "name",
@@ -99,7 +99,7 @@ export class CategoryResolver {
     checkIdFormat(id);
     const category = await Category.findOneBy({ id });
     if (!category) {
-      throw notFoundError("La catégorie sélectionnée n'existe pas.");
+      throw notFoundError("Selected category does not exist.");
     }
     const cleanData = sanitizeObjectStrings(data, [
       "name",
@@ -116,7 +116,7 @@ export class CategoryResolver {
     checkIdFormat(id);
     const category = await Category.findOne({ where: { id } });
     if (!category) {
-      throw notFoundError("La catégorie sélectionnée n'existe pas.");
+      throw notFoundError("Selected category does not exist.");
     }
     return (await Category.delete({ id })).affected;
   }

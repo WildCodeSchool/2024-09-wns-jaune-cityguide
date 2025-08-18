@@ -19,20 +19,20 @@ import { sanitizeObjectStrings } from "../utils/sanitize";
 export class InterestPointInput {
   @Field()
   @Transform(({ value }) => value.trim())
-  @IsString({ message: "Le nom du point d'intérêt doit être une chaîne de caractères." })
+  @IsString({ message: "The name must be a string." })
   @Length(2, 255)
   name!: string;
 
   @Field()
-  @IsString({ message: "La description doit être une chaîne de caractères." })
+  @IsString({ message: "The description must be a string." })
   @Length(10, 2000)
   description!: string;
 
   @Field()
   @Transform(({ value }) => value.trim())
-  @IsString({ message: "L'adresse doit être une chaîne de caractères" })
+  @IsString({ message: "The address must be a string." })
   @Length(2, 255, {
-    message: "L'adresse doit contenir entre 2 et 255 caractères.",
+    message: "The address must be between 2 and 255 characters.",
   })
   address!: string;
 
@@ -81,7 +81,7 @@ export class InterestPointResolver {
   async getInterestPointsByCategory(@Arg("categoryId") id: string) {
     checkIdFormat(id);
     const category = await Category.findOne({ where: { id } });
-    if (!category) throw notFoundError("La catégorie sélectionnée n'existe pas.");
+    if (!category) throw notFoundError("Selected category does not exist.");
     const interestPoints = await InterestPoint.find({
       where: { category: { id } },
       relations: ["category", "city", "pictures"],
@@ -93,7 +93,7 @@ export class InterestPointResolver {
   async getInterestPointsByCity(@Arg("cityId") id: string) {
     checkIdFormat(id);
     const city = await City.findOne({ where: { id } });
-    if (!city) throw notFoundError("La ville sélectionnée n'existe pas.");
+    if (!city) throw notFoundError("Selected city does not exist.");
     const interestPoints = await InterestPoint.find({
       where: { city: { id } },
       relations: ["category", "city", "pictures"],
@@ -108,7 +108,7 @@ export class InterestPointResolver {
       where: { id },
       relations: ["category", "city", "pictures"],
     });
-    if (!interestPoint) throw notFoundError("Le point d'intérêt sélectionné n'existe pas.");
+    if (!interestPoint) throw notFoundError("Selected interest point does not exist.");
     return interestPoint;
   }
 
@@ -122,14 +122,14 @@ export class InterestPointResolver {
     checkIdFormat(data.city);
     const city = await City.findOne({ where: { id: data.city } });
     if (!city) {
-      throw notFoundError("La ville sélectionnée n'existe pas.");
+      throw notFoundError("Selected city does not exist.");
     }
     checkIdFormat(data.category);
     const category = await Category.findOneBy({
       id: String(data.category),
     });
     if (!category) {
-      throw notFoundError("La catégorie sélectionnée n'existe pas.");
+      throw notFoundError("Selected category does not exist.");
     }
 
     let interestPoint = new InterestPoint();
@@ -151,7 +151,7 @@ export class InterestPointResolver {
 	async deleteInterestPointById( @Arg("interestPointId") id: string) {
     checkIdFormat(id);
     const interestPoint = await InterestPoint.findOneBy({id});
-    if (!interestPoint) throw notFoundError("Le point d'intérêt sélectionné n'existe pas.");
+    if (!interestPoint) throw notFoundError("Selected interest point does not exist.");
 		return (await InterestPoint.delete({id})).affected
 	}
 	
@@ -162,7 +162,7 @@ export class InterestPointResolver {
 			where: {id: id},
 			relations: ["category", "pictures"]
 		})
-		if (!interestPoint) throw notFoundError("Le point d'intérêt sélectionné n'existe pas.");
+		if (!interestPoint) throw notFoundError("Selected interest point does not exist.");
 		let newcategory: Category
     if(interestPoint.category.id !== String(data.category)) {
       newcategory = await Category.findOneByOrFail({id: String(data.category)})

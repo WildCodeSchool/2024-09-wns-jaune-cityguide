@@ -1,12 +1,11 @@
+import { Transform, Type } from "class-transformer";
+import {
+  IsInt, IsString, IsUrl, Length,
+} from "class-validator";
 import { Arg, Field, ID, InputType, Mutation, ObjectType, Query, Resolver } from "type-graphql";
 import { InterestPoint } from "../entities/InterestPoint";
 import { Picture } from "../entities/Picture";
-import { Transform, Type } from "class-transformer";
-import {
-  IsInt, IsString, IsUrl, Length, Max, Min 
-} from "class-validator";
 import { checkIdFormat, notFoundError } from "../utils/errors";
-import { sanitize } from "isomorphic-dompurify";
 import { sanitizeObjectStrings } from "../utils/sanitize";
 
 @InputType()
@@ -58,7 +57,7 @@ export class PictureResolver {
       ] 
     });
     if (!picture) {
-      throw notFoundError("L'image sélectionnée n'existe pas.");
+      throw notFoundError("The selected picture does not exist.");
     }
     return picture;
   }
@@ -68,7 +67,7 @@ export class PictureResolver {
     checkIdFormat(id);
     const interestPoint = await InterestPoint.findOneBy({ id });
     if (!interestPoint) {
-      throw notFoundError("Le point d'intérêt sélectionné n'existe pas.");
+      throw notFoundError("The selected interest point does not exist.");
     }
     const pictures = await Picture.find({ 
       where: { interestPoint: { id } }, 
@@ -85,7 +84,7 @@ export class PictureResolver {
     checkIdFormat(data.interestPoint);
     const interestPoint = await InterestPoint.findOne({ where: { id: data.interestPoint } });
     if (!interestPoint) {
-      throw notFoundError("Le point d'intérêt sélectionné n'existe pas.");
+      throw notFoundError("The selected interest point does not exist.");
     }
     const picture = new Picture();
     const cleanData = sanitizeObjectStrings(data, [
@@ -122,7 +121,7 @@ export class PictureResolver {
     checkIdFormat(id);
     const picture = await Picture.findOne({ where: { id } });
     if (!picture) {
-      throw notFoundError("L'image sélectionnée n'existe pas.");
+      throw notFoundError("The selected picture does not exist.");
     }
     return (await Picture.delete({ id })).affected;
   }

@@ -2,6 +2,7 @@ import { Transform } from "class-transformer";
 import {IsArray, IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
 import {
   Arg,
+  Authorized,
   Field,
   ID,
   InputType,
@@ -26,9 +27,9 @@ export class CityInput {
 
   @Field()
   @Transform(({ value }) => value.trim())
-  @IsString({ message: "Le code postal doit être une chaîne de caractères." })
+  @IsString({ message: "Postal code must be a string." })
   @Length(5, 10, {
-    message: "Le code postal doit contenir entre 5 et 10 caractères.",
+    message: "Postal code must be between 5 and 10 characters.",
   })
   postalCode!: string;
 
@@ -70,7 +71,7 @@ export class CityResolver {
       relations: ["interestPoints", "users"],
     });
     if (!city) {
-      throw notFoundError("La ville sélectionnée n'existe pas.");
+      throw notFoundError("Selected city does not exist.");
     }
     return city;
   }
@@ -89,7 +90,7 @@ export class CityResolver {
       } 
     });
   if (existingCity) {
-    throw badUserInputError("Une ville avec ce nom et ce code postal existe déjà.");
+    throw badUserInputError("A city with this name and postal code already exists.", "CITY_ALREADY_EXISTS");
   }
     let city = new City();
     const cleanData = sanitizeObjectStrings(data, [

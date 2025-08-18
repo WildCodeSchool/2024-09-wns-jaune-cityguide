@@ -47,7 +47,6 @@ export class NewUserInput {
   password!: string;
 
   @Field()
-  @Transform(({ value }) => value.trim())
   cityId!: string;
 }
 
@@ -134,12 +133,12 @@ export class UserResolver {
 
     const existingUser = await User.findOneBy({ email: data.email });
     if (existingUser) {
-      throw badUserInputError("Cet email est déjà utilisé.");
+      throw badUserInputError("Email already used.", "EMAIL_ALREADY_IN_USE");
     }
 
     const city = await City.findOneBy({ id: data.cityId });
     if (!city) {
-      throw notFoundError("La ville sélectionnée n'existe pas.");
+      throw notFoundError("The selected city does not exist.");
     }
 
     const hashedPassword = await argon.hash(data.password);
@@ -253,7 +252,7 @@ export class UserResolver {
     checkIdFormat(id);
     const user = await User.findOne({ where: { id } });
     if (!user) {
-      throw notFoundError("Utilisateur non trouvé.");
+      throw notFoundError("User not found.");
     }
     Object.assign(user, data);
     await user.save();
@@ -266,7 +265,7 @@ export class UserResolver {
     checkIdFormat(id);
     const user = await User.findOne({ where: { id } });
     if (!user) {
-      throw notFoundError("Utilisateur non trouvé.");
+      throw notFoundError("User not found.");
     }
 
     // Stocker une copie de l'utilisateur avant suppression
