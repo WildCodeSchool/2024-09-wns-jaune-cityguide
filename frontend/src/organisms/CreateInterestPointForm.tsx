@@ -5,8 +5,9 @@ import {
 	useGetCategoriesQuery,
 	type InterestPointInput,
 } from "../libs/graphql/generated/graphql-types";
-import type { AddressAutocompleteAPIResult } from "../@types/types";
+import { useInterestPointsStore } from "../store/interestPointsStore";
 import { useCitiesStore } from "../store/citiesStore";
+import type { AddressAutocompleteAPIResult } from "../@types/types";
 
 type NewInterestPointFormProps = {
 	isOpen: boolean;
@@ -42,6 +43,9 @@ export default function CreateInterestPointForm({
 	const inputRef = useRef<HTMLInputElement>(null);
 	const resultRefs = useRef<(HTMLLIElement | null)[]>([]);
 	const isFromSelectionRef = useRef(false);
+
+  const { selectedCity } = useCitiesStore();
+  const { fetchInterestPointsByCity } = useInterestPointsStore();
 
 	const navigate = useNavigate();
 
@@ -129,13 +133,17 @@ export default function CreateInterestPointForm({
 				},
 			});
 
-			if (result?.data?.createInterestPoint) {
-				console.log("Interest point created successfully");
-			}
-		} catch (err) {
-			console.error("Erreur lors de la création :", err);
-		}
-	};
+      if (result?.data?.createInterestPoint) {
+        console.log("point créé")
+        if (selectedCity) {
+        fetchInterestPointsByCity(selectedCity.id); // Récupérer les points mis à jour
+      }
+      onClose?.();
+      }
+    } catch (err) {
+      console.error("Erreur lors de la création :", err);
+    }
+  };
 
 	useEffect(() => {
 		if (!createdData) return;
@@ -388,28 +396,26 @@ export default function CreateInterestPointForm({
 					</div>
 				</div>
 
-				<div className="flex justify-between items-center pt-4">
+		
+
+          <button
+            type="submit"
+            className="flex justify-center items-center w-full text-sm px-4 py-2 rounded-md primary-bg text-white hover:bg-purple-700 transition hover:cursor-pointer hover:text-gray-100"
+            disabled={submitting}
+          >
+            {submitting ? "Création en cours..." : "Créer"}
+          </button>
+
+          		<div className="flex justify-between items-center pt-4">
 					<button
 						type="button"
 						onClick={onClose}
-						className="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-100 hover:cursor-pointer"
+						className="flex justify-center items-center w-full border border-gray-300 px-3 py-2 text-sm px-4 py-2 rounded-md  hover:cursor-pointer hover:text-gray-500"
 					>
 						Annuler
 					</button>
-
-					<button
-						type="submit"
-						className={`bg-indigo-600 text-white px-6 py-2 rounded-md text-sm hover:bg-indigo-700 hover:cursor-pointer ${
-							!cityExists
-								? "bg-purple-200 text-gray-500 cursor-not-allowed"
-								: "bg-[#706eeb] text-white hover:bg-[#5c5acf]"
-						}`}
-						disabled={submitting || !cityExists}
-					>
-						{submitting ? "Création en cours..." : "Créer"}
-					</button>
-				</div>
-			</form>
-		</aside>
-	);
+        </div>
+      </form>
+    </aside>
+  )
 }

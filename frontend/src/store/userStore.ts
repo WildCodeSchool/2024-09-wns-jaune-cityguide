@@ -20,6 +20,7 @@ interface UserStore {
 	user: User | null;
 	users: User[] | [];
 	setUser: (user: User) => void;
+	updateUser: (data: Partial<User>) => void;
 	fetchUsers: () => Promise<void>;
 	clearUser: () => void;
 	updateUserRole: (userId: string, role: UserRole) => Promise<void>;
@@ -33,7 +34,8 @@ export const useUserStore = create<UserStore>()(
 				user: null,
 				users: [],
 				isLoading: false,
-				setUser: (user) => set((state) => ({ user })),
+				setUser: (user) => set({ user }),
+				updateUser: (data) => set((state) => state.user ? { user: { ...state.user, ...data } } : state),
 				fetchUsers: async () => {
 					set({ isLoading: false });
 					try {

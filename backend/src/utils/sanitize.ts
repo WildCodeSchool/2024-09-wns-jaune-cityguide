@@ -33,7 +33,8 @@ export function sanitizeObjectStrings<T>(
 				);
 				console.warn(`Initial content: "${value}"`);
 				throw badUserInputError(
-					`Le champ "${String(key)}" contient du contenu invalide. Opération interrompue.`,
+					`Field "${String(key)}" contains invalid content. Operation interrupted.`,
+					"INVALID_INPUT",
 				);
 			}
 			if (cleaned !== value) {

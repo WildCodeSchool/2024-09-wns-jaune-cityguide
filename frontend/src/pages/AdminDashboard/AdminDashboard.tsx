@@ -2,35 +2,30 @@ import { useState } from "react";
 import UserManager from "../Admin/UserManager";
 import CityManager from "./CityManager/CityManager";
 import CategoryManager from "../CategoryManager/CategoryManager";
+import { UserRole } from "../../libs/graphql/generated/graphql-types";
+import { useUserStore } from "../../store/userStore";
 
-type Props = {
-	userRole: string;
-};
-
-// L'utilisateur sera passé en prop ou stocké dans un contexte (par exemple `role`)
-// Ici, on suppose que le rôle de l'utilisateur est "superAdmin", "adminVille", ou "user"
-// // Si l'utilisateur est "user" il verra une page blanche
 const tabs = [
-	{ id: "cities", label: "Villes", roles: ["superadmin", "cityadmin"] },
-	{ id: "categories", label: "Catégories", roles: ["superadmin"] },
+	{ id: "cities", label: "Villes", roles: [UserRole.SuperAdmin, UserRole.CityAdmin] },
 	{
 		id: "users",
 		label: "Utilisateurs",
-		roles: ["superadmin", "cityadmin"],
+		roles: [UserRole.SuperAdmin, UserRole.CityAdmin],
 	},
+  { id: "categories", label: "Catégories", roles: [UserRole.SuperAdmin] },
 ];
 
-export default function Dashboard({ userRole }: Props) {
-	// TODO: uncomment this when user role is implemented
-	// const accessibleTabs = tabs.filter((tab) => tab.roles.includes(userRole));
-	// const [activeTab, setActiveTab] = useState(
-	// 	accessibleTabs.length > 0 ? accessibleTabs[0].id : null,
-	// );
+export default function Dashboard() {
+  const user = useUserStore((state) => state.user);
 
-	const accessibleTabs = tabs;
+	const accessibleTabs = user 
+  ? tabs.filter((tab) => tab.roles.includes(user.role)) 
+  : [];
 	const [activeTab, setActiveTab] = useState(
 		accessibleTabs.length > 0 ? accessibleTabs[0].id : null,
 	);
+  
+	
 
 	return (
 		<div className="flex flex-col grow max-h-screen sm:h-full overflow-hidden w-full bg-gray-50">
@@ -61,9 +56,12 @@ export default function Dashboard({ userRole }: Props) {
 			</nav>
 
 			<main className="flex grow p-3 w-full overflow-auto">
+       
 				{activeTab === "cities" && <CityManager />}
-				{activeTab === "categories" && <CategoryManager />}
+      
 				{activeTab === "users" && <UserManager />}
+         
+        {activeTab === "categories" && <CategoryManager />}
 				{!activeTab && (
 					<div className="text-gray-500 text-lg flex grow text-justify">
 						Vous n&rsquo;avez pas l&rsquo;autorisation d&rsquo;accéder à cette

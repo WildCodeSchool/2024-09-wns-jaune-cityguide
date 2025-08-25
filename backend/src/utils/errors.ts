@@ -9,10 +9,10 @@ export function notFoundError(message: string) {
 	});
 }
 
-export function badUserInputError(message: string) {
+export function badUserInputError(message: string, customCode?: string) {
 	return new GraphQLError(message, {
 		extensions: {
-			code: "BAD_USER_INPUT",
+			code: customCode ?? "BAD_USER_INPUT",
 		},
 	});
 }
@@ -25,7 +25,7 @@ export function checkIdFormat(id: string) {
 		!isPositive(formattedId)
 	) {
 		throw badUserInputError(
-			"L'identifiant fourni doit être une chaîne représentant un nombre entier positif.",
+			"The provided ID must be a string representing a positive integer.",
 		);
 	}
 	return formattedId;

@@ -67,17 +67,19 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 				if (error.graphQLErrors?.length) {
 					const graphQLError = error.graphQLErrors[0];
 					console.error("GraphQL Error:", graphQLError);
-					if (graphQLError?.extensions?.code === "BAD_REQUEST") {
+					if (graphQLError?.extensions?.code === "CITY_ALREADY_EXISTS") {
 						setErrorMessage(
 							"La ville sélectionnée existe déjà en base de données.",
 						);
 					} else {
+						console.error("GraphQL Error:", graphQLError);
 						setErrorMessage(
 							"Une erreur est survenue lors de la création de la ville.",
 						);
 					}
 				}
 			} else {
+				console.error("Unexpected Error:", error);
 				setErrorMessage("Une erreur inattendue est survenue.");
 			}
 		}
@@ -89,6 +91,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		setUserInput(city.fulltext);
 		setSuggestions([]);
 		setDropdownIsOpen(false);
+		setErrorMessage(null);
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

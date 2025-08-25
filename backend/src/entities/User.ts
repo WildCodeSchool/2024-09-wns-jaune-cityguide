@@ -13,10 +13,10 @@ import {
 import { City } from "./City";
 
 export enum UserRole {
-	SUPER_ADMIN = "superadmin",
-	CITY_ADMIN = "cityadmin",
-	USER = "user",
-	SUPER_USER = "superuser",
+	SUPER_ADMIN = "SUPER_ADMIN",
+	CITY_ADMIN = "CITY_ADMIN",
+	USER = "USER",
+	SUPER_USER = "SUPER_USER",
 }
 
 registerEnumType(UserRole, {
