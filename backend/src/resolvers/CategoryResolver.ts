@@ -3,10 +3,13 @@ import {
   IsString, Length,
   Matches
 } from "class-validator";
-import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Field, InputType, Mutation, Query, Resolver, ID, Ctx, } from "type-graphql";
+
 import { Category } from "../entities/Category";
-import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
+import { requireRole } from "../middleware/authChecker";
+import { UserRole } from "../entities/User";
 import { sanitizeObjectStrings } from "../utils/sanitize";
+import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
 
 @InputType()
 class CategoryInput {
@@ -77,7 +80,12 @@ export class CategoryResolver {
   }
 
   @Mutation(() => Category)
-  async createCategory(@Arg("data") data: CategoryInput) {
+  async createCategory(
+    @Arg("data") data: CategoryInput,
+    @Ctx() { user }: Context
+) {
+   requireRole(user, [UserRole.SUPER_ADMIN]);
+
     const existingCategory = await Category.findOne({ where: { name: data.name } });
     if (existingCategory) throw badUserInputError("A category with this name already exists.", "CATEGORY_ALREADY_EXISTS");
     const category = new Category();
@@ -94,8 +102,10 @@ export class CategoryResolver {
   @Mutation(() => Category)
   async replaceCategoryById(
     @Arg("categoryId") id: string,
-    @Arg("data") data: UpdateCategoryInput
+    @Arg("data") data: UpdateCategoryInput,
+    @Ctx() { user }: Context
   ) {
+    requireRole(user, [UserRole.SUPER_ADMIN]);
     checkIdFormat(id);
     const category = await Category.findOneBy({ id });
     if (!category) {
@@ -112,7 +122,11 @@ export class CategoryResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteCategoryById(@Arg("categoryId") id: string) {
+  async deleteCategoryById(
+    @Arg("categoryId") id: string,
+    @Ctx() { user }: Context
+) {
+    requireRole(user, [UserRole.SUPER_ADMIN]);
     checkIdFormat(id);
     const category = await Category.findOne({ where: { id } });
     if (!category) {

@@ -7,6 +7,7 @@ import {
   Mutation,
   Query,
   Resolver,
+  Ctx,
 } from "type-graphql";
 import { Category } from "../entities/Category";
 import { City } from "../entities/City";
@@ -14,6 +15,8 @@ import { InterestPoint } from "../entities/InterestPoint";
 import { checkIdFormat, notFoundError } from "../utils/errors";
 import { Transform } from "class-transformer";
 import { sanitizeObjectStrings } from "../utils/sanitize";
+import { requireRole } from "../middleware/authChecker";
+import { UserRole } from "../entities/User";
 
 @InputType()
 export class InterestPointInput {
@@ -118,7 +121,13 @@ export class InterestPointResolver {
   }
 
   @Mutation(() => InterestPoint)
-  async createInterestPoint(@Arg("data") data: InterestPointInput) {
+  async createInterestPoint(
+    @Arg("data") data: InterestPointInput,
+    @Ctx() { user }: Context
+  ) {
+
+    requireRole(user, [UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN]);
+
     checkIdFormat(data.city);
     const city = await City.findOne({ where: { id: data.city } });
     if (!city) {
@@ -148,7 +157,12 @@ export class InterestPointResolver {
   }
 	
 	@Mutation(() => Boolean)
-	async deleteInterestPointById( @Arg("interestPointId") id: string) {
+	async deleteInterestPointById( 
+    @Arg("interestPointId") id: string,
+    @Ctx() { user }: Context) {
+
+    requireRole(user, [UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN]);
+
     checkIdFormat(id);
     const interestPoint = await InterestPoint.findOneBy({id});
     if (!interestPoint) throw notFoundError("Selected interest point does not exist.");
@@ -156,7 +170,14 @@ export class InterestPointResolver {
 	}
 	
 	@Mutation(() => InterestPoint)
-	async replaceInterestPointById( @Arg("interestPointId") id: string, @Arg("data") data: InterestPointInput ) {
+	async replaceInterestPointById( 
+    @Arg("interestPointId") id: string, 
+    @Arg("data") data: InterestPointInput,
+    @Ctx() { user }: Context 
+  ) {
+
+    requireRole(user, [UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN]);
+
     checkIdFormat(id);
 		let interestPoint = await InterestPoint.findOne({
 			where: {id: id},
@@ -178,7 +199,7 @@ export class InterestPointResolver {
 			category: newcategory
 		})
 		await interestPoint.save()
-		console.log(interestPoint)
+
 		return interestPoint;
 	}
 }

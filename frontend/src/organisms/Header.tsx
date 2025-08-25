@@ -4,9 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
 import { useMenuStore } from "../store/menuStore";
 import { useMutationMutation } from "../libs/graphql/generated/graphql-types";
+import { UserRole } from "../libs/graphql/generated/graphql-types";
 
 export default function Navbar() {
-	const { user, clearUser } = useUserStore();
+	const user = useUserStore((state) => state.user);
+  const clearUser = useUserStore((state) => state.clearUser);
 	console.log("Navbar render user:", user);
 	const [logout] = useMutationMutation();
 	const navigate = useNavigate();
@@ -102,7 +104,7 @@ export default function Navbar() {
 									>
 										<div className="py-1" role="none">
 											<a
-												href="#"
+												href="/profile"
 												className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 												role="menuitem"
 												tabIndex={-1}
@@ -112,59 +114,59 @@ export default function Navbar() {
 												Mon profil
 											</a>
 
-											{user.role === "SUPER_ADMIN" && (
-												<a
-													href="#"
-													className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-													role="menuitem"
-													tabIndex={-1}
-													id="menu-item-2"
-													onClick={() => setIsOpen(false)}
-												>
-													Dashboard
-												</a>
-											)}
+                     {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
+                        <Link
+                          to={"/dashboard"}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          role="menuitem"
+                          tabIndex={-1}
+                          id="menu-item-2"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Dashboard
+                        </Link>
+                      )}
 
-											<button
-												onClick={() => {
-													handleLogout();
-													setIsOpen(false);
-												}}
-												className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-												role="menuitem"
-												tabIndex={-1}
-												id="menu-item-3"
-											>
-												Déconnexion
-											</button>
-										</div>
-									</div>
-								</div>
-							</>
-						) : (
-							<>
-								<div>
-									<div className="hidden sm:flex space-x-4">
-										<Link
-											to={"/login"}
-											className="tuto-connexion-button rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
-											onClick={() => setIsOpen(false)}
-										>
-											CONNEXION
-										</Link>
-										<Link
-											to={"/inscription"}
-											className="tuto-inscription-button rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
-											onClick={() => setIsOpen(false)}
-										>
-											INSCRIPTION
-										</Link>
-									</div>
-								</div>
-							</>
-						)}
-					</div>
-				</div>
+                      <button
+                        onClick={() => {
+                          setIsOpen(false);
+                          handleLogout();
+                        }}
+                        className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                        role="menuitem"
+                        tabIndex={-1}
+                        id="menu-item-3"
+                      >
+                        Déconnexion
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <div className="hidden sm:flex space-x-4">
+                    <Link
+                      to={"/login"}
+                      className="tuto-connexion-button rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      CONNEXION
+                    </Link>
+                    <Link
+                      to={"/inscription"}
+                      className="tuto-inscription-button rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      INSCRIPTION
+                    </Link>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
 
 				{/* Mobile Menu */}
 
@@ -211,73 +213,73 @@ export default function Navbar() {
 											</svg>
 										</button>
 
-										{/* Dropdown */}
-										<div
-											className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
-												isOpen
-													? "scale-100 opacity-100"
-													: "scale-95 opacity-0 pointer-events-none"
-											}`}
-											role="menu"
-											aria-orientation="vertical"
-											aria-labelledby="menu-button"
-											tabIndex={-1}
-										>
-											<div className="py-1" role="none">
-												<Link
-													to="#"
-													className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-													onClick={() => setIsOpen(false)}
-												>
-													Mon profil
-												</Link>
-												{user.role === "SUPER_ADMIN" && (
-													<Link
-														to="#"
-														className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-														onClick={() => setIsOpen(false)}
-													>
-														Dashboard
-													</Link>
-												)}
-												<button
-													onClick={() => {
-														handleLogout();
-														setIsOpen(false);
-													}}
-													className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-												>
-													Déconnexion
-												</button>
-											</div>
-										</div>
-									</div>
-								</>
-							) : (
-								<>
-									{/* Dropdown connexion/inscription */}
-									<div className="relative inline-block text-left">
-										<button
-											type="button"
-											onClick={() => setIsOpen(!isOpen)}
-											className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
-											aria-expanded={isOpen}
-											aria-haspopup="true"
-										>
-											Menu
-											<svg
-												className="-mr-1 size-5 text-gray-400"
-												viewBox="0 0 20 20"
-												fill="currentColor"
-												aria-hidden="true"
-											>
-												<path
-													fillRule="evenodd"
-													d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-													clipRule="evenodd"
-												/>
-											</svg>
-										</button>
+                    {/* Dropdown */}
+                    <div
+                      className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
+                        isOpen
+                          ? "scale-100 opacity-100"
+                          : "scale-95 opacity-0 pointer-events-none"
+                      }`}
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="menu-button"
+                      tabIndex={-1}
+                    >
+                      <div className="py-1" role="none">
+                        <Link
+                          to="#"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Mon profil
+                        </Link>
+                       {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
+                          <Link
+                            to={"/dashboard"}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            Dashboard
+                          </Link>
+                        )}
+                        <button
+                          onClick={() => {
+                            setIsOpen(false);
+                            handleLogout();
+                          }}
+                          className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Déconnexion
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Dropdown connexion/inscription */}
+                  <div className="relative inline-block text-left">
+                    <button
+                      type="button"
+                      onClick={() => setIsOpen(!isOpen)}
+                      className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+                      aria-expanded={isOpen}
+                      aria-haspopup="true"
+                    >
+                      Menu
+                      <svg
+                        className="-mr-1 size-5 text-gray-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
 
 										{/* Dropdown */}
 										<div

@@ -7,6 +7,7 @@ type CitiesState = {
 	cities: City[];
 	selectedCity: City | null;
 	isLoading: boolean;
+	isLoaded: boolean;
 	fetchCities: () => Promise<void>;
 	setSelectedCity: (city: City | null) => void;
 };

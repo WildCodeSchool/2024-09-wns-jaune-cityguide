@@ -114,7 +114,10 @@ function Inscription() {
 				setUser({
 					id: parsed.id,
 					firstname: parsed.firstname,
+					lastname: parsed.lastname,
+					email: parsed.email,
 					role: parsed.role,
+					city: parsed.city,
 				});
 
 				setPopupMessage([
@@ -157,6 +160,7 @@ function Inscription() {
 			className="flex flex-col items-center justify-center min-h-[80vh] bg-[#B0AFE4]"
 			style={{
 				backgroundImage: `url(${background_form})`,
+				minHeight: "82vh",
 			}}
 		>
 			<div className="flex justify-center z-2 mb-[-2rem]">

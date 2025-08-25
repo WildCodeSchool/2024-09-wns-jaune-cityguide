@@ -9,10 +9,21 @@ import {
   Mutation,
   Query,
   Resolver,
+  Mutation,
+  ID,
+  Ctx,
 } from "type-graphql";
 import { In } from "typeorm";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
+import { requireRole } from "../middleware/authChecker";
+import { UserRole } from "../entities/User";
+
+
+interface Context {
+  user?: { id: string; role: UserRole };
+}
+import { GraphQLError } from "graphql";
 import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
 import { sanitizeObjectStrings } from "../utils/sanitize";
 
@@ -82,7 +93,10 @@ export class CityResolver {
   }
 
   @Mutation(() => City)
-  async createCity(@Arg("data") data: CityInput) {
+  async createCity(@Arg("data") data: CityInput, @Ctx() context: Context) {
+       
+    requireRole(context.user, [UserRole.SUPER_ADMIN]);
+    
     const existingCity = await City.findOne({ 
       where: { 
         name: data.name, 
@@ -103,6 +117,7 @@ export class CityResolver {
     const interestPoints = data.interestPoints
       ? await InterestPoint.findBy({ id: In(data.interestPoints) })
       : [];
+
     city.interestPoints = interestPoints;
     await city.save();
     return city;
@@ -111,8 +126,12 @@ export class CityResolver {
   @Mutation(() => City)
   async updateCityById(
     @Arg("cityId") id: string,
-    @Arg("data") data: CityInput
+    @Arg("data") data: CityInput,
+    @Ctx() context: Context
   ) {
+
+    requireRole(context.user, [UserRole.SUPER_ADMIN]);
+
     checkIdFormat(id);
     let city = await City.findOneByOrFail({ id });
         const cleanData = sanitizeObjectStrings(data, [
@@ -131,12 +150,16 @@ export class CityResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteCityById(@Arg("cityId") id: string) {
+  async deleteCityById(@Arg("cityId") id: string,
+  @Ctx() context: Context
+) {
+
+  requireRole(context.user, [UserRole.SUPER_ADMIN]);
     checkIdFormat(id);
     const city = await City.findOne({ where: { id } });
     if (!city) {
-      throw notFoundError("La ville sélectionnée n'existe pas.");
+      throw notFoundError("The selected city does not exist.");
     }
-    return (await City.delete(city.id)).affected;
+  return (await City.delete(city.id)).affected;
   }
 }

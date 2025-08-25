@@ -6,6 +6,8 @@ import { Carousel } from "../atoms/Carousel";
 import EditInterestPointForm from "../organisms/EditInterestPointForm"
 import DeleteConfirmationModal from "../organisms/DeleteConfirmationModal";
 import { useDeleteInterestPointByIdMutation } from "../libs/graphql/generated/graphql-types";
+import { UserRole } from "../libs/graphql/generated/graphql-types";
+import { useUserStore } from "../store/userStore";
 
 type InterestPointSheetProps = {
 	isOpen: boolean;
@@ -18,6 +20,7 @@ export default function InterestPointDetails({
 	onClose,
 	interestPoint
 }: InterestPointSheetProps) {
+	const user = useUserStore((state) => state.user);
 	const { selectedInterestPoint } = useInterestPointsStore();
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [showConfirm, setShowConfirm] = useState(false);
@@ -77,35 +80,19 @@ export default function InterestPointDetails({
 						onClose={() => setIsEditing(false)} />
 				) : (
 					<>
-						<div className="flex justify-between items-start w-full">
-							<button
-								type="button"
-								onClick={onClose}
-								className="cursor-pointer text-gray-800 rounded-full hover:bg-gray-200 hover:text-gray-500 p-1"
-								aria-label="Fermer les détails"
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									className="w-4 h-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									strokeWidth={2}
-								>
-									<path d="M18 6 6 18" />
-									<path d="m6 6 12 12" />
-
-								</svg>
-							</button>
+						<div className="flex justify-between items-center w-full">
 							<div className="flex gap-2">
+								{(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
 								<button
 									type="button"
 									onClick={() => setIsEditing(true)}
 									className="cursor-pointer text-gray-600 hover:text-gray-800 flex items-center gap-1 text-sm"
-								><span className="material-symbols-outlined text-xs">
-										edit</span>
+								>
+									<span className="material-symbols-outlined text-xs">edit</span>
 									Modifier
 								</button>
+											)}
+											{(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
 								<button
 									type="button"
 									onClick={() => setShowConfirm(true)}
@@ -114,7 +101,16 @@ export default function InterestPointDetails({
 									<span className="material-symbols-outlined text-xs">delete</span>
 									Supprimer
 								</button>
+								)}
 							</div>
+							<button
+								type="button"
+								onClick={onClose}
+								className="text-gray-500 hover:text-gray-700 hover:cursor-pointer text-lg"
+								aria-label="Fermer"
+							>
+								✕
+							</button>
 						</div>
 						<div className="sheet-header w-full flex items-center justify-center space-x-4 py-4 text-gray-600">
 							<div className="h-[1.5px] w-full bg-gray-600 rounded-full flex-grow" />
