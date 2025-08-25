@@ -67,9 +67,12 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 				if (error.graphQLErrors?.length) {
 					const graphQLError = error.graphQLErrors[0];
 					console.error("GraphQL Error:", graphQLError);
-					if (graphQLError?.extensions?.code === "BAD_USER_INPUT") {
-						setErrorMessage(graphQLError.message);
+					if (graphQLError?.extensions?.code === "CITY_ALREADY_EXISTS") {
+						setErrorMessage(
+							"La ville sélectionnée existe déjà en base de données.",
+						);
 					} else {
+						console.error("GraphQL Error:", graphQLError);
 						setErrorMessage(
 							"Une erreur est survenue lors de la création de la ville.",
 						);
