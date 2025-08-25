@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useUpdateUserMutation, UserRole, GetUserByIdQuery, useDeleteUserMutation } from "../../../libs/graphql/generated/graphql-types";
+import { useUpdateUserMutation, UserRole, GetUserByIdQuery, useDeleteUserByAdminMutation } from "../../../libs/graphql/generated/graphql-types";
 import { motion } from "framer-motion";
 
 
@@ -25,7 +25,7 @@ export default function UserEditForm({
   const [successUpdateMessage, setSuccessUpdateMessage] = useState("");
 
   const [updateUser] = useUpdateUserMutation();
-  const [deleteUser] = useDeleteUserMutation();
+  const [deleteUserByAdmin] = useDeleteUserByAdminMutation();;
 
   useEffect(() => {
     setFirstname(user.firstname);
@@ -63,7 +63,7 @@ export default function UserEditForm({
     if (!confirm("Es-tu sûr de vouloir supprimer cet utilisateur ?")) return;
 
     try {
-      await deleteUser({
+      await deleteUserByAdmin({
         variables: {
           userId: user.id,
         },

@@ -11,6 +11,8 @@ import { UserResolver } from "./resolvers/UserResolver";
 import { PictureResolver } from "./resolvers/PictureResolver";
 import { PasswordResolver } from "./resolvers/PasswordResolver";
 import { seedDatabase } from "./data/seeder";
+import { customAuthChecker } from "./middleware/authChecker";
+// import { AuthChecker } from "type-graphql";
 
 config();
 
@@ -39,7 +41,7 @@ const start = async () => {
 			PictureResolver,
 			PasswordResolver,
 		],
-		//authChecker: authChecker,
+		authChecker: customAuthChecker,
 	});
 	
 

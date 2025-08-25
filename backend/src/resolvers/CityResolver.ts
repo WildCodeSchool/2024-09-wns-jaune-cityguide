@@ -5,9 +5,20 @@ import {
   Query,
   Resolver,
   Mutation,
+  ID,
+  Ctx,
 } from "type-graphql";
 import { City } from "../entities/City";
+import { InterestPoint } from "../entities/InterestPoint";
+import { requireRole } from "../middleware/authChecker";
+import { UserRole } from "../entities/User";
+
+
+interface Context {
+  user?: { id: string; role: UserRole };
+}
 import { GraphQLError } from "graphql";
+import { In } from "typeorm";
 
 
 @InputType()
@@ -23,6 +34,9 @@ export class CityInput {
 
   @Field()
   longitude!: number;
+
+  @Field(() => [ID])
+  interestPoints?: InterestPoint[];
 }
 
 @Resolver(City)
@@ -55,9 +69,12 @@ export class CityResolver {
   }
 
   @Mutation(() => City)
-  async createCity(@Arg("data") data: CityInput) {
-    const cityExists = await City.findOne({ where: { postalCode: data.postalCode } });
-    if (cityExists) {
+  async createCity(@Arg("data") data: CityInput, @Ctx() context: Context) {
+       
+    requireRole(context.user, [UserRole.SUPER_ADMIN]);
+    
+    const existingCity = await City.findOne({ where: { postalCode: data.postalCode } });
+    if (existingCity) {
       throw new GraphQLError("City already exists", {
         extensions: { code: "BAD_USER_INPUT" },
       });
@@ -70,6 +87,12 @@ export class CityResolver {
 
     let city = new City();
     city = Object.assign(city, data);
+
+    const interestPoints = data.interestPoints
+      ? await InterestPoint.findBy({ id: In(data.interestPoints) })
+      : [];
+
+    city.interestPoints = interestPoints;
     await city.save();
     return city;
   }
@@ -77,8 +100,12 @@ export class CityResolver {
   @Mutation(() => City)
   async updateCityById(
     @Arg("cityId") id: string,
-    @Arg("data") data: CityInput
+    @Arg("data") data: CityInput,
+    @Ctx() context: Context
   ) {
+
+    requireRole(context.user, [UserRole.SUPER_ADMIN]);
+
     let city = await City.findOneByOrFail({ id });
     city = Object.assign(city, data);
     await city.save();
@@ -86,7 +113,11 @@ export class CityResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteCityById(@Arg("cityId") id: string) {
-    return (await City.delete({ id })).affected;
+  async deleteCityById(@Arg("cityId") id: string,
+  @Ctx() context: Context
+) {
+
+  requireRole(context.user, [UserRole.SUPER_ADMIN]);
+  return (await City.delete({ id })).affected;
   }
 }

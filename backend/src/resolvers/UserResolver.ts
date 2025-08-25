@@ -54,6 +54,9 @@ export class UpdateUserInput {
   email?: string;
 
   @Field({ nullable: true })
+  password?: string;
+
+  @Field({ nullable: true })
   city?: number;
 
   @Field(() => UserRole, { nullable: true })
@@ -63,7 +66,7 @@ export class UpdateUserInput {
 @Resolver(User)
 export class UserResolver {
   @Query(() => [User])
-  /* @Authorized(UserRole.SUPER_ADMIN) */
+  @Authorized(UserRole.SUPER_ADMIN)
   async getUsers() {
     const users = await User.find({
       relations: ["city"],
@@ -72,7 +75,7 @@ export class UserResolver {
   }
 
   @Query(() => User)
-  /* @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN) */
+  @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN)
   async getUserById(@Arg("userId") id: string) {
     const user = await User.findOneOrFail({
       where: { id },
@@ -114,11 +117,11 @@ export class UserResolver {
       firstname: data.firstname,
       lastname: data.lastname,
       hashedPassword: hashedPassword,
-      role: UserRole.USER,
       city: city,
     });
 
     const tokenContent = {
+      userId: user.id,
       email: user.email,
       firstname: user.firstname,
       lastname: user.lastname,
@@ -136,9 +139,12 @@ export class UserResolver {
     });
 
     const profile = {
-      mail: user.email,
+      userId: user.id,
+      email: user.email,
       firstname: user.firstname,
+      lastname: user.lastname,
       city: user.city,
+      role: user.role,
     };
     console.log("profile", profile);
     return JSON.stringify(profile);
@@ -192,10 +198,12 @@ export class UserResolver {
     });
 
     const profile = {
-      id: user.id,
-      mail: user.email,
+      userId: user.id,
+      email: user.email,
       firstname: user.firstname,
+      lastname: user.lastname,
       city: user.city,
+      role: user.role,
     };
     return JSON.stringify(profile);
   }
@@ -211,28 +219,67 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  /* @Authorized(UserRole.SUPER_ADMIN, UserRole.CITY_ADMIN, UserRole.SUPER_USER, UserRole.USER) */
+  @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN)
   async updateUser(
     @Arg("userId") id: string,
-    @Arg("data") data: UpdateUserInput
+    @Arg("data") data: UpdateUserInput,
+    @Ctx() { user }: { user: User }
   ) {
-    let user = await User.findOneByOrFail({ id });
-    user = Object.assign(user, data);
-    user.save();
-    return user;
-  }
+     // Autorisé si SUPER_ADMIN ou si c'est le propre utilisateur
+    if (user.role !== UserRole.SUPER_ADMIN && user.id !== id) {
+      throw new GraphQLError("Accès interdit", {
+        extensions: { code: "FORBIDDEN" },
+      });
+    }
+
+    const targetUser = await User.findOneByOrFail({ id });
+    Object.assign(targetUser, data);
+    await targetUser.save();
+    return targetUser;
+}
+  //   let user = await User.findOneByOrFail({ id });
+  //   user = Object.assign(user, data);
+  //   user.save();
+  //   return user;
+  // }
 
   @Mutation(() => User)
-  /* @Authorized(UserRole.SUPER_ADMIN, UserRole.SUPER_USER, UserRole.USER) */
-  async deleteUser(@Arg("userId") id: string) {
+  @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN)
+  async deleteUser(
+    @Arg("userId") id: string,
+    @Arg("password") password: string
+  ): Promise<User> {
     const user = await User.findOneByOrFail({ id });
+    const validPassword = await argon.verify(user.hashedPassword, password);
+    if (!validPassword) {
+      throw new GraphQLError("Mot de passe invalide.", {
+        extensions: { code: "INVALID_PASSWORD" },
+      });
+    }
 
-    // Stocker une copie de l'utilisateur avant suppression
-    const deletedUser = { ...user };
+    const deletedUser = {
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      role: user.role,
+      city: user.city,
+    };
 
+//     await user.remove();
+
+    return deletedUser as User;
+  }
+
+  @Mutation(() => Boolean)
+  async deleteUserByAdmin(@Arg("userId") id: string): Promise<boolean> {
+    const user = await User.findOneByOrFail({ id });
+    if (!user) {
+      throw new GraphQLError("Utilisateur non trouvé.", {
+        extensions: { code: "USER_NOT_FOUND" },
+      });
+    };
     await user.remove();
-
-    // Retourner la copie de l'utilisateur supprimé
-    return deletedUser;
+    return true;
   }
 }

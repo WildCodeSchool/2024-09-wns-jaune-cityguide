@@ -186,12 +186,16 @@ export const UPDATE_USER = gql`
 `;
 
 export const DELETE_USER = gql`
-  mutation DeleteUser($userId: String!) {
-    deleteUser(userId: $userId) {
-      id
-    }
+  mutation DeleteUser($password: String!, $userId: String!) {
+  deleteUser(password: $password, userId: $userId) {
+    id
   }
-`;
+}`;
+
+export const DELETE_USER_BY_ADMIN = gql`
+  mutation DeleteUserByAdmin($userId: String!) {
+  deleteUserByAdmin(userId: $userId)
+}`;
 
 export const GET_STATS = gql`
   query GetStats {
@@ -271,5 +275,26 @@ mutation UpdateUserRole($data: UpdateUserInput!, $userId: String!) {
   updateUser(data: $data, userId: $userId) {
     id,
     role
+  }
+}`;
+
+export const GET_INTEREST_POINT_BY_ID = gql`
+query GetInterestPointById($interestPointId: String!) {
+  getInterestPointById(interestPointId: $interestPointId) {
+    id
+    name
+    address
+    description
+    latitude
+    longitude
+    link_url
+    city {
+      id
+      name
+    }
+    category {
+      id
+      name
+    }
   }
 }`;
