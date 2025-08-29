@@ -13,6 +13,7 @@ import {
   ID,
   Ctx,
 } from "type-graphql";
+
 import { In } from "typeorm";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
@@ -26,6 +27,7 @@ interface Context {
 import { GraphQLError } from "graphql";
 import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
 import { sanitizeObjectStrings } from "../utils/sanitize";
+import { In } from "typeorm";
 
 
 @InputType()
@@ -134,6 +136,7 @@ export class CityResolver {
 
     checkIdFormat(id);
     let city = await City.findOneByOrFail({ id });
+
         const cleanData = sanitizeObjectStrings(data, [
       "name",
       "postalCode",
@@ -145,6 +148,8 @@ export class CityResolver {
       ? await InterestPoint.findBy({ id: In(data.interestPoints) })
       : [];
     city.interestPoints = interestPoints;
+
+    city = Object.assign(city, data);
     await city.save();
     return city;
   }
