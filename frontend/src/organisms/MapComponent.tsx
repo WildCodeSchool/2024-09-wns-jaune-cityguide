@@ -32,7 +32,7 @@ export default function MapComponent({
   `;
 
 		return new L.DivIcon({
-			className: "",
+			className: "custom-poi-marker",
 			html: pinIcon,
 			iconSize: [40, 55],
 			iconAnchor: [20, 52],

@@ -1,10 +1,12 @@
 import { dataSource } from "../config/db";
 import fs from "node:fs";
+import * as argon from "argon2";
 
 import { City } from "../entities/City";
 import { Category } from "../entities/Category";
 import { InterestPoint } from "../entities/InterestPoint";
 import { Picture } from "../entities/Picture";
+import { User, type UserRole } from "../entities/User";
 
 type InterestPointSeedType = {
 	name: string;
@@ -24,6 +26,15 @@ type PictureSeedType = {
 	interestPoint: string;
 };
 
+type UserSeedType = {
+	firstname: string;
+	lastname: string;
+	email: string;
+	password: string;
+	city: string;
+	role: UserRole;
+};
+
 export async function seedDatabase() {
 	console.log("🔎 Checking database content...");
 
@@ -31,26 +42,31 @@ export async function seedDatabase() {
 	const cityRepository = dataSource.getRepository(City);
 	const interestPointRepository = dataSource.getRepository(InterestPoint);
 	const pictureRepository = dataSource.getRepository(Picture);
+	const userRepository = dataSource.getRepository(User);
 
 	const categoriesCount = await categoryRepository.count();
 	const citiesCount = await cityRepository.count();
 	const interestPointsCount = await interestPointRepository.count();
 	const picturesCount = await pictureRepository.count();
+	const usersCount = await userRepository.count();
 	if (
 		categoriesCount > 0 ||
 		citiesCount > 0 ||
 		interestPointsCount > 0 ||
-		picturesCount > 0
+		picturesCount > 0 ||
+		usersCount > 0
 	) {
 		console.log("⛔️ Database already seeded, skipping...");
 		return;
 	}
 
 	console.log("🧹 Cleaning database...");
-	await pictureRepository.delete({});
-	await interestPointRepository.delete({});
-	await categoryRepository.delete({});
-	await cityRepository.delete({});
+	// Fix error 'Empty criteria(s) are not allowed for the delete method': https://github.com/typeorm/typeorm/issues/11455
+	await pictureRepository.createQueryBuilder().delete().execute();
+	await interestPointRepository.createQueryBuilder().delete().execute();
+	await categoryRepository.createQueryBuilder().delete().execute();
+	await cityRepository.createQueryBuilder().delete().execute();
+	await userRepository.createQueryBuilder().delete().execute();
 
 	console.log("🌱 Seeding begins...");
 
@@ -143,5 +159,36 @@ export async function seedDatabase() {
 		]);
 	}
 	console.log("✅ Pictures inserted successfully!");
+
+	console.log("⤵️ Inserting users...");
+	// const userRepository = dataSource.getRepository(User);
+
+	const users: UserSeedType[] = JSON.parse(
+		fs.readFileSync("src/data/users.json", "utf8"),
+	);
+
+	for (const user of users) {
+		const city = await cityRepository.findOneBy({ name: user.city });
+		if (!city) {
+			throw new Error(
+				`City not found for user: ${user.firstname} ${user.lastname}`,
+			);
+		}
+
+		const hashedPassword = await argon.hash(user.password);
+
+		const newUser = await userRepository.save([
+			{
+				firstname: user.firstname,
+				lastname: user.lastname,
+				email: user.email,
+				hashedPassword: hashedPassword,
+				city: city,
+				role: user.role,
+			},
+		]);
+	}
+	console.log("✅ Users inserted successfully!");
+
 	console.log("🌱 Seeding complete!");
 }

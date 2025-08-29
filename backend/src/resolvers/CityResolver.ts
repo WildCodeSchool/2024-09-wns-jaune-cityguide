@@ -8,7 +8,6 @@ import {
   ID,
   Ctx,
 } from "type-graphql";
-import { In, Like } from "typeorm";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
 import { requireRole } from "../middleware/authChecker";
@@ -19,6 +18,7 @@ interface Context {
   user?: { id: string; role: UserRole };
 }
 import { GraphQLError } from "graphql";
+import { In } from "typeorm";
 
 
 @InputType()
@@ -76,10 +76,15 @@ export class CityResolver {
     const existingCity = await City.findOne({ where: { postalCode: data.postalCode } });
     if (existingCity) {
       throw new GraphQLError("City already exists", {
-        //extensions: { code: "BAD_REQUEST", http: { status: 400 } },
-        extensions: { code: "BAD_REQUEST" },
+        extensions: { code: "BAD_USER_INPUT" },
       });
     }
+    if (!data.postalCode || data.postalCode.trim() === "") {
+      throw new GraphQLError("Invalid postal code", {
+        extensions: { code: "BAD_USER_INPUT" },
+      });
+    }
+
     let city = new City();
     city = Object.assign(city, data);
 
@@ -103,10 +108,6 @@ export class CityResolver {
 
     let city = await City.findOneByOrFail({ id });
     city = Object.assign(city, data);
-    const interestPoints = data.interestPoints
-      ? await InterestPoint.findBy({ id: In(data.interestPoints) })
-      : [];
-    city.interestPoints = interestPoints;
     await city.save();
     return city;
   }

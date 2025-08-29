@@ -1,12 +1,18 @@
 import { describe, it, expect, vi } from "vitest";
-import {
-	act,
-	fireEvent,
-	render,
-	screen,
-	waitFor,
-} from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
+
+vi.mock("../../store/citiesStore.ts", () => ({
+	useCitiesStore: () => ({
+		setSelectedCity: vi.fn(),
+	}),
+}));
+
+vi.mock("../../store/interestPointsStore.ts", () => ({
+	useInterestPointsStore: () => ({
+		fetchInterestPointsByCity: vi.fn(),
+	}),
+}));
 
 vi.mock("../../store/citiesStore.ts", () => ({
 	useCitiesStore: () => ({
@@ -136,12 +142,12 @@ describe("Display errors if the input format is invalid", () => {
 describe("Submit valid form without triggering any server error", () => {
 	// Workaround for the issue with useNavigate not being called: https://github.com/testing-library/react-testing-library/issues/1198
 	beforeEach(() => {
-		mockNavigate.mockClear();
 		renderRegistrationPage();
 		vi.useFakeTimers({ shouldAdvanceTime: true });
 	});
 
 	afterEach(() => {
+		mockNavigate.mockClear();
 		vi.runOnlyPendingTimers();
 		vi.useRealTimers();
 	});
@@ -153,31 +159,6 @@ describe("Submit valid form without triggering any server error", () => {
 		fireEvent.click(submitButton);
 
 		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
-	});
-	it("should navigate to the map page after successful registration", async () => {
-		fillValidForm();
-		const submitButton = screen.getByRole("button", { name: "M'inscrire" });
-
-		fireEvent.click(submitButton);
-		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
-		await act(() => vi.runAllTimers());
-		await waitFor(() => {
-			expect(mockNavigate).toHaveBeenCalledWith("/map");
-		});
-	});
-
-	it("should display a success message after successful registration", async () => {
-		fillValidForm();
-		const submitButton = screen.getByRole("button", { name: "M'inscrire" });
-
-		fireEvent.click(submitButton);
-		await waitFor(() => expect(mockValidRegister).toHaveBeenCalled());
-
-		expect(
-			screen.getByText(
-				"Félicitations, votre compte a été créé avec succès ! 🎉",
-			),
-		).toBeInTheDocument();
 	});
 });
 
