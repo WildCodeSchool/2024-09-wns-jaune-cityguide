@@ -10,7 +10,6 @@ interface NewCityFormData {
 	postalCode: string;
 	latitude: number;
 	longitude: number;
-	interestPoints?: [];
 }
 
 interface NewCityFormProps {
@@ -42,7 +41,6 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		postalCode: "",
 		latitude: 0,
 		longitude: 0,
-		interestPoints: [],
 	});
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,16 +52,15 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 				variables: {
 					data: {
 						...formData,
-						interestPoints: formData.interestPoints ?? [],
 					},
 				},
 			});
 			fetchCities();
-			// TODO: handle success with toast
 			onCancel();
 			return data.createCity;
 		} catch (error) {
 			if (error instanceof ApolloError) {
+
 				if (error.graphQLErrors?.length) {
 					const graphQLError = error.graphQLErrors[0];
 					console.error("GraphQL Error:", graphQLError);
@@ -77,6 +74,18 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 							"Une erreur est survenue lors de la création de la ville.",
 						);
 					}
+				console.error("GraphQL error:", error.graphQLErrors[0]);
+				const badInputError = error.graphQLErrors.find(
+					(e) => e.extensions?.code === "BAD_USER_INPUT",
+				);
+				if (badInputError) {
+					setErrorMessage(
+						"La ville sélectionnée existe déjà en base de données.",
+					);
+				} else {
+					setErrorMessage(
+						"Une erreur est survenue lors de la création de la ville.",
+					);
 				}
 			} else {
 				console.error("Unexpected Error:", error);
@@ -92,6 +101,9 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 		setSuggestions([]);
 		setDropdownIsOpen(false);
 		setErrorMessage(null);
+		if (!city.zipcode) {
+			setErrorMessage("Le code postal est manquant.");
+		}
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

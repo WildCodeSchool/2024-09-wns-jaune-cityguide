@@ -26,6 +26,7 @@ interface Context {
 import { GraphQLError } from "graphql";
 import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
 import { sanitizeObjectStrings } from "../utils/sanitize";
+import { In } from "typeorm";
 
 
 @InputType()
@@ -106,6 +107,7 @@ export class CityResolver {
   if (existingCity) {
     throw badUserInputError("A city with this name and postal code already exists.", "CITY_ALREADY_EXISTS");
   }
+
     let city = new City();
     const cleanData = sanitizeObjectStrings(data, [
       "name",
@@ -145,6 +147,7 @@ export class CityResolver {
       ? await InterestPoint.findBy({ id: In(data.interestPoints) })
       : [];
     city.interestPoints = interestPoints;
+    city = Object.assign(city, data);
     await city.save();
     return city;
   }

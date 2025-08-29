@@ -134,6 +134,7 @@ const Login = () => {
 								name="email"
 								type="email"
 								placeholder="Email"
+								data-testid="input-email"
 							/>
 						</div>
 						<div className="border border-gray-300 rounded-[25px] px-3 py-2 flex items-center justify-between w-full">
@@ -143,6 +144,7 @@ const Login = () => {
 								name="password"
 								type={showPassword ? "text" : "password"}
 								placeholder="Mot de passe"
+								data-testid="input-password"
 							/>
 							<button
 								type="button"
@@ -168,6 +170,7 @@ const Login = () => {
 							}`}
 							type="submit"
 							style={{ marginBottom: message ? "0" : "20px" }}
+							data-testid="login-button"
 						>
 							Me connecter
 						</button>
@@ -177,6 +180,7 @@ const Login = () => {
 								className={`mt-1 text-sm text-center flex items-center justify-center gap-2 ${
 									message.type === "error" ? "text-red-500" : "text-green-600"
 								}`}
+								data-testid="popup-message"
 							>
 								{message.type === "success" && (
 									<svg
