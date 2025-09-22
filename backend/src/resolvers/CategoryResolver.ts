@@ -3,13 +3,14 @@ import {
   IsString, Length,
   Matches
 } from "class-validator";
-import { Arg, Field, InputType, Mutation, Query, Resolver, ID, Ctx, } from "type-graphql";
+import { Arg, Ctx, Field, ID, InputType, Mutation, Query, Resolver, } from "type-graphql";
 
 import { Category } from "../entities/Category";
-import { requireRole } from "../middleware/authChecker";
 import { UserRole } from "../entities/User";
-import { sanitizeObjectStrings } from "../utils/sanitize";
+import { requireRole } from "../middleware/authChecker";
+import type { Context } from "../middleware/authChecker";
 import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
+import { sanitizeObjectStrings } from "../utils/sanitize";
 
 @InputType()
 class CategoryInput {

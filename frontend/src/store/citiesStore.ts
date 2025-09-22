@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { client } from "../main";
 import { GET_CITIES } from "../libs/graphql/operations";
-import type { City } from "../@types/types";
+import type { City } from "../libs/graphql/generated/graphql-types";
 
 type CitiesState = {
 	cities: City[];

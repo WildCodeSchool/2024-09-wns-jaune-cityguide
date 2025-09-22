@@ -1,33 +1,23 @@
 import { Transform } from "class-transformer";
-import {IsArray, IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
+import { IsArray, IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
 import {
   Arg,
-  Authorized,
+  Ctx,
   Field,
   ID,
   InputType,
   Mutation,
   Query,
-  Resolver,
-  Mutation,
-  ID,
-  Ctx,
+  Resolver
 } from "type-graphql";
 import { In } from "typeorm";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
-import { requireRole } from "../middleware/authChecker";
 import { UserRole } from "../entities/User";
-
-
-interface Context {
-  user?: { id: string; role: UserRole };
-}
-import { GraphQLError } from "graphql";
+import type { Context } from "../middleware/authChecker";
+import { requireRole } from "../middleware/authChecker";
 import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
 import { sanitizeObjectStrings } from "../utils/sanitize";
-import { In } from "typeorm";
-
 
 @InputType()
 export class CityInput {

@@ -5,7 +5,7 @@
 		"email": "anthony@email.com",
 		"password": "Anthony!123",
 		"city": "Montpellier",
-		"role": "user"
+		"role": "SUPER_ADMIN"
 	},
 	{
 		"firstname": "Bechir",
@@ -13,7 +13,7 @@
 		"email": "bechir@email.com",
 		"password": "Bechir!123",
 		"city": "Toulouse",
-		"role": "user"
+		"role": "SUPER_ADMIN"
 	},
 	{
 		"firstname": "Caroline",
@@ -21,7 +21,7 @@
 		"email": "caroline@email.com",
 		"password": "Caroline!123",
 		"city": "Paris",
-		"role": "user"
+		"role": "SUPER_ADMIN"
 	},
 	{
 		"firstname": "Maëva",
@@ -29,7 +29,7 @@
 		"email": "maeva@email.com",
 		"password": "Maeva!123",
 		"city": "Paris",
-		"role": "user"
+		"role": "SUPER_ADMIN"
 	},
 	{
 		"firstname": "Noëllie",
@@ -37,7 +37,7 @@
 		"email": "noellie@email.com",
 		"password": "Noellie!123",
 		"city": "Paris",
-		"role": "user"
+		"role": "SUPER_ADMIN"
 	},
 	{
 		"firstname": "Raphael",
@@ -45,7 +45,7 @@
 		"email": "raphael@email.com",
 		"password": "Raphael!123",
 		"city": "Montpellier",
-		"role": "user"
+		"role": "SUPER_ADMIN"
 	},
 	{
 		"firstname": "Test",
@@ -53,6 +53,6 @@
 		"email": "test@email.com",
 		"password": "Test!123",
 		"city": "Paris",
-		"role": "user"
+		"role": "USER"
 	}
 ]

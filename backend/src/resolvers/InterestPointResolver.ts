@@ -1,22 +1,23 @@
-import {IsArray, isInt, IsNumber, IsOptional, isPositive, IsString, IsUrl, Length, Max, Min } from "class-validator";
+import { Transform } from "class-transformer";
+import {IsArray, IsNumber, IsOptional, IsString, IsUrl, Length, Max, Min, isInt, isPositive } from "class-validator";
 import {
   Arg,
+  Ctx,
   Field,
   ID,
   InputType,
   Mutation,
   Query,
   Resolver,
-  Ctx,
 } from "type-graphql";
 import { Category } from "../entities/Category";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
-import { checkIdFormat, notFoundError } from "../utils/errors";
-import { Transform } from "class-transformer";
-import { sanitizeObjectStrings } from "../utils/sanitize";
-import { requireRole } from "../middleware/authChecker";
 import { UserRole } from "../entities/User";
+import { requireRole } from "../middleware/authChecker";
+import type { Context } from "../middleware/authChecker";
+import { checkIdFormat, notFoundError } from "../utils/errors";
+import { sanitizeObjectStrings } from "../utils/sanitize";
 
 @InputType()
 export class InterestPointInput {

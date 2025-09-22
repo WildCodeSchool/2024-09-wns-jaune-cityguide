@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { InterestPoint } from "../@types/types";
+import type { InterestPoint } from "../libs/graphql/generated/graphql-types";
 import { useInterestPointsStore } from "../store/interestPointsStore";
 import { Carousel } from "../atoms/Carousel";
-import EditInterestPointForm from "../organisms/EditInterestPointForm"
+import EditInterestPointForm from "../organisms/EditInterestPointForm";
 import DeleteConfirmationModal from "../organisms/DeleteConfirmationModal";
 import { useDeleteInterestPointByIdMutation } from "../libs/graphql/generated/graphql-types";
 import { UserRole } from "../libs/graphql/generated/graphql-types";
@@ -18,14 +18,15 @@ type InterestPointSheetProps = {
 export default function InterestPointDetails({
 	isOpen,
 	onClose,
-	interestPoint
+	interestPoint,
 }: InterestPointSheetProps) {
 	const user = useUserStore((state) => state.user);
 	const { selectedInterestPoint } = useInterestPointsStore();
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [showConfirm, setShowConfirm] = useState(false);
 	const [showDeletedPopup, setShowDeletedPopup] = useState(false);
-	const [deletePoint, { data: deletedData }] = useDeleteInterestPointByIdMutation();
+	const [deletePoint, { data: deletedData }] =
+		useDeleteInterestPointByIdMutation();
 	const navigate = useNavigate();
 
 	// Handling click outside of the sheet: https://dev.to/rashed_iqbal/how-to-handle-outside-clicks-in-react-with-typescript-4lmc
@@ -67,40 +68,47 @@ export default function InterestPointDetails({
 		}
 	}, [deletedData]);
 
-
 	return (
 		<>
 			<aside
-				className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-[900] ${isOpen ? "translate-x-0" : "translate-x-full"
-					} rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
+				className={`interest-point-details absolute top-0 right-0 h-full w-full sm:w-1/4 max-w-3xl bg-gray-50 text-black p-4 transform transition-transform duration-300 z-[900] ${
+					isOpen ? "translate-x-0" : "translate-x-full"
+				} rounded-tl-xl rounded-bl-xl p-6 shadow-xl flex flex-col gap-4 content-center`}
 			>
 				{isEditing ? (
 					<EditInterestPointForm
 						interestPoint={selectedInterestPoint}
-						onClose={() => setIsEditing(false)} />
+						onClose={() => setIsEditing(false)}
+					/>
 				) : (
 					<>
 						<div className="flex justify-between items-center w-full">
 							<div className="flex gap-2">
-								{(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
-								<button
-									type="button"
-									onClick={() => setIsEditing(true)}
-									className="cursor-pointer text-gray-600 hover:text-gray-800 flex items-center gap-1 text-sm"
-								>
-									<span className="material-symbols-outlined text-xs">edit</span>
-									Modifier
-								</button>
-											)}
-											{(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
-								<button
-									type="button"
-									onClick={() => setShowConfirm(true)}
-									className="cursor-pointer text-red-600 flex items-center gap-1 text-sm"
-								>
-									<span className="material-symbols-outlined text-xs">delete</span>
-									Supprimer
-								</button>
+								{(user?.role === UserRole.SuperAdmin ||
+									user?.role === UserRole.CityAdmin) && (
+									<button
+										type="button"
+										onClick={() => setIsEditing(true)}
+										className="cursor-pointer text-gray-600 hover:text-gray-800 flex items-center gap-1 text-sm"
+									>
+										<span className="material-symbols-outlined text-xs">
+											edit
+										</span>
+										Modifier
+									</button>
+								)}
+								{(user?.role === UserRole.SuperAdmin ||
+									user?.role === UserRole.CityAdmin) && (
+									<button
+										type="button"
+										onClick={() => setShowConfirm(true)}
+										className="cursor-pointer text-red-600 flex items-center gap-1 text-sm"
+									>
+										<span className="material-symbols-outlined text-xs">
+											delete
+										</span>
+										Supprimer
+									</button>
 								)}
 							</div>
 							<button
@@ -132,7 +140,9 @@ export default function InterestPointDetails({
 
 							{selectedInterestPoint?.address && (
 								<div>
-									<h4 className="font-semibold text-[#706eeb]">📍&nbsp;Adresse</h4>
+									<h4 className="font-semibold text-[#706eeb]">
+										📍&nbsp;Adresse
+									</h4>
 									<p>{selectedInterestPoint.address}</p>
 								</div>
 							)}
@@ -140,7 +150,9 @@ export default function InterestPointDetails({
 							<div className="grid grid-cols-2 gap-4">
 								{selectedInterestPoint?.city && (
 									<div>
-										<h4 className="font-semibold text-[#706eeb]">🏙️&nbsp;Ville</h4>
+										<h4 className="font-semibold text-[#706eeb]">
+											🏙️&nbsp;Ville
+										</h4>
 										<p>{selectedInterestPoint?.city.name}</p>
 									</div>
 								)}
