@@ -1,13 +1,19 @@
+import { Transform } from "class-transformer";
+import {IsArray, IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
 import {
   Arg,
+  Authorized,
   Field,
+  ID,
   InputType,
+  Mutation,
   Query,
   Resolver,
   Mutation,
   ID,
   Ctx,
 } from "type-graphql";
+import { In } from "typeorm";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
 import { requireRole } from "../middleware/authChecker";
@@ -18,25 +24,43 @@ interface Context {
   user?: { id: string; role: UserRole };
 }
 import { GraphQLError } from "graphql";
+import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
+import { sanitizeObjectStrings } from "../utils/sanitize";
 import { In } from "typeorm";
 
 
 @InputType()
 export class CityInput {
   @Field()
+  @Transform(({ value }) => value.trim())
+  @IsString()
+  @Length(2, 255)
   name!: string;
 
   @Field()
+  @Transform(({ value }) => value.trim())
+  @IsString({ message: "Postal code must be a string." })
+  @Length(5, 10, {
+    message: "Postal code must be between 5 and 10 characters.",
+  })
   postalCode!: string;
 
   @Field()
+  @IsNumber()
+  @Min(-90)
+  @Max(90)
   latitude!: number;
 
   @Field()
+  @IsNumber()
+  @Min(-180)
+  @Max(180)
   longitude!: number;
 
   @Field(() => [ID])
-  interestPoints?: InterestPoint[];
+  @IsOptional()
+  @IsArray()
+  interestPoints?: string[];
 }
 
 @Resolver(City)
@@ -52,13 +76,14 @@ export class CityResolver {
   }
 
   @Query(() => City)
-  async getCityById(@Arg("adId") id: string) {
-    const city = await City.findOneOrFail({
+  async getCityById(@Arg("cityId") id: string) {
+    checkIdFormat(id);
+    const city = await City.findOne({
       where: { id },
       relations: ["interestPoints", "users"],
     });
     if (!city) {
-      throw new Error("City not found");
+      throw notFoundError("Selected city does not exist.");
     }
     return city;
   }
@@ -73,21 +98,24 @@ export class CityResolver {
        
     requireRole(context.user, [UserRole.SUPER_ADMIN]);
     
-    const existingCity = await City.findOne({ where: { postalCode: data.postalCode } });
-    if (existingCity) {
-      throw new GraphQLError("City already exists", {
-        extensions: { code: "BAD_USER_INPUT" },
-      });
-    }
-    if (!data.postalCode || data.postalCode.trim() === "") {
-      throw new GraphQLError("Invalid postal code", {
-        extensions: { code: "BAD_USER_INPUT" },
-      });
-    }
+    const existingCity = await City.findOne({ 
+      where: { 
+        name: data.name, 
+        postalCode: data.postalCode 
+      } 
+    });
+  if (existingCity) {
+    throw badUserInputError("A city with this name and postal code already exists.", "CITY_ALREADY_EXISTS");
+  }
 
     let city = new City();
-    city = Object.assign(city, data);
-
+    const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "postalCode",
+      "latitude",
+      "longitude",
+    ]);
+    city = Object.assign(city, cleanData);
     const interestPoints = data.interestPoints
       ? await InterestPoint.findBy({ id: In(data.interestPoints) })
       : [];
@@ -106,7 +134,19 @@ export class CityResolver {
 
     requireRole(context.user, [UserRole.SUPER_ADMIN]);
 
+    checkIdFormat(id);
     let city = await City.findOneByOrFail({ id });
+        const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "postalCode",
+      "latitude",
+      "longitude",
+    ]);
+    city = Object.assign(city, cleanData);
+    const interestPoints = data.interestPoints
+      ? await InterestPoint.findBy({ id: In(data.interestPoints) })
+      : [];
+    city.interestPoints = interestPoints;
     city = Object.assign(city, data);
     await city.save();
     return city;
@@ -118,6 +158,11 @@ export class CityResolver {
 ) {
 
   requireRole(context.user, [UserRole.SUPER_ADMIN]);
-  return (await City.delete({ id })).affected;
+    checkIdFormat(id);
+    const city = await City.findOne({ where: { id } });
+    if (!city) {
+      throw notFoundError("The selected city does not exist.");
+    }
+  return (await City.delete(city.id)).affected;
   }
 }

@@ -5,11 +5,15 @@ import {
 	Entity,
 	PrimaryGeneratedColumn,
 	OneToMany,
+	CreateDateColumn,
+	UpdateDateColumn,
+	Unique,
 } from "typeorm";
 import { InterestPoint } from "./InterestPoint";
 import { User } from "./User";
 
 @Entity()
+@Unique(["name", "postalCode"])
 @ObjectType()
 export class City extends BaseEntity {
 	@Field()
@@ -45,4 +49,20 @@ export class City extends BaseEntity {
 		(user) => user.city,
 	)
 	users!: User[];
+
+	@Field(() => Date)
+	@CreateDateColumn({
+		name: "created_at",
+		type: "timestamptz",
+		default: () => "CURRENT_TIMESTAMP",
+	})
+	createdAt!: Date;
+
+	@Field(() => Date, { nullable: true })
+	@UpdateDateColumn({
+		name: "updated_at",
+		type: "timestamptz",
+		nullable: true,
+	})
+	updatedAt?: Date;
 }

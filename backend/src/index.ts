@@ -18,7 +18,7 @@ config();
 
 const port = process.env.PORT ? Number.parseInt(process.env.PORT, 10) : 3000;
 
-if (isNaN(port) || port < 0 || port > 65535) {
+if (Number.isNaN(port) || port < 0 || port > 65535) {
 	throw new Error(`Invalid port value: ${process.env.PORT}`);
 }
 
@@ -29,8 +29,8 @@ const start = async () => {
 		.catch((err) => console.error("Error connecting to the database", err));
 
 	await seedDatabase()
-    .then(() => console.log("Database seeded"))
-    .catch((err) => console.error("Error seeding the database", err));
+		.then(() => console.log("Database seeded"))
+		.catch((err) => console.error("Error seeding the database", err));
 
 	const schema = await buildSchema({
 		resolvers: [
@@ -42,8 +42,8 @@ const start = async () => {
 			PasswordResolver,
 		],
 		authChecker: customAuthChecker,
+		validate: true,
 	});
-	
 
 	const apiServer = new ApolloServer({ schema, introspection: true });
 
@@ -69,7 +69,7 @@ const start = async () => {
 		},
 	});
 
-	console.log("Backend started on port#" + port);
+	console.log(`Backend started on port #${port}`);
 };
 
 start();

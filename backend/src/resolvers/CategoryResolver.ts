@@ -1,42 +1,63 @@
-import { 
-  Arg,
-  Field,
-  InputType,
-  Query,
-  Resolver,
-  Mutation,
-  ID,
-  Ctx,
- } from "type-graphql";
+import { Transform } from "class-transformer";
+import {
+  IsString, Length,
+  Matches
+} from "class-validator";
+import { Arg, Field, InputType, Mutation, Query, Resolver, ID, Ctx, } from "type-graphql";
+
 import { Category } from "../entities/Category";
 import { requireRole } from "../middleware/authChecker";
 import { UserRole } from "../entities/User";
-
-interface Context {
-  user?: { id: string; role: UserRole };
-}
+import { sanitizeObjectStrings } from "../utils/sanitize";
+import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
 
 @InputType()
 class CategoryInput {
   @Field()
+  @Transform(({ value }) => value.trim())
+  @IsString({ message: "Category name must be a string." })
+  @Length(2, 100, {
+    message: "Category name must be between 2 and 100 characters.",
+  })
   name!: string;
 
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim())
+  @IsString()
+  @Length(10, 2000)
   description?: string;
 
   @Field()
+  @Transform(({ value }) => value.trim().toLowerCase())
+  @IsString()
+  @Matches(/^#[0-9a-fA-F]{6}$/, {
+    message: "Color must be a valid hexadecimal code (ex: #aabbcc)",
+  })
   color!: string;
 }
 
 @InputType()
 class UpdateCategoryInput {
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim())
+  @IsString({ message: "Category name must be a string." })
+  @Length(2, 100, {
+    message: "Category name must be between 2 and 100 characters.",
+  })
   name?: string;
 
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim())
+  @IsString()
+  @Length(10, 2000)
   description?: string;
 
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim().toLowerCase())
+  @IsString()
+  @Matches(/^#[0-9a-fA-F]{6}$/, {
+    message: "Color must be a valid hexadecimal code (ex: #aabbcc)",
+  })
   color?: string;
 }
 
@@ -50,7 +71,11 @@ export class CategoryResolver {
 
   @Query(() => Category)
   async getCategoryById(@Arg("categoryId") id: string) {
-    const category = await Category.findOneOrFail({ where: { id } });
+    checkIdFormat(id);
+    const category = await Category.findOne({ where: { id } });
+    if (!category) {
+      throw notFoundError("Selected category does not exist.");
+    }
     return category;
   }
 
@@ -61,8 +86,15 @@ export class CategoryResolver {
 ) {
    requireRole(user, [UserRole.SUPER_ADMIN]);
 
+    const existingCategory = await Category.findOne({ where: { name: data.name } });
+    if (existingCategory) throw badUserInputError("A category with this name already exists.", "CATEGORY_ALREADY_EXISTS");
     const category = new Category();
-    Object.assign(category, data);
+    const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "description",
+      "color",
+    ]);
+    Object.assign(category, cleanData);
     await category.save();
     return category;
   }
@@ -73,15 +105,18 @@ export class CategoryResolver {
     @Arg("data") data: UpdateCategoryInput,
     @Ctx() { user }: Context
   ) {
-
     requireRole(user, [UserRole.SUPER_ADMIN]);
-
-    const category = await Category.findOneByOrFail({ id });
-    Object.assign(category, {
-      name: data.name,
-      description: data.description,
-      color: data.color,
-    });
+    checkIdFormat(id);
+    const category = await Category.findOneBy({ id });
+    if (!category) {
+      throw notFoundError("Selected category does not exist.");
+    }
+    const cleanData = sanitizeObjectStrings(data, [
+      "name",
+      "description",
+      "color",
+    ]);
+    Object.assign(category, cleanData);
     await category.save();
     return category;
   }
@@ -91,9 +126,12 @@ export class CategoryResolver {
     @Arg("categoryId") id: string,
     @Ctx() { user }: Context
 ) {
-
     requireRole(user, [UserRole.SUPER_ADMIN]);
-    
+    checkIdFormat(id);
+    const category = await Category.findOne({ where: { id } });
+    if (!category) {
+      throw notFoundError("Selected category does not exist.");
+    }
     return (await Category.delete({ id })).affected;
   }
 }

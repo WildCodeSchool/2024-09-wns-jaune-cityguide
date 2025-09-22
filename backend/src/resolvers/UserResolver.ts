@@ -1,3 +1,11 @@
+import * as argon from "argon2";
+import {
+  IsString,
+  Length, Matches
+} from "class-validator";
+import type { Response } from "express";
+import { GraphQLError } from "graphql";
+import * as jwt from "jsonwebtoken";
 import {
   Arg,
   Authorized,
@@ -8,22 +16,32 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { User, UserRole } from "../entities/User";
-import type { Response } from "express";
-import * as argon from "argon2";
-import * as jwt from "jsonwebtoken";
-import { GraphQLError } from "graphql";
 import { City } from "../entities/City";
+import { User, UserRole } from "../entities/User";
+import { badUserInputError, checkIdFormat, notFoundError } from "../utils/errors";
+import { Transform } from "class-transformer";
 
 @InputType()
 export class NewUserInput {
   @Field()
+  @Transform(({ value }) => value.trim())
+  @IsString()
+  @Length(1, 100)
   firstname!: string;
 
   @Field()
+  @Transform(({ value }) => value.trim())
+  @IsString()
+  @Length(1, 100)
   lastname!: string;
 
   @Field()
+  @Transform(({ value }) => value.trim().toLowerCase())
+  @IsString()
+  @Length(5, 255)
+  @Matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
+    message: "L'email doit être une adresse email valide.",
+  })
   email!: string;
 
   @Field()
@@ -36,21 +54,36 @@ export class NewUserInput {
 @InputType()
 export class UserInput {
   @Field()
+  @Transform(({ value }) => value.trim().toLowerCase())
+  @IsString()
+  @Length(5, 255)
+  @Matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
+    message: "L'email doit être une adresse email valide.",
+  })
   email!: string;
 
   @Field()
+  @Transform(({ value }) => value.trim())
   password!: string;
 }
 
 @InputType()
 export class UpdateUserInput {
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim())
   firstname?: string;
 
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim())
   lastname?: string;
 
   @Field({ nullable: true })
+  @Transform(({ value }) => value.trim().toLowerCase())
+  @IsString()
+  @Length(5, 255)
+  @Matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
+    message: "L'email doit être une adresse email valide.",
+  })
   email?: string;
 
   @Field({ nullable: true })
@@ -77,6 +110,7 @@ export class UserResolver {
   @Query(() => User)
   @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN)
   async getUserById(@Arg("userId") id: string) {
+    checkIdFormat(id);
     const user = await User.findOneOrFail({
       where: { id },
       relations: ["city"],
@@ -103,12 +137,12 @@ export class UserResolver {
 
     const existingUser = await User.findOneBy({ email: data.email });
     if (existingUser) {
-      throw new Error("Cet email est déjà utilisé.");
+      throw badUserInputError("Email already used.", "EMAIL_ALREADY_IN_USE");
     }
 
     const city = await City.findOneBy({ id: data.cityId });
     if (!city) {
-      throw new Error("Ville introuvable");
+      throw notFoundError("The selected city does not exist.");
     }
 
     const hashedPassword = await argon.hash(data.password);
@@ -231,25 +265,28 @@ export class UserResolver {
         extensions: { code: "FORBIDDEN" },
       });
     }
-
-    const targetUser = await User.findOneByOrFail({ id });
+    checkIdFormat(id);
+    const targetUser = await User.findOne({ where: { id } });
+    if (!targetUser) {
+      throw notFoundError("User not found.");
+    }
     Object.assign(targetUser, data);
     await targetUser.save();
     return targetUser;
-}
-  //   let user = await User.findOneByOrFail({ id });
-  //   user = Object.assign(user, data);
-  //   user.save();
-  //   return user;
-  // }
+  }
 
-  @Mutation(() => User)
+@Mutation(() => User)
   @Authorized(UserRole.USER, UserRole.SUPER_USER, UserRole.CITY_ADMIN, UserRole.SUPER_ADMIN)
   async deleteUser(
     @Arg("userId") id: string,
     @Arg("password") password: string
   ): Promise<User> {
-    const user = await User.findOneByOrFail({ id });
+    const user = await User.findOne({ where: { id } });
+    if (!user) {
+      throw new GraphQLError("Utilisateur non trouvé.", {
+        extensions: { code: "USER_NOT_FOUND" },
+      });
+    }
     const validPassword = await argon.verify(user.hashedPassword, password);
     if (!validPassword) {
       throw new GraphQLError("Mot de passe invalide.", {
@@ -266,14 +303,12 @@ export class UserResolver {
       city: user.city,
     };
 
-//     await user.remove();
-
     return deletedUser as User;
   }
 
   @Mutation(() => Boolean)
   async deleteUserByAdmin(@Arg("userId") id: string): Promise<boolean> {
-    const user = await User.findOneByOrFail({ id });
+    const user = await User.findOne({ where: { id } });
     if (!user) {
       throw new GraphQLError("Utilisateur non trouvé.", {
         extensions: { code: "USER_NOT_FOUND" },
@@ -283,3 +318,6 @@ export class UserResolver {
     return true;
   }
 }
+
+
+
