@@ -107,7 +107,6 @@ export class CityResolver {
   if (existingCity) {
     throw badUserInputError("A city with this name and postal code already exists.", "CITY_ALREADY_EXISTS");
   }
-
     let city = new City();
     const cleanData = sanitizeObjectStrings(data, [
       "name",
@@ -136,7 +135,8 @@ export class CityResolver {
 
     checkIdFormat(id);
     let city = await City.findOneByOrFail({ id });
-        const cleanData = sanitizeObjectStrings(data, [
+
+    const cleanData = sanitizeObjectStrings(data, [
       "name",
       "postalCode",
       "latitude",
@@ -147,6 +147,7 @@ export class CityResolver {
       ? await InterestPoint.findBy({ id: In(data.interestPoints) })
       : [];
     city.interestPoints = interestPoints;
+
     city = Object.assign(city, data);
     await city.save();
     return city;

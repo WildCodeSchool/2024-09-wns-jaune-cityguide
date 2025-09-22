@@ -74,6 +74,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 							"Une erreur est survenue lors de la création de la ville.",
 						);
 					}
+
 				console.error("GraphQL error:", error.graphQLErrors[0]);
 				const badInputError = error.graphQLErrors.find(
 					(e) => e.extensions?.code === "BAD_USER_INPUT",
