@@ -13,7 +13,6 @@ import {
   ID,
   Ctx,
 } from "type-graphql";
-
 import { In } from "typeorm";
 import { City } from "../entities/City";
 import { InterestPoint } from "../entities/InterestPoint";
@@ -137,7 +136,7 @@ export class CityResolver {
     checkIdFormat(id);
     let city = await City.findOneByOrFail({ id });
 
-        const cleanData = sanitizeObjectStrings(data, [
+    const cleanData = sanitizeObjectStrings(data, [
       "name",
       "postalCode",
       "latitude",

@@ -60,6 +60,7 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 			return data.createCity;
 		} catch (error) {
 			if (error instanceof ApolloError) {
+
 				if (error.graphQLErrors?.length) {
 					const graphQLError = error.graphQLErrors[0];
 					console.error("GraphQL Error:", graphQLError);
@@ -73,6 +74,19 @@ export function NewCityForm({ onCancel }: NewCityFormProps) {
 							"Une erreur est survenue lors de la création de la ville.",
 						);
 					}
+
+				console.error("GraphQL error:", error.graphQLErrors[0]);
+				const badInputError = error.graphQLErrors.find(
+					(e) => e.extensions?.code === "BAD_USER_INPUT",
+				);
+				if (badInputError) {
+					setErrorMessage(
+						"La ville sélectionnée existe déjà en base de données.",
+					);
+				} else {
+					setErrorMessage(
+						"Une erreur est survenue lors de la création de la ville.",
+					);
 				}
 			} else {
 				console.error("Unexpected Error:", error);
