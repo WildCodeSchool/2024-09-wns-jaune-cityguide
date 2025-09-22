@@ -3,16 +3,13 @@ import { DELETE_CITY } from "../../../libs/graphql/operations";
 import { useCitiesStore } from "../../../store/citiesStore";
 import { useUserStore } from "../../../store/userStore";
 import { useState } from "react";
-import { UserRole } from "../../../libs/graphql/generated/graphql-types";
+import {
+	type City,
+	UserRole,
+} from "../../../libs/graphql/generated/graphql-types";
 
 interface EditFormProps {
-	city: {
-		id: string | null;
-		name: string;
-		postalCode: string;
-		latitude: number;
-		longitude: number;
-	};
+	city: City;
 }
 
 export function EditCityForm({ city }: EditFormProps) {

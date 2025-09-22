@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useCitiesStore } from "../store/citiesStore";
 import { useInterestPointsStore } from "../store/interestPointsStore";
-import type { City } from "../@types/types";
+import type { City } from "../libs/graphql/generated/graphql-types";
 
 export default function SearchBar() {
 	const { cities, selectedCity, setSelectedCity } = useCitiesStore();

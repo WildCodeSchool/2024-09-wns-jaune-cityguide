@@ -1,18 +1,12 @@
 import { motion } from "framer-motion";
 import { type ReactNode, useState } from "react";
-import { UserRole } from "../libs/graphql/generated/graphql-types";
+import { type City, UserRole } from "../libs/graphql/generated/graphql-types";
 import { Modal } from "../organisms/Modal";
 import { EditCityForm } from "../pages/AdminDashboard/CityManager/EditCityForm";
 import { useUserStore } from "../store/userStore";
 
 interface CityCardProps {
-	city: {
-		id: string | null;
-		name: string;
-		postalCode: string;
-		latitude: number;
-		longitude: number;
-	};
+	city: City;
 }
 
 export function CityStatsCard({ city }: CityCardProps) {
