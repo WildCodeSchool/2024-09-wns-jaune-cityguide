@@ -15,15 +15,18 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTimeISO: { input: any; output: any; }
 };
 
 export type Category = {
   __typename?: 'Category';
   color: Scalars['String']['output'];
+  createdAt: Scalars['DateTimeISO']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   interestPoints: InterestPoint;
   name: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
 export type CategoryInput = {
@@ -34,12 +37,14 @@ export type CategoryInput = {
 
 export type City = {
   __typename?: 'City';
+  createdAt: Scalars['DateTimeISO']['output'];
   id: Scalars['String']['output'];
   interestPoints: Array<InterestPoint>;
   latitude: Scalars['Float']['output'];
   longitude: Scalars['Float']['output'];
   name: Scalars['String']['output'];
   postalCode: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   users: Array<User>;
 };
 
@@ -56,6 +61,7 @@ export type InterestPoint = {
   address: Scalars['String']['output'];
   category: Category;
   city: City;
+  createdAt: Scalars['DateTimeISO']['output'];
   description: Scalars['String']['output'];
   id: Scalars['String']['output'];
   latitude: Scalars['Float']['output'];
@@ -63,6 +69,7 @@ export type InterestPoint = {
   longitude: Scalars['Float']['output'];
   name: Scalars['String']['output'];
   pictures: Array<Picture>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
 export type InterestPointInput = {
@@ -213,10 +220,12 @@ export type NewUserInput = {
 
 export type Picture = {
   __typename?: 'Picture';
+  createdAt: Scalars['DateTimeISO']['output'];
   description: Scalars['String']['output'];
   id: Scalars['String']['output'];
   interestPoint: InterestPoint;
   name: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   url: Scalars['String']['output'];
 };
 
@@ -254,7 +263,7 @@ export type QueryGetCategoryByIdArgs = {
 
 
 export type QueryGetCityByIdArgs = {
-  adId: Scalars['String']['input'];
+  cityId: Scalars['String']['input'];
 };
 
 
@@ -305,6 +314,7 @@ export type UpdateUserInput = {
 export type User = {
   __typename?: 'User';
   city: City;
+  createdAt: Scalars['DateTimeISO']['output'];
   email: Scalars['String']['output'];
   firstname: Scalars['String']['output'];
   hashedPassword: Scalars['String']['output'];
@@ -313,6 +323,7 @@ export type User = {
   resetToken?: Maybe<Scalars['String']['output']>;
   resetTokenExpiration?: Maybe<Scalars['String']['output']>;
   role: UserRole;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
 export type UserInput = {
@@ -496,6 +507,13 @@ export type UpdateUserRoleMutationVariables = Exact<{
 
 
 export type UpdateUserRoleMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, role: UserRole } };
+
+export type GetInterestPointByIdQueryVariables = Exact<{
+  interestPointId: Scalars['String']['input'];
+}>;
+
+
+export type GetInterestPointByIdQuery = { __typename?: 'Query', getInterestPointById: { __typename?: 'InterestPoint', id: string, name: string, address: string, description: string, latitude: number, longitude: number, link_url: string, city: { __typename?: 'City', id: string, name: string }, category: { __typename?: 'Category', id: string, name: string } } };
 
 
 export const GetCitiesDocument = gql`
@@ -1457,3 +1475,57 @@ export function useUpdateUserRoleMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateUserRoleMutationHookResult = ReturnType<typeof useUpdateUserRoleMutation>;
 export type UpdateUserRoleMutationResult = Apollo.MutationResult<UpdateUserRoleMutation>;
 export type UpdateUserRoleMutationOptions = Apollo.BaseMutationOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
+export const GetInterestPointByIdDocument = gql`
+    query GetInterestPointById($interestPointId: String!) {
+  getInterestPointById(interestPointId: $interestPointId) {
+    id
+    name
+    address
+    description
+    latitude
+    longitude
+    link_url
+    city {
+      id
+      name
+    }
+    category {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetInterestPointByIdQuery__
+ *
+ * To run a query within a React component, call `useGetInterestPointByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInterestPointByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInterestPointByIdQuery({
+ *   variables: {
+ *      interestPointId: // value for 'interestPointId'
+ *   },
+ * });
+ */
+export function useGetInterestPointByIdQuery(baseOptions: Apollo.QueryHookOptions<GetInterestPointByIdQuery, GetInterestPointByIdQueryVariables> & ({ variables: GetInterestPointByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInterestPointByIdQuery, GetInterestPointByIdQueryVariables>(GetInterestPointByIdDocument, options);
+      }
+export function useGetInterestPointByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInterestPointByIdQuery, GetInterestPointByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInterestPointByIdQuery, GetInterestPointByIdQueryVariables>(GetInterestPointByIdDocument, options);
+        }
+export function useGetInterestPointByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetInterestPointByIdQuery, GetInterestPointByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetInterestPointByIdQuery, GetInterestPointByIdQueryVariables>(GetInterestPointByIdDocument, options);
+        }
+export type GetInterestPointByIdQueryHookResult = ReturnType<typeof useGetInterestPointByIdQuery>;
+export type GetInterestPointByIdLazyQueryHookResult = ReturnType<typeof useGetInterestPointByIdLazyQuery>;
+export type GetInterestPointByIdSuspenseQueryHookResult = ReturnType<typeof useGetInterestPointByIdSuspenseQuery>;
+export type GetInterestPointByIdQueryResult = Apollo.QueryResult<GetInterestPointByIdQuery, GetInterestPointByIdQueryVariables>;
