@@ -259,7 +259,7 @@ export class UserResolver {
     @Arg("data") data: UpdateUserInput,
     @Ctx() { user }: { user: User }
   ) {
-     // Autorisé si SUPER_ADMIN ou si c'est le propre utilisateur
+     
     if (user.role !== UserRole.SUPER_ADMIN && user.id !== id) {
       throw new GraphQLError("Accès interdit", {
         extensions: { code: "FORBIDDEN" },

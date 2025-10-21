@@ -1,0 +1,10 @@
+{
+  "name": "docker",
+  "scripts": {
+    "build:dev": "cross-env NODE_ENV=development docker compose -f compose.yaml --env-file .env.dev up -d --build",
+    "build:prod": "cross-env NODE_ENV=production docker compose -f compose.yaml --env-file .env.prod up -d --build"
+  },
+  "dependencies": {
+    "cross-env": "^10.1.0"
+  }
+}

@@ -45,8 +45,6 @@ vi.mock("../../libs/graphql/generated/graphql-types", () => ({
 	],
 }));
 
-// Useful code snippet to render a component with react-router-dom: https://stackoverflow.com/questions/76754014/reactjs-how-to-unit-test-login-form-in-vitest
-// See also: https://www.webpilot.ai/writeDetail/808ff24c-fa86-43ae-9d2d-d6cd7f40e765?lang=en-US
 
 const renderLoginPage = () => {
 	return render(
