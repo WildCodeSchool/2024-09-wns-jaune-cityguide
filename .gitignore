@@ -1,3 +1,4 @@
 persist/
-.env
+.env.dev
 node_modules/
+.env.prod

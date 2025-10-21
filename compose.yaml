@@ -21,6 +21,7 @@ services:
     volumes:
       - ./frontend/src/:/app/src
     environment:
+      VITE_BASE_URL: ${VITE_BASE_URL}
       VITE_GATEWAY_PORT: ${GATEWAY_PORT}
 
   test_database:
