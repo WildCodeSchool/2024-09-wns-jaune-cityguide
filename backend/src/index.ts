@@ -68,7 +68,7 @@ const start = async () => {
 		},
 	});
 
-	console.log(`Backend ready at: ${url}`);
+	console.log(`Backend started on port #${port}`);
 };
 
 start();
