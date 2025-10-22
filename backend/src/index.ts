@@ -1,4 +1,7 @@
-import { config } from "dotenv";
+import "reflect-metadata";
+import dotenv from "dotenv";
+dotenv.config();
+
 import { dataSource } from "./config/db";
 import { buildSchema } from "type-graphql";
 import { ApolloServer } from "@apollo/server";
@@ -12,9 +15,6 @@ import { PictureResolver } from "./resolvers/PictureResolver";
 import { PasswordResolver } from "./resolvers/PasswordResolver";
 import { seedDatabase } from "./data/seeder";
 import { customAuthChecker } from "./middleware/authChecker";
-// import { AuthChecker } from "type-graphql";
-
-config();
 
 const port = process.env.PORT ? Number.parseInt(process.env.PORT, 10) : 3000;
 
@@ -53,7 +53,6 @@ const start = async () => {
 			try {
 				if (!process.env.TOKEN_SECRET_KEY) return { res };
 				const token = req.headers.cookie?.split("token=")[1];
-
 				if (!token) return { res };
 
 				const tokenContent = jwt.verify(token, process.env.TOKEN_SECRET_KEY);
@@ -64,7 +63,7 @@ const start = async () => {
 				};
 			} catch (error) {
 				console.error("Erreur dans le contexte Apollo :", error);
-				return { res }; // Retourner un contexte minimal pour éviter le blocage
+				return { res };
 			}
 		},
 	});
