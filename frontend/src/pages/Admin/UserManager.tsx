@@ -12,14 +12,12 @@ import {
 import { useUserStore } from "../../store/userStore";
 
 export default function UserManager() {
-	const currentUser = useUserStore((state) => state.user);
-
-	if (!currentUser) {
-		return;
-	}
+	const { user: currentUser, fetchUsers } = useUserStore((state) => ({
+		user: state.user,
+		fetchUsers: state.fetchUsers,
+	}));
 
 	const { data, loading, error, refetch } = useGetUsersQuery();
-	const { fetchUsers } = useUserStore();
 	const [selectedUser, setSelectedUser] = useState<string | null>(null);
 	const [selectedCardRef] = useState<HTMLDivElement | null>(null);
 	const [searchUser, setSearchUser] = useState("");
@@ -29,7 +27,7 @@ export default function UserManager() {
 
 	const { data: selectedUserData } = useGetUserByIdQuery({
 		variables: { userId: selectedUser || "" },
-		skip: !selectedUser, // Ne pas exécuter la requête si aucun utilisateur n'est sélectionné
+		skip: !selectedUser,
 	});
 
 	useEffect(() => {
@@ -37,6 +35,16 @@ export default function UserManager() {
 			formRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
 		}
 	}, [selectedUser, selectedUserData]);
+
+	if (!currentUser) {
+		return (
+			<div className="flex items-center justify-center h-screen text-gray-500">
+				<p>
+					Vous devez être connecté pour accéder à la gestion des utilisateurs.
+				</p>
+			</div>
+		);
+	}
 
 	if (loading) return <p>Chargement des utilisateurs...</p>;
 	if (error) return <p>Erreur : {error.message}</p>;

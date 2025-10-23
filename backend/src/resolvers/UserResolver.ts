@@ -180,7 +180,6 @@ export class UserResolver {
       city: user.city,
       role: user.role,
     };
-    console.log("profile", profile);
     return JSON.stringify(profile);
   }
 

@@ -37,8 +37,6 @@ export default function EditInterestPointForm({
 
 	const navigate = useNavigate();
 
-	if (!interestPoint) return null;
-
 	const handleSubmit = async (evt: FormEvent) => {
 		evt.preventDefault();
 		const form = evt.target as HTMLFormElement;
@@ -47,12 +45,13 @@ export default function EditInterestPointForm({
 
 		const formattedData = {
 			...formJson,
-			latitude: interestPoint.latitude,
-			longitude: interestPoint.longitude,
-			city: String(interestPoint.city.id),
+			latitude: interestPoint?.latitude,
+			longitude: interestPoint?.longitude,
+			city: String(interestPoint?.city.id),
 			category: String(formJson.category),
 		};
 
+		if (!interestPoint?.id) return;
 		try {
 			const result = await replaceInterestPoint({
 				variables: {
@@ -66,7 +65,7 @@ export default function EditInterestPointForm({
 					fetchInterestPointsByCity(selectedCity.id);
 				}
 			}
-			fetchInterestPointById(String(interestPoint.id));
+			fetchInterestPointById(String(interestPoint?.id));
 			onClose();
 		} catch (err) {
 			console.error("Erreur lors de la modification :", err);
