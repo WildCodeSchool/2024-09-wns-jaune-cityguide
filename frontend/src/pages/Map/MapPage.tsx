@@ -37,9 +37,6 @@ export default function MapPage() {
 		}
 	}, [selectedInterestPoint, editModalOpen]);
 
-	console.log("user connecté :", user);
-	console.log("role du user connecté", user?.role);
-
 	return (
 		<div className="map-page-container relative flex flex-col h-full w-full overflow-hidden">
 			<div className="search-bar-container absolute z-10 top-5 left-1/2 -translate-x-1/2 w-11/12 max-w-md flex items-center justify-between gap-2 sm:w-1/2 sm:justify-center sm:gap-0">

@@ -3,7 +3,7 @@ import { client } from "../main";
 import {
 	GET_INTEREST_POINTS,
 	GET_INTEREST_POINTS_BY_CITY,
-	GET_INTEREST_POINT_BY_ID
+	GET_INTEREST_POINT_BY_ID,
 } from "../libs/graphql/operations";
 import type { InterestPoint } from "../libs/graphql/generated/graphql-types";
 
@@ -35,10 +35,6 @@ export const useInterestPointsStore = create<InterestPointsState>((set) => ({
 					interestPoints: data.getInterestPoints,
 					isLoading: false,
 				});
-				console.log(
-					"Interest points fetched successfully:",
-					data.getInterestPoints,
-				);
 			} else {
 				set({ isLoading: false });
 			}
@@ -60,10 +56,6 @@ export const useInterestPointsStore = create<InterestPointsState>((set) => ({
 					interestPointsByCity: data.getInterestPointsByCity,
 					isLoading: false,
 				});
-				console.log(
-					"Interest points by city fetched successfully:",
-					data.getInterestPointsByCity,
-				);
 			} else {
 				set({ isLoading: false });
 			}
@@ -75,7 +67,7 @@ export const useInterestPointsStore = create<InterestPointsState>((set) => ({
 			set({ isLoading: false });
 		}
 	},
-	
+
 	fetchInterestPointById: async (pointId) => {
 		set({ isLoading: true });
 		try {
@@ -83,24 +75,17 @@ export const useInterestPointsStore = create<InterestPointsState>((set) => ({
 				query: GET_INTEREST_POINT_BY_ID,
 				variables: { pointId },
 				fetchPolicy: "network-only",
-			})
+			});
 			if (data?.getInterestPointById) {
 				set({
 					selectedInterestPoint: data.getInterestPointById,
 					isLoading: false,
 				});
-				console.log(
-					"Interest point by ID fetched successfully:",
-					data.getInterestPointById,
-				);
 			} else {
 				set({ isLoading: false });
 			}
-		} catch (error) { 
-			console.error(
-				"Error occurred while fetching interest point:",
-				error,
-			);
+		} catch (error) {
+			console.error("Error occurred while fetching interest point:", error);
 			set({ isLoading: false });
 		}
 	},

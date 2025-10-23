@@ -62,12 +62,10 @@ export default function EditInterestPointForm({
 			});
 
 			if (result?.data?.replaceInterestPointById) {
-				console.log("Point modifié !");
 				if (selectedCity) {
 					fetchInterestPointsByCity(selectedCity.id);
 				}
 			}
-			console.log("Type of POI id:", typeof interestPoint.id);
 			fetchInterestPointById(String(interestPoint.id));
 			onClose();
 		} catch (err) {

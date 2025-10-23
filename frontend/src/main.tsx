@@ -84,9 +84,6 @@ const router = createBrowserRouter([
 	},
 ]);
 
-console.log("Base URL:", import.meta.env.VITE_BASE_URL);
-console.log("Gateway Port:", import.meta.env.VITE_GATEWAY_PORT);
-
 export const client = new ApolloClient({
 	uri: `${import.meta.env.VITE_BASE_URL}/api`,
 	cache: new InMemoryCache(),

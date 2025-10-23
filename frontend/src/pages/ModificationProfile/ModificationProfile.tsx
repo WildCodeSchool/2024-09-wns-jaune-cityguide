@@ -21,7 +21,7 @@ type FormDataType = {
 export default function ModificationProfile() {
 	const navigate = useNavigate();
 	const { user, setUser } = useUserStore();
-	const userId = "" + user?.id || "";
+	const userId = `${user?.id || ""}`;
 	const { cities } = useCitiesStore();
 	const { data, loading, error } = useGetUserByIdQuery({
 		variables: { userId },
@@ -83,11 +83,8 @@ export default function ModificationProfile() {
 					},
 				},
 			});
-			console.log("Ancien user:", user);
-			console.log("Données mises à jour:", data!.updateUser);
 			if (data?.updateUser) {
 				setUser({ ...user, ...data.updateUser } as User);
-				console.log("User mis à jour", data.updateUser);
 				navigate("/map");
 			}
 		} catch (error) {
