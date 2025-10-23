@@ -12,13 +12,13 @@ import { useUserStore } from "../store/userStore";
 type InterestPointSheetProps = {
 	isOpen: boolean;
 	interestPoint: InterestPoint | null;
+	onEdit: (updatedPoint: InterestPoint) => void;
 	onClose: () => void;
 };
 
 export default function InterestPointDetails({
 	isOpen,
 	onClose,
-	interestPoint,
 }: InterestPointSheetProps) {
 	const user = useUserStore((state) => state.user);
 	const { selectedInterestPoint } = useInterestPointsStore();
@@ -49,6 +49,8 @@ export default function InterestPointDetails({
 	}, [isOpen, onClose]);
 
 	const handleDelete = async () => {
+		if (!selectedInterestPoint) return;
+		const interestPoint = selectedInterestPoint;
 		try {
 			await deletePoint({ variables: { interestPointId: interestPoint.id } });
 		} catch (error) {
@@ -66,7 +68,7 @@ export default function InterestPointDetails({
 				navigate("/map");
 			}, 3000);
 		}
-	}, [deletedData]);
+	}, [deletedData, navigate, onClose]);
 
 	return (
 		<>
@@ -79,6 +81,7 @@ export default function InterestPointDetails({
 					<EditInterestPointForm
 						interestPoint={selectedInterestPoint}
 						onClose={() => setIsEditing(false)}
+						isOpen={isOpen}
 					/>
 				) : (
 					<>

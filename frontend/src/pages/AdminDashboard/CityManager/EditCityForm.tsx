@@ -49,7 +49,6 @@ export function EditCityForm({ city }: EditFormProps) {
 					cityId: city.id.toString(),
 				},
 			});
-			console.log("Deleting city with ID:", city.id);
 			fetchCities();
 			return data.deleteCity;
 		} catch (error) {
@@ -63,7 +62,6 @@ export function EditCityForm({ city }: EditFormProps) {
 	const handleAssignAdminRole = async (userId: string) => {
 		try {
 			await updateUserRole(userId, UserRole.CityAdmin);
-			console.log("User role updated for user:", userId);
 			fetchUsers();
 		} catch (error) {
 			console.error("Error updating user role:", error);
@@ -73,7 +71,6 @@ export function EditCityForm({ city }: EditFormProps) {
 	const handleAssignUserRole = async (userId: string) => {
 		try {
 			await updateUserRole(userId, UserRole.User);
-			console.log("User role updated for user:", userId);
 			fetchUsers();
 		} catch (error) {
 			console.error("Error updating user role:", error);

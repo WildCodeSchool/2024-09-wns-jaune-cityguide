@@ -10,7 +10,6 @@ import {
 	useGetUsersQuery,
 } from "../../libs/graphql/generated/graphql-types";
 import { useUserStore } from "../../store/userStore";
-import { UserRole } from "../../libs/graphql/generated/graphql-types";
 
 export default function UserManager() {
 	const currentUser = useUserStore((state) => state.user);
@@ -18,13 +17,11 @@ export default function UserManager() {
 	if (!currentUser) {
 		return;
 	}
-	
+
 	const { data, loading, error, refetch } = useGetUsersQuery();
 	const { fetchUsers } = useUserStore();
 	const [selectedUser, setSelectedUser] = useState<string | null>(null);
-	const [selectedCardRef, setSelectedCardRef] = useState<HTMLDivElement | null>(
-		null,
-	);
+	const [selectedCardRef] = useState<HTMLDivElement | null>(null);
 	const [searchUser, setSearchUser] = useState("");
 	const formRef = useRef<HTMLDivElement | null>(null);
 	const [showAllUsers, setShowAllUsers] = useState(false);
@@ -110,7 +107,7 @@ export default function UserManager() {
 							onUserDeleted={handleUserDeletedByAdmin}
 							onCancel={handleCancel}
 						/>
- 					</motion.div>
+					</motion.div>
 				)}
 			</AnimatePresence>
 		</div>

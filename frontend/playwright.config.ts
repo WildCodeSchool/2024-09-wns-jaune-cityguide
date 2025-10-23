@@ -6,13 +6,15 @@ import { defineConfig, devices } from "@playwright/test";
  */
 import dotenv from "dotenv";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+
+const envFile =
+	process.env.NODE_ENV === "production"
+		? "../environments/prod/.env.prod"
+		: "../environments/dev/.env.dev";
 
 // How to fix error '__dirname is not defined in ES module scope': https://iamwebwiz.medium.com/how-to-fix-dirname-is-not-defined-in-es-module-scope-34d94a86694d
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+dotenv.config({ path: path.resolve(envFile) });
 console.log("BASE URL:", process.env.PLAYWRIGHT_BASE_URL);
 
 /**

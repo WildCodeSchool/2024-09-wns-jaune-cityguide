@@ -140,15 +140,17 @@ const CategoryManager = () => {
 
 	return (
 		<div className="w-full p-6 space-y-8 min-h-[80vh]">
-			{/* Recherche & Compteur */}
 			<div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
-				{/* Recherche */}
 				<div className="w-full sm:w-auto">
-					<label className="block text-[#706EEB] font-medium mb-2">
+					<label
+						htmlFor="search-category"
+						className="block text-[#706EEB] font-medium mb-2"
+					>
 						Rechercher une Catégorie :
 					</label>
 					<div className="flex items-center bg-white rounded-full border-2 border-[#706EEB] px-4 py-2 shadow-md">
 						<input
+							id="search-category"
 							type="text"
 							value={searchedCategory}
 							onChange={(e) => setSearchedCategory(e.target.value)}
@@ -164,7 +166,6 @@ const CategoryManager = () => {
 					</div>
 				</div>
 
-				{/* Nombre de catégories */}
 				<div className="bg-white border-2 border-[#706EEB] px-6 py-2 rounded-xl shadow-md text-center">
 					<p className="text-[#706EEB] text-sm font-medium">
 						Nombre de catégories
@@ -175,9 +176,9 @@ const CategoryManager = () => {
 				</div>
 			</div>
 
-			{/* Bouton ajouter */}
 			<div>
 				<button
+					type="button"
 					className="bg-[#706EEB] text-white px-4 py-2 rounded-full shadow-md hover:bg-[#5a58d6] cursor-pointer transition"
 					onClick={handleShowPopup}
 				>
@@ -185,19 +186,17 @@ const CategoryManager = () => {
 				</button>
 			</div>
 
-			{/* Popup d'ajout de catégorie */}
 			{showCreationPopup && (
 				<div className="fixed inset-0 bg-black/20 my-0 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out animate-fade-in">
 					<div className="relative bg-white max-w-md w-full px-6 py-5 rounded-xl shadow-lg border-2 border-[#706eeb] transform transition-all duration-300 ease-out scale-95 animate-scale-in">
-						{/* Bouton fermeture */}
 						<button
+							type="button"
 							onClick={() => setShowCreationPopup(false)}
 							className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition cursor-pointer"
 						>
 							Fermer
 						</button>
 
-						{/* Contenu du popup */}
 						<div className="text-sm text-[#706eeb] font-medium space-y-2 mt-6">
 							<form
 								onSubmit={handleCreateCategory}
@@ -246,7 +245,7 @@ const CategoryManager = () => {
 									rows={4}
 									className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
 									required={true}
-								></textarea>
+								/>
 
 								<div className="flex items-center justify-between w-full">
 									<button
@@ -257,6 +256,7 @@ const CategoryManager = () => {
 									</button>
 
 									<button
+										type="button"
 										className="w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] mt-0 cursor-pointer"
 										onClick={() => setShowCreationPopup(false)}
 									>
@@ -269,7 +269,6 @@ const CategoryManager = () => {
 				</div>
 			)}
 
-			{/* Popup de succès */}
 			{successCreationPopup && (
 				<div className="fixed top-20 right-3 max-w-[350px] w-auto mt-5 bg-white border-3 border-[#706eeb] px-6 py-4 rounded-xl shadow-lg flex items-center justify-start space-x-3 transition-all ease-in-out duration-300 transform opacity-100 scale-100">
 					<div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">
@@ -295,10 +294,10 @@ const CategoryManager = () => {
 				</div>
 			)}
 
-			{/* Liste des catégories */}
 			<div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
 				{filteredCategories.map((category) => (
 					<button
+						type="button"
 						key={category.id}
 						className="rounded-xl px-4 py-3 text-center shadow-md border-2 transition-all bg-white text-[#fff] font-semibold border-[#333] hover:bg-[#f5f5ff] cursor-pointer"
 						onClick={() => handleSelectCategory(category.id)}
@@ -308,13 +307,11 @@ const CategoryManager = () => {
 					</button>
 				))}
 			</div>
-
-			{/* Popup de mise à jour */}
 			{showUpdatePopup && selectedCategoryData && (
 				<div className="fixed inset-0 bg-black/20 my-0 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out animate-fade-in">
 					<div className="relative bg-white max-w-md w-full px-6 py-5 rounded-xl shadow-lg border-2 border-[#706eeb] transform transition-all duration-300 ease-out scale-95 animate-scale-in">
-						{/* Bouton fermeture */}
 						<button
+							type="button"
 							onClick={() => {
 								setShowUpdatePopup(false);
 								setSelectedCategoryId(null);
@@ -324,7 +321,6 @@ const CategoryManager = () => {
 							Fermer
 						</button>
 
-						{/* Contenu du popup */}
 						<div className="text-sm text-[#706eeb] font-medium space-y-2 mt-6">
 							<form
 								onSubmit={handleUpdateCategory}
@@ -375,7 +371,7 @@ const CategoryManager = () => {
 									defaultValue={
 										selectedCategoryData.getCategoryById.description ?? ""
 									}
-								></textarea>
+								/>
 
 								<div className="flex items-center justify-between w-full gap-4">
 									<button
@@ -386,6 +382,7 @@ const CategoryManager = () => {
 									</button>
 
 									<button
+										type="button"
 										className="w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#706eeb] hover:bg-[#b0afe4] mt-0 cursor-pointer"
 										onClick={() => {
 											setShowUpdatePopup(false);
@@ -396,6 +393,7 @@ const CategoryManager = () => {
 									</button>
 
 									<button
+										type="button"
 										className="w-full max-w-[150px] text-white py-1 rounded-[25px] bg-[#FF0000] hover:bg-[#b0afe4] mt-0 cursor-pointer"
 										onClick={() => {
 											setShowUpdatePopup(false);
@@ -412,7 +410,6 @@ const CategoryManager = () => {
 				</div>
 			)}
 
-			{/* Popup de succès mise à jour */}
 			{successUpdatePopup && (
 				<div className="fixed top-20 right-3 max-w-[350px] w-auto mt-5 bg-white border-3 border-[#706eeb] px-6 py-4 rounded-xl shadow-lg flex items-center justify-start space-x-3 transition-all ease-in-out duration-300 transform opacity-100 scale-100">
 					<div className="absolute top-[-12px] left-[-12px] bg-[#706eeb] p-1 rounded-full text-white">

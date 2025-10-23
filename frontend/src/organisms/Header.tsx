@@ -8,7 +8,7 @@ import { UserRole } from "../libs/graphql/generated/graphql-types";
 
 export default function Navbar() {
 	const user = useUserStore((state) => state.user);
-  const clearUser = useUserStore((state) => state.clearUser);
+	const clearUser = useUserStore((state) => state.clearUser);
 	console.log("Navbar render user:", user);
 	const [logout] = useMutationMutation();
 	const navigate = useNavigate();
@@ -41,7 +41,6 @@ export default function Navbar() {
 		<>
 			<nav className="nav-container primary-bg z-50 flex flex-col sm:flex-row items-start sm:items-center justify-between h-auto sm:h-20">
 				<div className="desktop-nav hidden sm:flex items-center justify-between h-full w-full p-14">
-					{/* Logo */}
 					<div className="flex justify-center -mt-12 sm:mt-12 z-[901]">
 						<a href="/" className="flex-shrink-0">
 							<img
@@ -53,7 +52,6 @@ export default function Navbar() {
 						</a>
 					</div>
 
-					{/* Version desktop */}
 					<div className="hidden sm:flex items-center space-x-4">
 						{user ? (
 							<>
@@ -62,7 +60,6 @@ export default function Navbar() {
 								</span>
 
 								<div className="relative inline-block text-left">
-									{/* Bouton d'ouverture */}
 									<div>
 										<button
 											type="button"
@@ -90,19 +87,17 @@ export default function Navbar() {
 										</button>
 									</div>
 
-									{/* Dropdown */}
 									<div
 										className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
 											isOpen
 												? "scale-100 opacity-100"
 												: "scale-95 opacity-0 pointer-events-none"
 										}`}
-										role="menu"
 										aria-orientation="vertical"
 										aria-labelledby="menu-button"
 										tabIndex={-1}
 									>
-										<div className="py-1" role="none">
+										<div className="py-1">
 											<a
 												href="/profile"
 												className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -114,61 +109,61 @@ export default function Navbar() {
 												Mon profil
 											</a>
 
-                     {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
-                        <Link
-                          to={"/dashboard"}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          role="menuitem"
-                          tabIndex={-1}
-                          id="menu-item-2"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          Dashboard
-                        </Link>
-                      )}
+											{(user?.role === UserRole.SuperAdmin ||
+												user?.role === UserRole.CityAdmin) && (
+												<Link
+													to={"/dashboard"}
+													className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+													role="menuitem"
+													tabIndex={-1}
+													id="menu-item-2"
+													onClick={() => setIsOpen(false)}
+												>
+													Dashboard
+												</Link>
+											)}
 
-                      <button
-                        onClick={() => {
-                          setIsOpen(false);
-                          handleLogout();
-                        }}
-                        className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        tabIndex={-1}
-                        id="menu-item-3"
-                      >
-                        Déconnexion
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div>
-                  <div className="hidden sm:flex space-x-4">
-                    <Link
-                      to={"/login"}
-                      className="tuto-connexion-button rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      CONNEXION
-                    </Link>
-                    <Link
-                      to={"/inscription"}
-                      className="tuto-inscription-button rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      INSCRIPTION
-                    </Link>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-
-				{/* Mobile Menu */}
+											<button
+												type="button"
+												onClick={() => {
+													setIsOpen(false);
+													handleLogout();
+												}}
+												className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+												role="menuitem"
+												tabIndex={-1}
+												id="menu-item-3"
+											>
+												Déconnexion
+											</button>
+										</div>
+									</div>
+								</div>
+							</>
+						) : (
+							<>
+								<div>
+									<div className="hidden sm:flex space-x-4">
+										<Link
+											to={"/login"}
+											className="tuto-connexion-button rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-black"
+											onClick={() => setIsOpen(false)}
+										>
+											CONNEXION
+										</Link>
+										<Link
+											to={"/inscription"}
+											className="tuto-inscription-button rounded-md px-3 py-2 text-sm font-medium bg-gray-700 text-gray-300 hover:secondary-bg hover:text-white"
+											onClick={() => setIsOpen(false)}
+										>
+											INSCRIPTION
+										</Link>
+									</div>
+								</div>
+							</>
+						)}
+					</div>
+				</div>
 
 				<div className="w-full h-15 sm:hidden relative px-4">
 					<div className="flex items-center justify-between h-full">
@@ -187,7 +182,6 @@ export default function Navbar() {
 									<span className="text-white text-base font-bold">
 										Bonjour, {user.firstname}
 									</span>
-									{/* Dropdown utilisateur */}
 									<div className="relative inline-block text-left">
 										<button
 											type="button"
@@ -213,75 +207,6 @@ export default function Navbar() {
 											</svg>
 										</button>
 
-                    {/* Dropdown */}
-                    <div
-                      className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
-                        isOpen
-                          ? "scale-100 opacity-100"
-                          : "scale-95 opacity-0 pointer-events-none"
-                      }`}
-                      role="menu"
-                      aria-orientation="vertical"
-                      aria-labelledby="menu-button"
-                      tabIndex={-1}
-                    >
-                      <div className="py-1" role="none">
-                        <Link
-                          to="#"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          Mon profil
-                        </Link>
-                       {(user?.role === UserRole.SuperAdmin || user?.role === UserRole.CityAdmin) && (
-                          <Link
-                            to={"/dashboard"}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            Dashboard
-                          </Link>
-                        )}
-                        <button
-                          onClick={() => {
-                            setIsOpen(false);
-                            handleLogout();
-                          }}
-                          className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                          Déconnexion
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {/* Dropdown connexion/inscription */}
-                  <div className="relative inline-block text-left">
-                    <button
-                      type="button"
-                      onClick={() => setIsOpen(!isOpen)}
-                      className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
-                      aria-expanded={isOpen}
-                      aria-haspopup="true"
-                    >
-                      Menu
-                      <svg
-                        className="-mr-1 size-5 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </button>
-
-										{/* Dropdown */}
 										<div
 											className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
 												isOpen
@@ -294,6 +219,72 @@ export default function Navbar() {
 											tabIndex={-1}
 										>
 											<div className="py-1" role="none">
+												<Link
+													to="#"
+													className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+													onClick={() => setIsOpen(false)}
+												>
+													Mon profil
+												</Link>
+												{(user?.role === UserRole.SuperAdmin ||
+													user?.role === UserRole.CityAdmin) && (
+													<Link
+														to={"/dashboard"}
+														className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+														onClick={() => setIsOpen(false)}
+													>
+														Dashboard
+													</Link>
+												)}
+												<button
+													onClick={() => {
+														setIsOpen(false);
+														handleLogout();
+													}}
+													className="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+												>
+													Déconnexion
+												</button>
+											</div>
+										</div>
+									</div>
+								</>
+							) : (
+								<>
+									<div className="relative inline-block text-left">
+										<button
+											type="button"
+											onClick={() => setIsOpen(!isOpen)}
+											className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+											aria-expanded={isOpen}
+											aria-haspopup="true"
+										>
+											Menu
+											<svg
+												className="-mr-1 size-5 text-gray-400"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												aria-hidden="true"
+											>
+												<path
+													fillRule="evenodd"
+													d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+													clipRule="evenodd"
+												/>
+											</svg>
+										</button>
+
+										<div
+											className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none transform transition-all duration-100 ${
+												isOpen
+													? "scale-100 opacity-100"
+													: "scale-95 opacity-0 pointer-events-none"
+											}`}
+											aria-orientation="vertical"
+											aria-labelledby="menu-button"
+											tabIndex={-1}
+										>
+											<div className="py-1">
 												<Link
 													to="/login"
 													className="tuto-connexion-button-mobile block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
