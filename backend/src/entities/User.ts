@@ -20,7 +20,7 @@ export enum UserRole {
 }
 
 registerEnumType(UserRole, {
-	name: "UserRole", // Nom utilisé dans le schéma GraphQL
+	name: "UserRole",
 	description: "Defines the role of the user",
 });
 

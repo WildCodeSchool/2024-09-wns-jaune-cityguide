@@ -136,7 +136,7 @@ export default function CreateInterestPointForm({
 			if (result?.data?.createInterestPoint) {
 				console.log("point créé");
 				if (selectedCity) {
-					fetchInterestPointsByCity(selectedCity.id); // Récupérer les points mis à jour
+					fetchInterestPointsByCity(selectedCity.id);
 				}
 				onClose?.();
 			}
