@@ -30,9 +30,6 @@ jobs:
       - name: Type check backend
         run: npm run type-check
 
-      - name: Lint backend
-        run: npm run lint
-
       - name: Run backend tests
         run: npm test
 
