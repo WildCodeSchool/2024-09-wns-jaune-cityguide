@@ -1,76 +1,145 @@
 # CityGuide
 
-Cityguide est une application permettant de découvrir des points d'intérêts des différentes villes de France. Ce projet est construit avec **Node.js**, **React** et **PostgresSQL** et fonctionne avec **Docker** pour simplifier le déploiement.
+![Logo de l'application CityGuide](./frontend/src/assets/logo.png)
 
-## Prérequis
+**CityGuide** est une application web fullstack composée de :  
 
-- **Docker & Docker Compose** installés ([instructions](https://docs.docker.com/get-docker/))
-- **Node.js** et **npm** (si besoin de lancer des commandes en local sans Docker)
-- **Git**
+- **Frontend** : React + Vite + Apollo Client  
+- **Backend** : Node.js + GraphQL  
+- **Base de données** : PostgreSQL  
+- **Reverse Proxy / API Gateway** : Nginx  
+- **Admin & DB visualization** : Adminer  
 
-### Installation et configuration
+L’application est containerisée avec **Docker** et peut être déployée dans différents environnements (`dev` et `prod`) via des fichiers `.env` dédiés.
 
-1. Cloner le projet
+---
 
-```sh
-git clone https://github.com/WildCodeSchool/2024-09-wns-jaune-cityguide.git
-cd 2024-09-wns-jaune-cityguide
+## Table des matières
+
+- [Présentation](#présentation)
+- [Prérequis](#prérequis-techniques)
+- [Installation et lancement](#installation-et-lancement-de-lapplication)
+- [Configurer les variables d'environnement](#configurer-les-variables-denvironnement)
+- [Architecture Docker](#architecture-docker)
+- [Scripts utiles](#scripts-utiles)
+- [CI/CD](#cicd)
+- [Déploiement](#déploiement-de-lapplication)
+
+---
+
+## Présentation
+
+CityGuide permet de :  
+
+- consulter des informations sur les villes et leurs points d'intérêts,
+- gérer les utilisateurs et les rôles,
+- ajouter de nouvelles villes et de nouveaux points d'intérêt.
+
+---
+
+## Prérequis techniques
+
+- Docker et Docker Compose  
+- Git  
+- (Optionnel) Node.js + `npm` si vous voulez lancer certains scripts localement  
+
+> ⚠️ Pour le déploiement, Node.js n’est **pas nécessaire** car tout fonctionne via Docker.
+
+---
+
+## Installation et lancement de l'application
+
+### Cloner le projet
+
+Cloner le repo distant à l'aide de la commande :
+
+```bash
+
+git clone git@github.com:WildCodeSchool 2024-09-wns-jaune-cityguide.git
+
 ```
 
-2. Lancer l'appli avec docker
+### Configurer les variables d'environnement
 
-```sh
-docker-compose up --build
-```
+Copier le fichier d’exemple `.env.sample`, le renommer `.env.dev` et le remplir avec les variables adéquates.
 
-3. Arrêter les services
+### Démarrer l'application en mode "dev"
 
-```sh
-docker-compose down
-```
+À la racine du projet, exécuter la commande suivante pour lancer le projet en mode "développement" : `npm run build:dev`.
 
-4. Créer une branche (en partant de la branche dev)
+Pour vérifier le bon démarrage de l'application, essayer d'accéder aux url suivantes :
 
-```sh
-git checkout -b nom-de-la-branche
-```
+- pour le frontend : ``http://localhost:${PORT}``: la page d'accueil de l'application doit s'afficher,
 
-5. Faire un commit des changements
+- pour le backend GraphQL : ``http://localhost:${PORT}/api`` : ApolloSandbox doit s'afficher.
 
-```sh
-git commit -m "nom du commit"
-```
+---
 
-6. Pousser sa branche sur le repo (push)
+## Architecture Docker
 
-```sh
-git push origin nom-de-la-branche
-```
+L’application CityGuide repose sur une architecture multi-conteneurs orchestrée avec Docker Compose.
+Chaque service est isolé dans son propre conteneur et communique via un réseau interne Docker.
 
-7. Faire valider sa pull request
+### Liste des services
 
-Se rendre sur https://github.com/WildCodeSchool/2024-09-wns-jaune-cityguide et cliquer sur le bouton :
-**Compare & pull request**
-Se relire, puis cliquer sur le bouton:
-**Create pull request**
+- `frontend` : React + Vite
+- `backend` : Node.js + GraphQL
+- `database` : PostgreSQL (volume persistant)
+- `gateway` : Nginx (API Gateway + Reverse Proxy)
+- `vizualizer` : Adminer pour visualiser la base de données
 
-Attention, ne pas oublier d'ajouter des **Reviewers** afin de leur notifier la pull request
+### Dépendances et ordre de démarrage des containers
 
-Ensuite il faudra attendre la validation du code d'au moins deux personnes exterieures à la features avant de merger.
+L’ordre de démarrage est géré automatiquement grâce aux _healthchecks_ et à `depends_on` :
 
-8. Acceptation de la pull request
+1. `database` démarre et doit être `healthy` (`pg_isready`).
+2. `backend` attend que database soit prêt avant de se lancer.
+3. `frontend` attend que backend soit `healthy` avant de se lancer.
+4. `gateway` démarre seulement après que frontend soit disponible.
 
-Une fois la validation passée sous reserve de changements, vous pourrez cliquer sur le bouton merge pull request
+Cette configuration permet à l'application de démarrer de façon séquentielle et stable, en évitant les erreurs de connexion prématurées entre services.
 
-9. pull origin dev
+---
 
-Au retour d'une branche lors du passage sur la branche dev, il faut penser à :
+## Scripts utiles
 
-```sh
-git pull origin dev
-```
+L'application compte plusieurs scripts.
 
-#### Contact
+### Scripts racine (Docker)
 
-En cas de soucis n'hésitez pas à nous contacter à l'adresse email suivante
-cityguide.admin@gmail.com
+Ces scripts permettent de lancer tous les services via Docker Compose selon l’environnement :
+
+- `npm run build:dev` : build et démarre tous les conteneurs en mode développement avec `.env.dev` et active `NODE_ENV=development`.
+- `npm run build:prod` : build et démarre tous les conteneurs en mode production avec `.env.prod` et active `NODE_ENV=development`.
+
+### Scripts frontend
+
+Ces scripts sont à utiliser dans le dossier `frontend/`.
+
+- `npm run dev` : lance le serveur de développement Vite local avec hot-reload.
+- `npm run codegen` : génère les types et hooks Apollo GraphQL via graphql-codegen.
+- `npm run test:unit` : exécute les tests unitaires avec Vitest.
+- `npm run test:e2e` : exécute les tests end-to-end avec Playwright.
+
+### Scripts backend
+
+Ces scripts sont à utiliser dans le dossier `backend/`.
+
+- `npm run start` : démarre le serveur Node.js avec hot-reload (ts-node-dev).
+- `npm run data:create` : crée une nouvelle migration TypeORM.
+- `npm run data:generate` : génère une migration TypeORM à partir des changements dans la DB.
+- `npm run data:up` : applique les migrations à la base de données.
+- `npm run data:down` : annule la dernière migration appliquée.
+- `npm run test`: lance les tests backend avec Jest et génère le coverage.
+
+---
+
+## CI/CD
+
+🚧 En cours de rédaction...
+
+---
+
+## Déploiement de l'application
+
+🚧 En cours de rédaction...
