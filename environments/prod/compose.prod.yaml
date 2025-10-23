@@ -1,0 +1,82 @@
+services:
+  backend:
+    container_name: cityguide_backend
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile
+    volumes:
+      - ../../backend/src/:/app/src
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'curl --fail --request POST --header ''Content-Type: application/json'' --url ''http://backend:${SERVICE_PORT}/api'' --data ''{"query":"query { __typename }"}'' || exit 1',
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    environment:
+      SERVICE_PORT: ${SERVICE_PORT}
+      BASE_URL: ${BASE_URL}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_SCHEMA: ${DB_SCHEMA}
+      DB_USER: ${DB_USER}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      TOKEN_SECRET_KEY: ${TOKEN_SECRET_KEY}
+      GMAIL_USERNAME: ${GMAIL_USERNAME}
+      GMAIL_PASSWORD: ${GMAIL_PASSWORD}
+      GATEWAY_PORT: ${GATEWAY_PORT}
+
+  frontend:
+    container_name: cityguide_frontend
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ../../frontend/src/:/app/src
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test:
+        ["CMD-SHELL", "curl --fail 'http://frontend:${SERVICE_PORT}' || exit 1"]
+    environment:
+      SERVICE_PORT: ${SERVICE_PORT}
+      VITE_BASE_URL: ${VITE_BASE_URL}
+      GATEWAY_PORT: ${GATEWAY_PORT}
+
+  database:
+    container_name: cityguide_database
+    image: postgres
+    volumes:
+      - ./persist/data/:/var/lib/postgresql
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_SCHEMA} -h ${DB_HOST}"]
+      interval: 40s
+      timeout: 30s
+      retries: 3
+      start_period: 10s
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_SCHEMA}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_HOST: ${DB_HOST}
+
+  gateway:
+    container_name: cityguide_gateway
+    image: nginx
+    ports:
+      - ${GATEWAY_PORT}:80
+    volumes:
+      - ./nginx:/etc/nginx/templates
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
