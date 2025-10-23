@@ -9,7 +9,7 @@ describe("sanitizeObjectStrings", () => {
 			]),
 		).toThrow(
 			badUserInputError(
-				`Le champ "name" contient du contenu invalide. Opération interrompue.`,
+				`Field "name" contains invalid content. Operation interrupted.`,
 			),
 		);
 	});
