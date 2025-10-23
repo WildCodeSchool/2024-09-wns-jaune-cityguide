@@ -10,8 +10,9 @@ import { useInterestPointsStore } from "../store/interestPointsStore";
 import { useCitiesStore } from "../store/citiesStore";
 
 type EditInterestPointFormProps = {
-	interestPoint: InterestPoint;
+	interestPoint: InterestPoint | null;
 	isOpen: boolean;
+	onSave?: (updatedPoint: InterestPoint) => void;
 	onClose: () => void;
 };
 
@@ -87,7 +88,7 @@ export default function EditInterestPointForm({
 		}, 2000);
 
 		return () => clearTimeout(timer);
-	}, [editedData, onClose]);
+	}, [editedData, onClose, navigate]);
 
 	if (!interestPoint) return null;
 	if (error || editError) return <>Error!</>;
@@ -119,8 +120,8 @@ export default function EditInterestPointForm({
 					</svg>
 
 					<div className="text-sm text-[#706eeb] font-medium">
-						{popupMessage.map((line, index) => (
-							<p key={index} className="mb-2">
+						{popupMessage.map((line) => (
+							<p key={line} className="mb-2">
 								{line}
 							</p>
 						))}
@@ -140,20 +141,28 @@ export default function EditInterestPointForm({
 						</button>
 					</div>
 					<div className="sheet-header w-full flex items-center justify-center space-x-4 py-4 text-gray-600">
-						<label className="block text-sm font-medium text-gray-700 mb-1">
+						<label
+							htmlFor="name"
+							id="name-label"
+							className="block text-sm font-medium text-gray-700 mb-1"
+						>
 							Nom
 						</label>
 						<input
+							id="name"
 							name="name"
 							defaultValue={interestPoint.name || ""}
 							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
 						/>
 					</div>
 
-					{/* Pictures */}
 					<div className="w-full sm:w-2/3 space-y-2 mx-auto">
-						<label className="text-sm font-medium text-gray-700">Photos</label>
-						{/* Responsive grid */}
+						<label
+							htmlFor="new_picture_url"
+							className="text-sm font-medium text-gray-700"
+						>
+							Photos
+						</label>
 						<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
 							{interestPoint.pictures?.map((pic) => (
 								<div
@@ -175,7 +184,6 @@ export default function EditInterestPointForm({
 								</div>
 							))}
 
-							{/* Add picture button */}
 							<button
 								type="button"
 								onClick={() => setShowAddImageInput(!showAddImageInput)}
@@ -187,6 +195,7 @@ export default function EditInterestPointForm({
 
 						{showAddImageInput && (
 							<input
+								id="new_picture_url"
 								type="url"
 								name="new_picture_url"
 								value={newImageUrl}
@@ -198,38 +207,54 @@ export default function EditInterestPointForm({
 					</div>
 
 					<div className="details-content space-y-4 text-sm sm:text-base">
-						<label className="block text-sm font-medium text-gray-700 mb-1">
+						<label
+							htmlFor="description"
+							className="block text-sm font-medium text-gray-700 mb-1"
+						>
 							Description
 						</label>
 						<textarea
+							id="description"
 							name="description"
 							defaultValue={interestPoint.description || ""}
 							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm resize-none h-24 focus:outline-none focus:ring-2 focus:ring-violet-500"
 						/>
 
-						<label className="block text-sm font-medium text-gray-700 mb-1">
+						<label
+							htmlFor="address"
+							className="block text-sm font-medium text-gray-700 mb-1"
+						>
 							Adresse
 						</label>
 						<input
+							id="address"
 							name="address"
 							defaultValue={interestPoint.address || ""}
 							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-500 cursor-not-allowed focus:outline-none"
 						/>
 
 						<div className="grid grid-cols-2 gap-4">
-							<label className="block text-sm font-medium text-gray-700 mb-1">
+							<label
+								htmlFor="city"
+								className="block text-sm font-medium text-gray-700 mb-1"
+							>
 								Ville
 							</label>
 							<input
-								name="address"
+								id="city"
+								name="city"
 								defaultValue={interestPoint.city.name || ""}
 								disabled
 								className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-100 text-gray-500 cursor-not-allowed focus:outline-none"
 							/>
-							<label className="block text-sm font-medium text-gray-700 mb-1">
+							<label
+								htmlFor="category"
+								className="block text-sm font-medium text-gray-700 mb-1"
+							>
 								Catégorie
 							</label>
 							<select
+								id="category"
 								name="category"
 								defaultValue={interestPoint.category?.id || ""}
 								className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 text-center"
@@ -242,10 +267,14 @@ export default function EditInterestPointForm({
 							</select>
 						</div>
 
-						<label className="block text-sm font-medium text-gray-700 mb-1">
+						<label
+							htmlFor="link_url"
+							className="block text-sm font-medium text-gray-700 mb-1"
+						>
 							Site officiel{" "}
 						</label>
 						<input
+							id="link_url"
 							name="link_url"
 							defaultValue={interestPoint.link_url || ""}
 							className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
