@@ -1,8 +1,8 @@
 {
 	"name": "docker",
 	"scripts": {
-		"build:dev": "cross-env NODE_ENV=development docker compose -f compose.yaml --env-file .env.dev up -d --build",
-		"build:prod": "cross-env NODE_ENV=production docker compose -f compose.yaml --env-file .env.prod up -d --build",
+		"build:dev": "cross-env NODE_ENV=development docker compose -f environments/dev/compose.dev.yaml --env-file environments/dev/.env.dev up -d --build",
+		"build:prod": "cross-env NODE_ENV=production docker compose -f environments/prod/compose.prod.yaml --env-file environments/prod/.env.prod up -d --build",
 		"destroy": "docker compose down -v && docker system prune -af --volumes"
 	},
 	"dependencies": {
