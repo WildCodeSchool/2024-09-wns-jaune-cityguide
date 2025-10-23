@@ -10,15 +10,17 @@ import { useUserStore } from "../../store/userStore";
 import { useCitiesStore } from "../../store/citiesStore";
 import { useInterestPointsStore } from "../../store/interestPointsStore";
 import background_form from "../../assets/background_form.png";
+import { ApolloError } from "@apollo/client";
 
 const Login = () => {
 	const [login] = useLoginUserMutation();
 	const { setSelectedCity } = useCitiesStore();
 	const { fetchInterestPointsByCity } = useInterestPointsStore();
 	const navigate = useNavigate();
-	const [message, setMessage] = useState<{ type: string; text: string } | null>(
-		null,
-	);
+	const [message, setMessage] = useState<{
+		type: string;
+		text: string;
+	} | null>(null);
 	const setUser = useUserStore((state) => state.setUser);
 
 	const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +34,10 @@ const Login = () => {
 
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		if (!emailRegex.test(formJson.email)) {
-			setMessage({ type: "error", text: "Le format de l'email est invalide." });
+			setMessage({
+				type: "error",
+				text: "Le format de l'email est invalide.",
+			});
 			return;
 		}
 
@@ -43,8 +48,6 @@ const Login = () => {
 
 			if (data?.loginUser) {
 				const parsed = JSON.parse(data.loginUser);
-
-				console.log("parsed user from response:", parsed);
 				setUser({
 					id: parsed.userId,
 					firstname: parsed.firstname,
@@ -65,30 +68,39 @@ const Login = () => {
 					navigate("/map");
 				}, 2000);
 			}
-		} catch (error: any) {
-			const code = error?.graphQLErrors?.[0]?.extensions?.code;
+		} catch (error) {
+			if (error instanceof ApolloError) {
+				const code = error?.graphQLErrors?.[0]?.extensions?.code;
 
-			switch (code) {
-				case "USER_NOT_FOUND":
-					setMessage({
-						type: "error",
-						text: "Le compte avec cet email n'existe pas.",
-					});
-					break;
+				switch (code) {
+					case "USER_NOT_FOUND":
+						setMessage({
+							type: "error",
+							text: "Le compte avec cet email n'existe pas.",
+						});
+						break;
 
-				case "INVALID_PASSWORD":
-					setMessage({
-						type: "error",
-						text: "Email ou mot de passe invalide.",
-					});
-					break;
+					case "INVALID_PASSWORD":
+						setMessage({
+							type: "error",
+							text: "Email ou mot de passe invalide.",
+						});
+						break;
 
-				default:
-					setMessage({ type: "error", text: "Erreur lors de la connexion." });
+					default:
+						setMessage({
+							type: "error",
+							text: "Erreur lors de la connexion.",
+						});
+				}
+			} else {
+				setMessage({
+					type: "error",
+					text: "Une erreur inattendue est survenue. Veuillez réessayer.",
+				});
 			}
 		}
 	};
-
 	return (
 		<>
 			<div
