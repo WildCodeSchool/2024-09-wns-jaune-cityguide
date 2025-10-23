@@ -1,4 +1,6 @@
 persist/
 .env.dev
 node_modules/
-.env.prod
+
+**.env**
+!.env.sample
