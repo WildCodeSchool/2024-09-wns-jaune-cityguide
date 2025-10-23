@@ -110,7 +110,6 @@ function Inscription() {
 			});
 			if (data?.registerUser) {
 				const parsed = JSON.parse(data.registerUser);
-				console.log("parsed", parsed);
 				setUser({
 					id: parsed.id,
 					firstname: parsed.firstname,
@@ -136,7 +135,7 @@ function Inscription() {
 				}, 3000);
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			if (error instanceof Error) {
 				if (error.message === "Cet email est déjà utilisé.") {
 					setApiError("Cet email est déjà utilisé.");

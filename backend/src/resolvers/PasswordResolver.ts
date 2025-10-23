@@ -65,8 +65,6 @@ export class PasswordResolver {
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error("Erreur lors de l'envoi de l'e-mail:", error);
-      } else {
-        console.log("E-mail envoyé:", info.response);
       }
     });
 

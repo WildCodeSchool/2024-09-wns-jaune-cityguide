@@ -106,7 +106,6 @@ export default function CreateInterestPointForm({
 				"La ville sélectionnée n'existe pas dans la base de données.",
 			);
 			setFormCityId("");
-			console.log("City not found in the database:", address.city);
 			setCityExists(false);
 		}
 	};
@@ -124,8 +123,6 @@ export default function CreateInterestPointForm({
 			city: formCityId,
 			address: selectedAddress?.fulltext,
 		};
-
-		console.log(formattedData);
 		try {
 			const result = await createInterestPoint({
 				variables: {
@@ -134,7 +131,6 @@ export default function CreateInterestPointForm({
 			});
 
 			if (result?.data?.createInterestPoint) {
-				console.log("point créé");
 				if (selectedCity) {
 					fetchInterestPointsByCity(selectedCity.id);
 				}
