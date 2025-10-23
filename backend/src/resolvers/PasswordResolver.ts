@@ -88,8 +88,8 @@ export class PasswordResolver {
 
     const hashedPassword = await argon.hash(newPassword);
     user.hashedPassword = hashedPassword;
-    user.resetToken = null; // Clear the reset token
-    user.resetTokenExpiration = null; // Clear the expiration date
+    user.resetToken = null;
+    user.resetTokenExpiration = null;
     await user.save();
 
     return "Mot de passe réinitialisé avec succès";
