@@ -26,6 +26,7 @@ L’application est containerisée avec **Docker** et peut être déployée dans
 - [Scripts utiles](#scripts-utiles)
 - [CI/CD](#cicd)
 - [Déploiement](#déploiement-de-lapplication)
+- [Troubleshooting](#troubleshooting-des-erreurs-courantes)
 
 ---
 
@@ -164,4 +165,102 @@ La CI est composée de deux jobs indépendants, exécutés en parallèle :
 
 ## Déploiement de l'application
 
-🚧 En cours de rédaction...
+L’application est déployée sur un serveur VPS configuré avec Caddy, un serveur web moderne et léger qui gère automatiquement les certificats SSL (via Let’s Encrypt) et le reverse proxy. Il assure la mise à disposition sécurisée de l’application sur Internet, en redirigeant le trafic HTTP/HTTPS vers les services correspondants.
+
+Le VPS héberge à la fois le frontend et le backend, chacun exécuté dans des conteneurs Docker orchestrés à l’aide de Docker Compose.
+
+Actuellement, le déploiement de CityGuide est effectué manuellement à l'aide d'une connexion SSH.
+
+Pour se connecter au serveur, exécuter la commande :
+
+```bash
+ssh ***********@************** -p ****
+```
+
+Saisir le mot de passe lorsque l'invite de commande le demande.
+
+Une fois la connexion établie, se déplacer dans le `production/` et faire récupérer les modifications du repo distant à l'aide de `git pull`.
+
+Si besoin, en cas de modifications critiques, redémarrer les containers.
+
+Le site est accessible à l'adresse suivante : [https://092024-jaune-3.wns.wilders.dev/](https://092024-jaune-3.wns.wilders.dev/)
+
+## Troubleshooting des erreurs courantes
+
+### Production
+
+#### 🚫 Erreur `502 Bad Gateway`
+
+**⛔️ Cause probable :**
+Le conteneur `gateway` (reverse proxy interne) est arrêté, planté ou ne répond plus.
+
+**✅ Étapes de vérification :**
+
+1. **Lister les conteneurs en cours d’exécution :**
+
+   ```bash
+   docker ps
+   ```
+
+   → Vérifier si le conteneur nommé `gateway` apparaît dans la liste.
+
+2. **Afficher tous les conteneurs (même ceux arrêtés) :**
+
+   ```bash
+   docker ps -a
+   ```
+
+   → Si `gateway` est présent mais arrêté, c’est probablement la cause de l’erreur.
+
+3. **Consulter les logs du conteneur `gateway` :**
+
+   ```bash
+   docker logs gateway --tail 50
+   ```
+
+   → Permet d’identifier une erreur de démarrage ou de configuration.
+
+4. **Relancer le conteneur `gateway` :**
+
+   ```bash
+   docker restart gateway
+   ```
+
+5. **Si le problème persiste, reconstruire le service à l'aide de la commande :**
+
+   ```bash
+   docker compose -f environments/prod/docker-compose.yml up -d --build gateway
+   ```
+
+6. **Vérifier à nouveau que le conteneur est actif :**
+
+   ```bash
+   docker ps | grep gateway
+   ```
+
+---
+
+#### Site totalement inaccessible (“This site can’t be reached”)
+
+**⛔️ Cause probable :**
+Le serveur **Caddy** (reverse proxy HTTPS) est arrêté ou ne tourne plus.
+
+**✅ Étapes de vérification :**
+
+1. **Vérifier le statut de Caddy :**
+
+   ```bash
+   service caddy status
+   ```
+
+2. **Si Caddy ne fonctionne pas (`Failed to start Caddy.`) :**
+
+   ```bash
+   service caddy start
+   ```
+
+   → Démarrer Caddy.
+
+Sélectionner l'utilisateur et entrer le mot de passe correspondant.
+
+En cas de succès, on doit obtenir : `Active: active (running)`.
