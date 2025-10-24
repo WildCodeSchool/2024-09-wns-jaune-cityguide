@@ -80,3 +80,5 @@ services:
         condition: service_healthy
       frontend:
         condition: service_healthy
+    environment:
+      SERVICE_PORT: ${SERVICE_PORT}
