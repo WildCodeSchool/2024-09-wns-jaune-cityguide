@@ -1,8 +1,6 @@
 name: CI - Frontend & Backend
 
 on:
-  push:
-    branches: [feature/ci-cd]
   pull_request:
     branches: [dev]
 
