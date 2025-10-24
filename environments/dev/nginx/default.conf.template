@@ -1,11 +1,8 @@
-events{}
-
-http {
     server {
         listen 80;
 
         location /api {
-            proxy_pass http://backend:${SERVICE_PORT}/;
+            proxy_pass http://backend:${SERVICE_PORT};
         }
 
         location /vizualizer {
@@ -23,4 +20,3 @@ http {
             proxy_pass http://frontend:${SERVICE_PORT};
         }
     }
-}
