@@ -16,10 +16,18 @@ import { PasswordResolver } from "./resolvers/PasswordResolver";
 import { seedDatabase } from "./data/seeder";
 import { customAuthChecker } from "./middleware/authChecker";
 
-const port = process.env.PORT ? Number.parseInt(process.env.PORT, 10) : 3000;
+const { env } = process;
 
-if (Number.isNaN(port) || port < 0 || port > 65535) {
-	throw new Error(`Invalid port value: ${process.env.PORT}`);
+if (!env.SERVICE_PORT) {
+	throw new Error(
+		`Variable "SERVICE_PORT" is not defined in environment variables`,
+	);
+}
+
+const PORT = Number.parseInt(env.SERVICE_PORT, 10);
+
+if (Number.isNaN(PORT) || PORT < 0 || PORT > 65535) {
+	throw new Error(`Invalid port value: ${env.SERVICE_PORT}`);
 }
 
 const start = async () => {
@@ -48,7 +56,7 @@ const start = async () => {
 	const apiServer = new ApolloServer({ schema, introspection: true });
 
 	await startStandaloneServer(apiServer, {
-		listen: { port },
+		listen: { port: PORT },
 		context: async ({ req, res }) => {
 			try {
 				if (!process.env.TOKEN_SECRET_KEY) return { res };
@@ -62,13 +70,13 @@ const start = async () => {
 					user: tokenContent,
 				};
 			} catch (error) {
-				console.error("Erreur dans le contexte Apollo :", error);
+				console.error("Error in Apollo Server context:", error);
 				return { res };
 			}
 		},
 	});
 
-	console.log(`Backend started on port #${port}`);
+	console.log(`Backend started on port #${PORT}`);
 };
 
 start();
