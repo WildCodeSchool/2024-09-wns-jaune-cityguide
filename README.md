@@ -154,8 +154,7 @@ La CI est composée de deux jobs indépendants, exécutés en parallèle :
 
   - Vérification de la compilation (`vite build --dry-run`)
   - Analyse du code avec ESLint
-  - Exécutuion des tests unitaires (Vitest)
-  - Exécution des tests end-to-end (Playwright)
+  - Exécution des tests unitaires (Vitest)
 
 >💡 Remarque :
 >
