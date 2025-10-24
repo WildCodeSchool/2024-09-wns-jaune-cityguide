@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { type ReactNode, useState } from "react";
-import type { City } from "../../../@types/types";
 import { CityStatsCard } from "../../../atoms/CityStatsCard";
+import type { City } from "../../../libs/graphql/generated/graphql-types";
 import { useCitiesStore } from "../../../store/citiesStore";
 
 import { Modal } from "../../../organisms/Modal";

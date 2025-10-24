@@ -2,6 +2,8 @@
 
 ![Logo de l'application CityGuide](./frontend/src/assets/logo.png)
 
+[![CI Status](https://github.com/WildCodeSchool/2024-09-wns-jaune-cityguide/actions/workflows/ci.yaml/badge.svg?branch=dev)](https://github.com/WildCodeSchool/2024-09-wns-jaune-cityguide/actions/workflows/ci.yaml)
+
 **CityGuide** est une application web fullstack composée de :  
 
 - **Frontend** : React + Vite + Apollo Client  
@@ -136,7 +138,27 @@ Ces scripts sont à utiliser dans le dossier `backend/`.
 
 ## CI/CD
 
-🚧 En cours de rédaction...
+CityGuide intègre un pipeline CI (Continuous Integration) basée sur GitHub Actions, permettant de vérifier automatiquement la qualité et la stabilité du code à chaque contribution.
+
+Le workflow CI s’exécute automatiquement lors d’une `pull request` vers la branche `dev` (avant `merge`),
+
+La CI est composée de deux jobs indépendants, exécutés en parallèle :
+
+- CI Backend
+
+  - Vérification des types (`tsc --noEmit`)
+  - Exécution des tests Jest
+  - Compilation du projet (`tsc`)
+
+- CI Frontend
+
+  - Vérification de la compilation (`vite build --dry-run`)
+  - Analyse du code avec ESLint
+  - Exécution des tests unitaires (Vitest)
+
+>💡 Remarque :
+>
+> Le pipeline sera enrichi ultérieurement avec un déploiement automatisé (CD) vers le VPS via SSH, dès qu’une version stable sera validée sur `main`.
 
 ---
 

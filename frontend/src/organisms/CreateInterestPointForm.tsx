@@ -35,7 +35,7 @@ export default function CreateInterestPointForm({
 	const [selectedAddress, setSelectedAddress] =
 		useState<AddressAutocompleteAPIResult | null>(null);
 	const [formCityId, setFormCityId] = useState<string>("");
-	const [cityExists, setCityExists] = useState<boolean>(false);
+	const [, setCityExists] = useState<boolean>(false);
 
 	const [showPopup, setShowPopup] = useState(false);
 	const [popupMessage, setPopupMessage] = useState<string[]>([]);
@@ -44,8 +44,8 @@ export default function CreateInterestPointForm({
 	const resultRefs = useRef<(HTMLLIElement | null)[]>([]);
 	const isFromSelectionRef = useRef(false);
 
-  const { selectedCity } = useCitiesStore();
-  const { fetchInterestPointsByCity } = useInterestPointsStore();
+	const { selectedCity } = useCitiesStore();
+	const { fetchInterestPointsByCity } = useInterestPointsStore();
 
 	const navigate = useNavigate();
 
@@ -106,7 +106,6 @@ export default function CreateInterestPointForm({
 				"La ville sélectionnée n'existe pas dans la base de données.",
 			);
 			setFormCityId("");
-			console.log("City not found in the database:", address.city);
 			setCityExists(false);
 		}
 	};
@@ -124,8 +123,6 @@ export default function CreateInterestPointForm({
 			city: formCityId,
 			address: selectedAddress?.fulltext,
 		};
-
-		console.log(formattedData);
 		try {
 			const result = await createInterestPoint({
 				variables: {
@@ -133,17 +130,16 @@ export default function CreateInterestPointForm({
 				},
 			});
 
-      if (result?.data?.createInterestPoint) {
-        console.log("point créé")
-        if (selectedCity) {
-        fetchInterestPointsByCity(selectedCity.id); // Récupérer les points mis à jour
-      }
-      onClose?.();
-      }
-    } catch (err) {
-      console.error("Erreur lors de la création :", err);
-    }
-  };
+			if (result?.data?.createInterestPoint) {
+				if (selectedCity) {
+					fetchInterestPointsByCity(selectedCity.id);
+				}
+				onClose?.();
+			}
+		} catch (err) {
+			console.error("Erreur lors de la création :", err);
+		}
+	};
 
 	useEffect(() => {
 		if (!createdData) return;
@@ -396,17 +392,15 @@ export default function CreateInterestPointForm({
 					</div>
 				</div>
 
-		
+				<button
+					type="submit"
+					className="flex justify-center items-center w-full text-sm px-4 py-2 rounded-md primary-bg text-white hover:bg-purple-700 transition hover:cursor-pointer hover:text-gray-100"
+					disabled={submitting}
+				>
+					{submitting ? "Création en cours..." : "Créer"}
+				</button>
 
-          <button
-            type="submit"
-            className="flex justify-center items-center w-full text-sm px-4 py-2 rounded-md primary-bg text-white hover:bg-purple-700 transition hover:cursor-pointer hover:text-gray-100"
-            disabled={submitting}
-          >
-            {submitting ? "Création en cours..." : "Créer"}
-          </button>
-
-          		<div className="flex justify-between items-center pt-4">
+				<div className="flex justify-between items-center pt-4">
 					<button
 						type="button"
 						onClick={onClose}
@@ -414,8 +408,8 @@ export default function CreateInterestPointForm({
 					>
 						Annuler
 					</button>
-        </div>
-      </form>
-    </aside>
-  )
+				</div>
+			</form>
+		</aside>
+	);
 }

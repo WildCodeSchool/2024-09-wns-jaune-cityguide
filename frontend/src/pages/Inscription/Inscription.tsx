@@ -57,7 +57,7 @@ function Inscription() {
 
 	useEffect(() => {
 		fetchCities();
-	}, []);
+	}, [fetchCities]);
 
 	const validate = (): ErrorsType => {
 		const newErrors: ErrorsType = {};
@@ -103,14 +103,19 @@ function Inscription() {
 		if (Object.keys(validationErrors).length > 0) return;
 
 		try {
-			const { confirmPassword, ...dataToSend } = formData;
+			const dataToSend = {
+				firstname: formData.firstname,
+				lastname: formData.lastname,
+				email: formData.email,
+				password: formData.password,
+				cityId: formData.cityId,
+			};
 
 			const { data } = await register({
 				variables: { data: dataToSend as NewUserInput },
 			});
 			if (data?.registerUser) {
 				const parsed = JSON.parse(data.registerUser);
-				console.log("parsed", parsed);
 				setUser({
 					id: parsed.id,
 					firstname: parsed.firstname,
@@ -136,7 +141,7 @@ function Inscription() {
 				}, 3000);
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			if (error instanceof Error) {
 				if (error.message === "Cet email est déjà utilisé.") {
 					setApiError("Cet email est déjà utilisé.");
@@ -204,8 +209,8 @@ function Inscription() {
 							className="text-sm text-[#706eeb] font-medium"
 							data-testid="popup-message"
 						>
-							{popupMessage.map((line, index) => (
-								<p key={index} className="mb-2">
+							{popupMessage.map((line) => (
+								<p key={line} className="mb-2">
 									{line}
 								</p>
 							))}

@@ -7,12 +7,11 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import TutorialPage from "./pages/Tutorial/TutorialPage.tsx";
 import Inscription from "./pages/Inscription/Inscription.tsx";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.tsx";
-import Login from './pages/Login/Login.tsx';
+import Login from "./pages/Login/Login.tsx";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import MapPage from "./pages/Map/MapPage.tsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.tsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.tsx";
-import CategoryManager from "./pages/CategoryManager/CategoryManager.tsx";
 import { UserRole } from "./libs/graphql/generated/graphql-types";
 import ProtectedRoute from "./security/ProtectedRoute.tsx";
 
@@ -45,7 +44,9 @@ const router = createBrowserRouter([
 			{
 				path: "/dashboard",
 				element: (
-					<ProtectedRoute allowedRoles={[UserRole.SuperAdmin, UserRole.CityAdmin]}>
+					<ProtectedRoute
+						allowedRoles={[UserRole.SuperAdmin, UserRole.CityAdmin]}
+					>
 						<AdminDashboard />
 					</ProtectedRoute>
 				),
@@ -61,30 +62,27 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/forgotPassword",
-				element: <ForgotPassword />
+				element: <ForgotPassword />,
 			},
 			{
 				path: "/resetPassword",
-				element: <ResetPassword />
+				element: <ResetPassword />,
 			},
 			{
 				path: "/about",
-				element: <About />
+				element: <About />,
 			},
 			{
 				path: "/contact",
-				element: <Contact />
+				element: <Contact />,
 			},
 			{
 				path: "/profile",
-				element: <UserProfile />
+				element: <UserProfile />,
 			},
 		],
 	},
 ]);
-
-console.log("Base URL:", import.meta.env.VITE_BASE_URL); 
-console.log("Gateway Port:", import.meta.env.VITE_GATEWAY_PORT);
 
 export const client = new ApolloClient({
 	uri: `${import.meta.env.VITE_BASE_URL}/api`,
