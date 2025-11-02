@@ -7,17 +7,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
 	type GetUserByIdQuery,
 	useGetUserByIdQuery,
-	useGetUsersQuery,
 } from "../../libs/graphql/generated/graphql-types";
 import { useUserStore } from "../../store/userStore";
 
 export default function UserManager() {
-	const { user: currentUser, fetchUsers } = useUserStore((state) => ({
-		user: state.user,
-		fetchUsers: state.fetchUsers,
-	}));
+	const { user, isLoading, fetchUsers, users } = useUserStore();
 
-	const { data, loading, error, refetch } = useGetUsersQuery();
 	const [selectedUser, setSelectedUser] = useState<string | null>(null);
 	const [selectedCardRef] = useState<HTMLDivElement | null>(null);
 	const [searchUser, setSearchUser] = useState("");
@@ -36,7 +31,7 @@ export default function UserManager() {
 		}
 	}, [selectedUser, selectedUserData]);
 
-	if (!currentUser) {
+	if (!user) {
 		return (
 			<div className="flex items-center justify-center h-screen text-gray-500">
 				<p>
@@ -46,11 +41,8 @@ export default function UserManager() {
 		);
 	}
 
-	if (loading) return <p>Chargement des utilisateurs...</p>;
-	if (error) return <p>Erreur : {error.message}</p>;
-	if (!data) return <p>Aucun utilisateur trouvé.</p>;
-
-	const users = data?.getUsers || [];
+	if (isLoading) return <p>Chargement des utilisateurs...</p>;
+	if (!users.length) return <p>Aucun utilisateur trouvé.</p>;
 
 	const filteredUsers = users.filter((user) =>
 		`${user.firstname} ${user.lastname}`
@@ -62,13 +54,11 @@ export default function UserManager() {
 		updatedUser: GetUserByIdQuery["getUserById"],
 	) => {
 		setSelectedUser(updatedUser.id);
-		await refetch();
 		fetchUsers();
 	};
 
 	const handleUserDeletedByAdmin = async () => {
 		setSelectedUser(null);
-		await refetch();
 		fetchUsers();
 	};
 

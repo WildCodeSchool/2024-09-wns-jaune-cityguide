@@ -7,7 +7,7 @@ import {
 } from "../../libs/graphql/generated/graphql-types";
 import { useNavigate, Link } from "react-router-dom";
 import { useCitiesStore } from "../../store/citiesStore";
-import { type User, useUserStore } from "../../store/userStore";
+import { type UserMapped, useUserStore } from "../../store/userStore";
 import background_form from "../../assets/background_form.png";
 
 type FormDataType = {
@@ -84,7 +84,7 @@ export default function ModificationProfile() {
 				},
 			});
 			if (data?.updateUser) {
-				setUser({ ...user, ...data.updateUser } as User);
+				setUser({ ...user, ...data.updateUser } as UserMapped);
 				navigate("/map");
 			}
 		} catch (error) {
