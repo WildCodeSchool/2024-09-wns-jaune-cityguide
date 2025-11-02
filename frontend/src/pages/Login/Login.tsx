@@ -21,7 +21,7 @@ const Login = () => {
 		type: string;
 		text: string;
 	} | null>(null);
-	const setUser = useUserStore((state) => state.setUser);
+	const { setUser } = useUserStore();
 
 	const [showPassword, setShowPassword] = useState(false);
 
